@@ -1,0 +1,22 @@
+name: xcube-eopf
+channels:
+- conda-forge
+dependencies:
+  - python >=3.10
+  # Library Dependencies
+  - fsspec
+  - numpy
+  - pandas
+  - xarray
+  - xcube
+  - xarray-eopf
+  - zarr
+  # Development Dependencies - Tools
+  - black
+  - isort
+  - pytest
+  - pytest-cov
+  - ruff
+  # Development Dependencies - Demos
+  - jupyterlab
+  - matplotlib
