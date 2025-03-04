@@ -6,7 +6,6 @@ dependencies:
   # Library Dependencies
   - fsspec
   - numpy
-  - pandas
   - xarray
   - xcube
   - xarray-eopf
