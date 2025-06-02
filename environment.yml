@@ -4,8 +4,9 @@ channels:
 dependencies:
   - python >=3.10
   # Library Dependencies
-  - fsspec
   - numpy
+  - pystac
+  - pystac-client
   - xarray
   - xcube
   - xarray-eopf
