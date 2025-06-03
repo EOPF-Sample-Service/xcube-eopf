@@ -6,8 +6,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Type
 
-from xcube.util.jsonschema import JsonObjectSchema
 import xarray as xr
+from xcube.util.jsonschema import JsonObjectSchema
 
 from .constants import SUPPORTED_STAC_COLLECTIONS
 

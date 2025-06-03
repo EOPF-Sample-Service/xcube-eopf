@@ -6,5 +6,5 @@ from xcube_eopf.prodhandler import ProductHandlerRegistry
 
 
 def register(_registry: ProductHandlerRegistry):
-    # TODO: implement Sentinel-1 ProductType
+    # TODO: implement Sentinel-1 ProductHandler
     pass

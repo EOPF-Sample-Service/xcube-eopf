@@ -5,8 +5,6 @@
 from collections.abc import Container, Iterator
 from typing import Any
 
-
-import pystac_client
 import xarray as xr
 from xcube.core.mldataset import MultiLevelDataset
 from xcube.core.store import (
@@ -18,13 +16,12 @@ from xcube.core.store import (
 )
 from xcube.util.jsonschema import JsonObjectSchema
 
-from .prodhandlers import register_product_handlers
-from .prodhandler import ProductHandler
 from .constants import (
-    STAC_URL,
-    SUPPORTED_STAC_COLLECTIONS,
     EOPF_ZARR_OPENR_ID,
+    SUPPORTED_STAC_COLLECTIONS,
 )
+from .prodhandler import ProductHandler
+from .prodhandlers import register_product_handlers
 
 
 class EOPFZarrDataStore(DataStore):
@@ -78,10 +75,21 @@ class EOPFZarrDataStore(DataStore):
     def get_open_data_params_schema(
         self, data_id: str = None, opener_id: str = None
     ) -> JsonObjectSchema:
-        self._assert_has_data(data_id)
         self._assert_valid_opener_id(opener_id)
-        product_type = ProductHandler.guess(data_id)
-        return product_type.get_open_data_params_schema()
+        if data_id is not None:
+            self._assert_has_data(data_id)
+            product_handler = ProductHandler.guess(data_id)
+            return product_handler.get_open_data_params_schema()
+        else:
+            return JsonObjectSchema(
+                title="Opening parameters for all supported Sentinel products.",
+                properties={
+                    key: ph.get_open_data_params_schema()
+                    for (key, ph) in zip(
+                        ProductHandler.registry.keys(), ProductHandler.registry.values()
+                    )
+                },
+            )
 
     def open_data(
         self,
@@ -93,8 +101,8 @@ class EOPFZarrDataStore(DataStore):
         self._assert_has_data(data_id)
         self._assert_valid_data_type(data_type)
         self._assert_valid_opener_id(opener_id)
-        product_type = ProductHandler.guess(data_id)
-        return product_type.open_data(**open_params)
+        product_handler = ProductHandler.guess(data_id)
+        return product_handler.open_data(**open_params)
 
     def describe_data(
         self, data_id: str, data_type: DataTypeLike = None

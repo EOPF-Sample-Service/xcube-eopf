@@ -4,8 +4,13 @@
 
 import datetime
 
+import dask.array as da
+import numpy as np
 import pyproj
 import pystac
+import xarray as xr
+from xcube.core.gridmapping import GridMapping
+from xcube.core.store import DataStoreError
 
 
 def reproject_bbox(
@@ -131,3 +136,96 @@ def convert_to_solar_time(
     """
     offset_seconds = int(longitude / 15) * 3600
     return utc + datetime.timedelta(seconds=offset_seconds)
+
+
+def mosaic_spatial_take_first(list_ds: list[xr.Dataset]) -> xr.Dataset:
+    """Creates a spatial mosaic from a list of datasets by taking the first
+    non-NaN value encountered across datasets at each pixel location.
+
+    The function assumes all datasets share the same spatial dimensions and coordinate
+    system. Only variables with 2D spatial dimensions (y, x) are processed. At each
+    spatial location, the first non-NaN value across the dataset stack
+    is selected.
+
+    Args:
+        list_ds: A list of datasets to be mosaicked.
+
+    Returns:
+        A new dataset representing the mosaicked result, using the first valid
+        value encountered across the input datasets for each spatial position.
+    """
+    if len(list_ds) == 1:
+        return list_ds[0]
+
+    y_coord, x_coord = get_spatial_dims(list_ds[0])
+    ds_mosaic = xr.Dataset()
+    for key in list_ds[0]:
+        if list_ds[0][key].dims[-2:] == (y_coord, x_coord):
+            da_arr = da.stack([ds[key].data for ds in list_ds], axis=0)
+            nonnan_mask = ~da.isnan(da_arr)
+            first_non_nan_index = nonnan_mask.argmax(axis=0)
+            da_arr_select = da.choose(first_non_nan_index, da_arr)
+            ds_mosaic[key] = xr.DataArray(
+                da_arr_select,
+                dims=list_ds[0][key].dims,
+                coords=list_ds[0][key].coords,
+            )
+
+    return ds_mosaic
+
+
+def get_spatial_dims(ds: xr.Dataset) -> (str, str):
+    """Identifies the spatial coordinate names in a dataset.
+
+    The function checks for common spatial dimension naming conventions: ("lat", "lon")
+    or ("y", "x"). If neither pair is found, it raises a DataStoreError.
+
+    Args:
+        ds: The dataset to inspect.
+
+    Returns:
+        A tuple of strings representing the names of the spatial dimensions.
+
+    Raises:
+        DataStoreError: If no recognizable spatial dimensions are found.
+    """
+    if "lat" in ds and "lon" in ds:
+        y_coord, x_coord = "lat", "lon"
+    elif "y" in ds and "x" in ds:
+        y_coord, x_coord = "y", "x"
+    else:
+        raise DataStoreError("No spatial dimensions found in dataset.")
+    return y_coord, x_coord
+
+
+def get_gridmapping(
+    bbox: tuple[float] | tuple[int] | list[float] | list[int],
+    spatial_res: float | int | tuple[float | int, float | int],
+    crs: str | pyproj.crs.CRS,
+    tile_size: int | tuple[int, int],
+) -> GridMapping:
+    """Creates a regular GridMapping object based on a bounding box, spatial resolution,
+    and CRS.
+
+    Args:
+        bbox: The bounding box in the form (min_x, min_y, max_x, max_y).
+        spatial_res: Spatial resolution as a single value or a (x_res, y_res) tuple.
+        crs: Coordinate reference system as a `pyproj.CRS` or a string
+            (e.g., "EPSG:4326").
+        tile_size: Tile size as a single integer or a (width, height) tuple.
+
+    Returns:
+        A xcube `GridMapping` object representing the regular grid layout defined
+        by the input parameters.
+    """
+    if not isinstance(spatial_res, tuple):
+        spatial_res = (spatial_res, spatial_res)
+    x_size = np.ceil((bbox[2] - bbox[0]) / spatial_res[0]) + 1
+    y_size = np.ceil(abs(bbox[3] - bbox[1]) / spatial_res[1]) + 1
+    return GridMapping.regular(
+        size=(x_size, y_size),
+        xy_min=(bbox[0] - spatial_res[0] / 2, bbox[1] - spatial_res[1] / 2),
+        xy_res=spatial_res,
+        crs=crs,
+        tile_size=tile_size,
+    )

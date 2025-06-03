@@ -2,7 +2,6 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import pystac_client
 from xcube.util.jsonschema import (
     JsonArraySchema,
     JsonDateSchema,
@@ -14,10 +13,12 @@ from xcube.util.jsonschema import (
 
 # general stac constants
 DATA_STORE_ID = "eopf-zarr"
-STAC_URL = "https://stac.browser.user.eopf.eodc.eu"
-STAC_CATALOG = pystac_client.Client.open(STAC_URL)
+STAC_URL = "https://stac.core.eopf.eodc.eu"
 SUPPORTED_STAC_COLLECTIONS = ["sentinel-2-l1c", "sentinel-2-l2a"]
 EOPF_ZARR_OPENR_ID = "dataset:zarr:eopf-zarr"
+
+# other constants
+CONVERSION_FACTOR_DEG_METER = 111320
 
 # general schema definition
 SCHEMA_ADDITIONAL_QUERY = JsonObjectSchema(
