@@ -69,7 +69,8 @@ class EOPFZarrDataStore(DataStore):
         self, data_id: str = None, data_type: DataTypeLike = None
     ) -> tuple[str, ...]:
         self._assert_valid_data_type(data_type)
-        self._assert_has_data(data_id)
+        if data_id is not None:
+            self._assert_has_data(data_id)
         return (EOPF_ZARR_OPENR_ID,)
 
     def get_open_data_params_schema(
@@ -109,7 +110,7 @@ class EOPFZarrDataStore(DataStore):
     ) -> DatasetDescriptor:
         self._assert_has_data(data_id)
         self._assert_valid_data_type(data_type)
-        raise NotImplementedError("Coming soon...")
+        raise NotImplementedError("`describe_data` is not implemented, yet.")
 
     def search_data(
         self, data_type: DataTypeLike = None, **search_params
@@ -145,7 +146,8 @@ class EOPFZarrDataStore(DataStore):
     def _assert_valid_data_type(self, data_type: DataTypeLike) -> None:
         if not self._is_valid_data_type(data_type):
             raise DataStoreError(
-                f"Data type must be {DATASET_TYPE.alias!r} but got {data_type!r}."
+                f"Data type must be {DATASET_TYPE.alias!r} "
+                f"or None, but got {data_type!r}."
             )
 
     @staticmethod

@@ -58,7 +58,7 @@ SCHEMA_VARIABLES = JsonArraySchema(
     description="Names of variables which will be included in the data cube.",
 )
 SCHEMA_SPATIAL_RES = JsonNumberSchema(title="Spatial Resolution", exclusive_minimum=0.0)
-SCHEMA_CRS = JsonStringSchema(title="Coordinate reference system", default="EPSG:4326")
+SCHEMA_CRS = JsonStringSchema(title="Coordinate reference system")
 SCHEMA_TILE_SIZE = JsonArraySchema(
     nullable=True,
     title="Tile size of returned dataset",
@@ -67,5 +67,4 @@ SCHEMA_TILE_SIZE = JsonArraySchema(
         "in returned dataset."
     ),
     items=[JsonIntegerSchema(minimum=1), JsonIntegerSchema(minimum=1)],
-    default=(2048, 2048),
 )

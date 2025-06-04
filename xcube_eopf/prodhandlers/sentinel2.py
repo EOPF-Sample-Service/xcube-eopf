@@ -46,10 +46,6 @@ class Sen2ProductHandler(ProductHandler, ABC):
     for L1C and L2A product.
     """
 
-    def __init__(self):
-        self._catalog = pystac_client.Client.open(STAC_URL)
-        super().__init__()
-
     # noinspection PyMethodMayBeStatic
     def get_open_data_params_schema(self) -> JsonObjectSchema:
         return JsonObjectSchema(
@@ -81,7 +77,8 @@ class Sen2ProductHandler(ProductHandler, ABC):
             bbox=bbox_wgs84,
             query=open_params.get("query"),
         )
-        items = list(self._catalog.search(**search_params).items())
+        catalog = pystac_client.Client.open(STAC_URL)
+        items = list(catalog.search(**search_params).items())
         if len(items) == 0:
             raise DataStoreError(f"No items found for search_params {search_params}.")
 
@@ -93,6 +90,8 @@ class Sen2ProductHandler(ProductHandler, ABC):
 
         # add attributes
         ds = add_attributes(ds, grouped_items, **open_params)
+
+        # TODO how to handle solar and viewing angles
 
         return ds
 
@@ -135,6 +134,10 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     """
     items = add_nominal_datetime(items)
 
+    # TODO: So far no handling of processing version,
+    #       STAC items with multiple processing versions are added to the list and
+    #       mosaicked by taking the fist non-NaN value.
+    #       For proper handling wait for STAC item update (see https://github.com/EOPF-Sample-Service/eopf-stac/issues/28)
     # get dates and tile IDs of the items
     dates = []
     tile_ids = []

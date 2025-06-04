@@ -9,8 +9,6 @@ from typing import Optional, Type
 import xarray as xr
 from xcube.util.jsonschema import JsonObjectSchema
 
-from .constants import SUPPORTED_STAC_COLLECTIONS
-
 
 class ProductHandler(ABC):
     """Provides product-type specific properties and behaviour
@@ -39,9 +37,9 @@ class ProductHandler(ABC):
         product_handler = ProductHandler.from_data_id(data_id)
         if product_handler is None:
             raise ValueError(
-                "Unable to detect product handler for `data_id`."
+                f"Unable to detect product handler for {data_id!r}."
                 " Use `data_id` argument to pass one of"
-                f" {', '.join(map(repr, SUPPORTED_STAC_COLLECTIONS))}."
+                f" {', '.join(map(repr, cls.registry.keys()))}."
             )
         return product_handler
 
