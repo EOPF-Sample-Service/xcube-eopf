@@ -169,7 +169,11 @@ def mosaic_spatial_take_first(list_ds: list[xr.Dataset]) -> xr.Dataset:
                 da_arr_select,
                 dims=list_ds[0][key].dims,
                 coords=list_ds[0][key].coords,
+                attrs=list_ds[0][key].attrs,
             )
+
+    # attributes are taken from the first UTM dataset
+    ds_mosaic.attrs = list_ds[0].attrs
 
     return ds_mosaic
 

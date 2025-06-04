@@ -576,4 +576,8 @@ def _create_empty_dataset(
             "spatial_ref": sample_ds.spatial_ref,
         },
     )
+    for key in sample_ds.data_vars:
+        ds[key].attrs = sample_ds[key].attrs
+    # TODO decide which attributes shall be added to the final cube
+
     return ds
