@@ -29,14 +29,14 @@ jobs:
       - name: Install the package
         shell: bash -l {0}
         run: |
-            cd /home/runner/work/xcube-eopf
+            cd /home/runner/work/xcube-eopf/xcube-eopf/xcube-eopf
             ls
             pip install --no-deps .
 
       - name: Run unit tests
         shell: bash -l {0}
         run: |
-            cd /home/runner/work/xcube-eopf
+            cd /home/runner/work/xcube-eopf/xcube-eopf/xcube-eopf
             ls
             pytest tests/ --cov=xcube_eopf --cov-report=xml
 
