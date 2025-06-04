@@ -16,10 +16,10 @@ jobs:
           repository: xcube-dev/xcube
           path: xcube
 
-      - name: checkout xcube-stac
+      - name: checkout xcube-eopf
         uses: actions/checkout@v4
         with:
-          path: xcube-stac
+          path: xcube-eopf
 
       - name: Set up MicroMamba
         uses: mamba-org/setup-micromamba@v1
@@ -29,14 +29,14 @@ jobs:
       - name: Install the package
         shell: bash -l {0}
         run: |
-            cd /home/runner/work/xcube-eopf/xcube-eopf/xcube-eopf
+            cd /home/runner/work/xcube-eopf
             ls
             pip install --no-deps .
 
       - name: Run unit tests
         shell: bash -l {0}
         run: |
-            cd /home/runner/work/xcube-eopf/xcube-eopf/xcube-eopf
+            cd /home/runner/work/xcube-eopf
             ls
             pytest tests/ --cov=xcube_eopf --cov-report=xml
 
