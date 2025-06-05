@@ -37,6 +37,6 @@ class Sentinel2Test(TestCase):
 
         grouped_item = group_items([item0, item1])
         self.assertIsInstance(grouped_item, xr.DataArray)
-        self.assertEqual(grouped_item.sizes, dict(time=1, tile_id=1))
+        self.assertEqual(dict(time=1, tile_id=1), grouped_item.sizes)
         self.assertIsInstance(grouped_item[0, 0].item(), list)
-        self.assertEqual(len(grouped_item[0, 0].item()), 2)
+        self.assertEqual(2, len(grouped_item[0, 0].item()))

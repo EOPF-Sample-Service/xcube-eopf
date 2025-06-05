@@ -48,7 +48,7 @@ dependencies = [
   "pystac-client",
   "xarray",
   "xarray-eopf",
-  "xcube>=1.10.0" # TODO to be adjusted
+  "xcube>=1.11.0"
 ]
 
 [project.optional-dependencies]

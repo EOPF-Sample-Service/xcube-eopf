@@ -24,8 +24,8 @@ class EOPFZarrDataStoreTest(TestCase):
     def test_get_data_store_params_schema(self):
         schema = self.store.get_data_store_params_schema()
         self.assertIsInstance(schema, JsonObjectSchema)
-        self.assertEqual(schema.properties, dict())
-        self.assertEqual(schema.required, [])
+        self.assertEqual(dict(), schema.properties)
+        self.assertEqual([], schema.required)
         self.assertFalse(schema.additional_properties)
 
     def test_get_data_types(self):
@@ -56,8 +56,8 @@ class EOPFZarrDataStoreTest(TestCase):
         with self.assertRaises(DataStoreError) as cm:
             self.store.has_data("sentinel-2-l2a", data_type="mldataset")
         self.assertEqual(
-            str(cm.exception),
             "Data type must be 'dataset' or None, but got 'mldataset'.",
+            str(cm.exception),
         )
 
     def test_get_data_opener_ids(self):
@@ -69,8 +69,8 @@ class EOPFZarrDataStoreTest(TestCase):
         with self.assertRaises(DataStoreError) as cm:
             self.store.get_data_opener_ids("sentinel-2-l3a")
         self.assertEqual(
-            str(cm.exception),
             "Data resource 'sentinel-2-l3a' is not available.",
+            str(cm.exception),
         )
 
     def test_get_open_data_params_schema(self):
@@ -99,9 +99,9 @@ class EOPFZarrDataStoreTest(TestCase):
         with self.assertRaises(DataStoreError) as cm:
             self.store.get_open_data_params_schema(opener_id="dataset:netcdf:eopf-zarr")
         self.assertEqual(
-            str(cm.exception),
             "Data opener identifier must be 'dataset:zarr:eopf-zarr', "
             "but got 'dataset:netcdf:eopf-zarr'.",
+            str(cm.exception),
         )
 
     @pytest.mark.vcr()

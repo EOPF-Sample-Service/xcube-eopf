@@ -63,7 +63,7 @@ class ProductHandlerRegistryTest(TestCase):
         reg = self.get()
         self.assertIsInstance(reg.get("sentinel-2-l1c"), Sen2L1CProductHandler)
         self.assertIsInstance(reg.get("sentinel-2-l2a"), Sen2L2AProductHandler)
-        self.assertIs(None, reg.get("sentinel-2-l3a"))
+        self.assertIsNone(reg.get("sentinel-2-l3a"))
 
     def test_keys_and_values(self):
         reg = self.get()

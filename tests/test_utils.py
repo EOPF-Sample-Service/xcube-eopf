@@ -88,20 +88,20 @@ class UtilsTest(unittest.TestCase):
         item = items_nominal_time[0]
         self.assertIn("datetime_nominal", item.properties)
         self.assertEqual(
-            item.properties["datetime_nominal"],
             datetime.datetime(2024, 6, 1, 12, 0, 0),
+            item.properties["datetime_nominal"],
         )
         self.assertIn("center_point", item.properties)
-        self.assertEqual(item.properties["center_point"], (0.5, 50.5))
+        self.assertEqual((0.5, 50.5), item.properties["center_point"])
 
         item = items_nominal_time[1]
         self.assertIn("datetime_nominal", item.properties)
         self.assertEqual(
-            item.properties["datetime_nominal"],
             datetime.datetime(2024, 7, 2, 2, 0, 0),
+            item.properties["datetime_nominal"],
         )
         self.assertIn("center_point", item.properties)
-        self.assertEqual(item.properties["center_point"], (150.5, 50.5))
+        self.assertEqual((150.5, 50.5), item.properties["center_point"])
 
     def test_mosaic_spatial_take_first(self):
         list_ds = []
@@ -217,7 +217,7 @@ class UtilsTest(unittest.TestCase):
         tile_size = 2000
         gm = get_gridmapping(bbox, spatial_res, crs, tile_size)
         self.assertIsInstance(gm, GridMapping)
-        self.assertEqual(gm.xy_res, (0.0001, 0.0001))
-        self.assertEqual(gm.crs, pyproj.CRS.from_epsg(4326))
-        self.assertEqual(gm.tile_size, (2000, 2000))
-        self.assertEqual(gm.size, (10001, 10001))
+        self.assertEqual((0.0001, 0.0001), gm.xy_res)
+        self.assertEqual(pyproj.CRS.from_epsg(4326), gm.crs)
+        self.assertEqual((2000, 2000), gm.tile_size)
+        self.assertEqual((10001, 10001), gm.size)
