@@ -2,6 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import logging
+
 from xcube.util.jsonschema import (
     JsonArraySchema,
     JsonDateSchema,
@@ -19,6 +21,7 @@ EOPF_ZARR_OPENR_ID = "dataset:zarr:eopf-zarr"
 
 # other constants
 CONVERSION_FACTOR_DEG_METER = 111320
+LOG = logging.getLogger("xcube.eopf")
 
 # general schema definition
 SCHEMA_ADDITIONAL_QUERY = JsonObjectSchema(
