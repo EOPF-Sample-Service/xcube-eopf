@@ -73,21 +73,6 @@ _SCHEMA_SPLINE_ORDERS = JsonComplexSchema(
         ),
     ],
 )
-_AGG_METHODS = [
-    "center",
-    "count",
-    "first",
-    "last",
-    "max",
-    "mean",
-    "median",
-    "mode",
-    "min",
-    "prod",
-    "std",
-    "sum",
-    "var",
-]
 _SCHEMA_AGG_METHODS = JsonComplexSchema(
     title="Aggregation methods for downsampling",
     description=(
@@ -101,8 +86,8 @@ _SCHEMA_AGG_METHODS = JsonComplexSchema(
         "'center'."
     ),
     one_of=[
-        JsonStringSchema(enum=_AGG_METHODS),
-        JsonObjectSchema(properties=dict(data_var=JsonStringSchema(enum=_AGG_METHODS))),
+        JsonStringSchema(enum=AGG_METHODS),
+        JsonObjectSchema(properties=dict(data_var=JsonStringSchema(enum=AGG_METHODS))),
     ],
 )
 
@@ -516,25 +501,16 @@ def _resample_dataset_soft(
             var_configs=var_configs,
         )
     else:
-        spline_orders = open_params.get("spline_orders")
         # TODO update reproject_dataset method in xcube
+        spline_orders = open_params.get("spline_orders")
         # this can be removed once xcube reproject_dataset can handle interpolation
         # mode per data variable.
-        if isinstance(spline_orders, dict):
+        if spline_orders:
             LOG.warning(
-                "Mapping spline orders by data type or variable is not yet supported"
-                "when reprojecting to a different CRS. Default interpolation will be"
-                "used: bilinear for continuous data, and nearest-neighbor for 'scl'."
-            )
-            spline_orders = None
-        # this can be removed once xcube reproject_dataset supports cubic interpolation
-        elif spline_orders in [1, 3]:
-            LOG.warning(
-                "Only spline orders 0 (nearest) and 2 (bilinear) are supported when "
-                "reprojecting to a different CRS. Default interpolation will be used: "
+                "User-defined spline-orders is not supported yet, when reprojecting "
+                "to a different CRS. Default interpolation will be used: "
                 "bilinear for continuous data, and nearest-neighbor for 'scl'."
             )
-            spline_orders = None
         agg_methods = open_params.get("agg_methods")
         var_configs = {}
         for key, var in ds.data_vars.items():
@@ -546,16 +522,10 @@ def _resample_dataset_soft(
         # mode per data variable.
         if "scl" in ds:
             dss = [ds.drop_vars("scl"), ds[["scl"]]]
-            if spline_orders is None:
-                spline_orders = [2, 0]
-            else:
-                spline_orders = [spline_orders, spline_orders]
+            spline_orders = [2, 0]
         else:
             dss = [ds]
-            if spline_orders is None:
-                spline_orders = [2]
-            else:
-                spline_orders = [spline_orders]
+            spline_orders = [2]
         dss_reprojected = []
         for ds, spline_order in zip(dss, spline_orders):
             dss_reprojected.append(
@@ -586,7 +556,7 @@ def _get_var_spline_order(
         spline_order = 0 if key == "scl" else 3
     if key == "scl" and spline_order != 0:
         LOG.warning(
-            f"Spline order {spline_order} selected for 'scl' (categorical data). "
+            f"Spline order {spline_order!r} selected for 'scl' (categorical data). "
             f"This may produce corrupted results."
         )
 
