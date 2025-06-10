@@ -39,6 +39,14 @@ from xcube_eopf.version import version
 
 _SEN2_SPATIAL_RES = np.array([10, 20, 60])
 _TILE_SIZE = 1830  # chunk size of 10m resolution and a multiple of 20m and 60m
+_ATTRIBUTE_KEYS = [
+    "_eopf_attrs",
+    "long_name",
+    "flag_values",
+    "flag_meanings",
+    "flag_colors",
+    "grid_mapping",
+]
 
 
 class Sen2ProductHandler(ProductHandler, ABC):
@@ -577,7 +585,10 @@ def _create_empty_dataset(
         },
     )
     for key in sample_ds.data_vars:
-        ds[key].attrs = sample_ds[key].attrs
-    # TODO decide which attributes shall be added to the final cube
+        ds[key].attrs = {
+            k: sample_ds[key].attrs[k]
+            for k in _ATTRIBUTE_KEYS
+            if k in sample_ds[key].attrs
+        }
 
     return ds
