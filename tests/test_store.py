@@ -5,6 +5,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
+import numpy as np
 import pytest
 import xarray as xr
 from xcube.core.store import DataStoreError, new_data_store
@@ -116,7 +117,7 @@ class EOPFZarrDataStoreTest(TestCase):
             spatial_res=10,
             crs="EPSG:32632",
             variables=["b02", "b03", "b04", "scl"],
-            spline_orders={"np.float32": 0, "scl": 3},
+            spline_orders={0: [np.float32], 3: ["scl"]},
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
@@ -145,7 +146,7 @@ class EOPFZarrDataStoreTest(TestCase):
                 spatial_res=5,
                 crs="EPSG:32632",
                 variables=["b02", "b03", "b04", "scl"],
-                spline_orders={"np.float32": 0, "scl": 3},
+                spline_orders={0: [np.float32], 3: ["scl"]},
             )
         self.assertEqual(1, len(cm.output))
         msg = (
@@ -181,7 +182,7 @@ class EOPFZarrDataStoreTest(TestCase):
                 spatial_res=100,
                 crs="EPSG:32632",
                 variables=["b02", "b03", "b04", "scl"],
-                agg_methods={"np.float32": "max", "scl": "mean"},
+                agg_methods={"max": [np.float32], "mean": ["scl"]},
             )
         self.assertEqual(1, len(cm.output))
         msg = (

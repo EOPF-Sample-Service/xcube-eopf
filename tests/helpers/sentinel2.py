@@ -24,7 +24,7 @@ def sen2_sample(
     data_vars = {
         band: (
             ("y", "x"),
-            da.zeros(size, chunks=chunksize, dtype=np.float32),
+            da.zeros(size, chunks=chunksize, dtype=np.float64),
         )
         for band in bands
     }

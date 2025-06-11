@@ -20,7 +20,7 @@ from xcube.util.jsonschema import (
     JsonStringSchema,
     JsonComplexSchema,
 )
-from xarray_eopf.spatial import AGG_METHODS
+from xarray_eopf.spatial import AGG_METHODS, AggMethod
 
 
 from xcube_eopf.constants import (
@@ -61,8 +61,8 @@ _SCHEMA_SPLINE_ORDERS = JsonComplexSchema(
     description=(
         "Spline orders be used for upsampling spatial data variables. Can be a "
         "single spline order for all variables or a dictionary that maps a spline "
-        "order to applicable variable names or array data types. A spline order "
-        "is given by one of 0 (nearest neighbor), 1 (linear), 2 (bi-linear), "
+        "order to a list of applicable variable names or array data types. A spline "
+        "order is given by one of 0 (nearest neighbor), 1 (linear), 2 (bi-linear), "
         "or 3 (cubic). The default is 3, except for product specific overrides. "
         "For example, the Sentinel-2 variable scl uses the default 0."
     ),
@@ -78,10 +78,10 @@ _SCHEMA_AGG_METHODS = JsonComplexSchema(
     description=(
         "Optional aggregation methods to be used for downsampling spatial data "
         "variables / bands. Can be a single aggregation method for all variables "
-        "or a dictionary that maps an aggregation method to applicable variable names "
-        "or array data types. An aggregation method is one of 'center', 'count', "
-        "'first', 'last', 'max', 'mean', 'median', 'mode', 'min', 'prod', 'std', "
-        "'sum', or 'var'. The default is 'mean', except for product specific "
+        "or a dictionary that maps an aggregation method to a list of applicable "
+        "variable names or array data types. An aggregation method is one of 'center', "
+        "'count', 'first', 'last', 'max', 'mean', 'median', 'mode', 'min', 'prod', "
+        "'std', 'sum', or 'var'. The default is 'mean', except for product specific "
         "overrides. For example, the Sentinel-2 variable scl uses the default "
         "'center'."
     ),
@@ -545,10 +545,16 @@ def _resample_dataset_soft(
 
 
 def _get_var_spline_order(
-    spline_orders: int | dict[str | np.dtype, int], key: str, var: xr.DataArray
+    spline_orders: int | dict[int, list[str | np.dtype]] | None,
+    key: str,
+    var: xr.DataArray,
 ) -> int:
+    spline_order = None
     if isinstance(spline_orders, dict):
-        spline_order = spline_orders.get(key) or spline_orders.get(var.dtype)
+        for sp_key, sp_var_list in spline_orders.items():
+            if key in sp_var_list or var.dtype in sp_var_list:
+                spline_order = sp_key
+                break
     else:
         spline_order = spline_orders
 
@@ -564,10 +570,16 @@ def _get_var_spline_order(
 
 
 def _get_var_agg_method(
-    agg_methods: str | dict[str | np.dtype, str], key: str, var: xr.DataArray
-) -> str:
+    agg_methods: AggMethod | dict[AggMethod, list[type, str]] | None,
+    key: str,
+    var: xr.DataArray,
+) -> AggMethod:
+    agg_method = None
     if isinstance(agg_methods, dict):
-        agg_method = agg_methods.get(key) or agg_methods.get(var.dtype)
+        for agg_key, agg_var_list in agg_methods.items():
+            if key in agg_var_list or var.dtype in agg_var_list:
+                agg_method = agg_key
+                break
     else:
         agg_method = agg_methods
 
@@ -578,6 +590,7 @@ def _get_var_agg_method(
             f"Aggregation method {agg_method!r} selected for 'scl' (categorical data). "
             f"This may produce corrupted results."
         )
+    # noinspection PyTypeChecker
     return AGG_METHODS[agg_method]
 
 
