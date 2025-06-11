@@ -24,7 +24,7 @@ def sen2_sample(
     data_vars = {
         band: (
             ("y", "x"),
-            da.zeros(size, chunks=chunksize, dtype=np.float32),
+            da.zeros(size, chunks=chunksize, dtype=np.float64),
         )
         for band in bands
     }
@@ -32,6 +32,8 @@ def sen2_sample(
         data_vars=data_vars, coords={"x": ("x", x), "y": ("y", y), "spatial_ref": 0}
     )
     ds.coords["spatial_ref"].attrs = crs_utm.to_cf()
+    if "scl" in ds:
+        ds["scl"] = ds["scl"].astype(np.uint8)
 
     return ds
 
@@ -53,4 +55,14 @@ def l2a_60m() -> xr.Dataset:
     origin = (600000, 5910000)
     crs_utm = pyproj.CRS.from_epsg(32632)
     bands = ["b02", "b03", "b04", "scl"]
+    return sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)
+
+
+def l2a_60m_wo_scl() -> xr.Dataset:
+    size = (1830, 1830)
+    chunksize = (305, 305)
+    resolution = 60
+    origin = (600000, 5910000)
+    crs_utm = pyproj.CRS.from_epsg(32632)
+    bands = ["b02", "b03", "b04"]
     return sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)

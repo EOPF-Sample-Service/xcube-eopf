@@ -14,7 +14,14 @@ import xarray as xr
 from xcube.core.gridmapping import GridMapping
 from xcube.core.resampling import affine_transform_dataset, reproject_dataset
 from xcube.core.store import DataStoreError
-from xcube.util.jsonschema import JsonObjectSchema
+from xcube.util.jsonschema import (
+    JsonIntegerSchema,
+    JsonObjectSchema,
+    JsonStringSchema,
+    JsonComplexSchema,
+)
+from xarray_eopf.spatial import AGG_METHODS, AggMethod
+
 
 from xcube_eopf.constants import (
     CONVERSION_FACTOR_DEG_METER,
@@ -26,6 +33,7 @@ from xcube_eopf.constants import (
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
     STAC_URL,
+    LOG,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
@@ -47,6 +55,41 @@ _ATTRIBUTE_KEYS = [
     "flag_colors",
     "grid_mapping",
 ]
+_INTERPOLATIONS = {0: "nearest", 2: "bilinear"}
+_SCHEMA_SPLINE_ORDERS = JsonComplexSchema(
+    title="Spline orders for updampling",
+    description=(
+        "Spline orders be used for upsampling spatial data variables. Can be a "
+        "single spline order for all variables or a dictionary that maps a spline "
+        "order to a list of applicable variable names or array data types. A spline "
+        "order is given by one of 0 (nearest neighbor), 1 (linear), 2 (bi-linear), "
+        "or 3 (cubic). The default is 3, except for product specific overrides. "
+        "For example, the Sentinel-2 variable scl uses the default 0."
+    ),
+    one_of=[
+        JsonIntegerSchema(minimum=0, maximum=3),
+        JsonObjectSchema(
+            properties=dict(data_var=JsonIntegerSchema(minimum=0, maximum=3))
+        ),
+    ],
+)
+_SCHEMA_AGG_METHODS = JsonComplexSchema(
+    title="Aggregation methods for downsampling",
+    description=(
+        "Optional aggregation methods to be used for downsampling spatial data "
+        "variables / bands. Can be a single aggregation method for all variables "
+        "or a dictionary that maps an aggregation method to a list of applicable "
+        "variable names or array data types. An aggregation method is one of 'center', "
+        "'count', 'first', 'last', 'max', 'mean', 'median', 'mode', 'min', 'prod', "
+        "'std', 'sum', or 'var'. The default is 'mean', except for product specific "
+        "overrides. For example, the Sentinel-2 variable scl uses the default "
+        "'center'."
+    ),
+    one_of=[
+        JsonStringSchema(enum=AGG_METHODS),
+        JsonObjectSchema(properties=dict(data_var=JsonStringSchema(enum=AGG_METHODS))),
+    ],
+)
 
 
 class Sen2ProductHandler(ProductHandler, ABC):
@@ -66,6 +109,8 @@ class Sen2ProductHandler(ProductHandler, ABC):
                 crs=SCHEMA_CRS,
                 tile_size=SCHEMA_TILE_SIZE,
                 query=SCHEMA_ADDITIONAL_QUERY,
+                agg_methods=_SCHEMA_AGG_METHODS,
+                spline_orders=_SCHEMA_SPLINE_ORDERS,
             ),
             required=["time_range", "bbox", "crs", "spatial_res"],
             additional_properties=False,
@@ -414,11 +459,13 @@ def _merge_utm_zones(list_ds_utm: list[xr.Dataset], **open_params) -> xr.Dataset
 
     resampled_list_ds = []
     for ds in list_ds_utm:
-        resampled_list_ds.append(_resample_dataset_soft(ds, target_gm))
+        resampled_list_ds.append(_resample_dataset_soft(ds, target_gm, **open_params))
     return mosaic_spatial_take_first(resampled_list_ds)
 
 
-def _resample_dataset_soft(ds: xr.Dataset, target_gm: GridMapping) -> xr.Dataset:
+def _resample_dataset_soft(
+    ds: xr.Dataset, target_gm: GridMapping, **open_params
+) -> xr.Dataset:
     """Resample a dataset to a target grid mapping, using either affine transform
     or reprojection.
 
@@ -437,9 +484,15 @@ def _resample_dataset_soft(ds: xr.Dataset, target_gm: GridMapping) -> xr.Dataset
     if source_gm.is_close(target_gm):
         return ds
     if target_gm.crs == source_gm.crs:
+        spline_orders = open_params.get("spline_orders")
+        agg_methods = open_params.get("agg_methods")
         var_configs = {}
-        for var in ds.data_vars:
-            var_configs[var] = dict(recover_nan=True)
+        for key, var in ds.data_vars.items():
+            var_configs[key] = dict(
+                recover_nan=True,
+                spline_order=_get_var_spline_order(spline_orders, key, var),
+                aggregator=_get_var_agg_method(agg_methods, key, var),
+            )
         ds = affine_transform_dataset(
             ds,
             source_gm=source_gm,
@@ -448,13 +501,97 @@ def _resample_dataset_soft(ds: xr.Dataset, target_gm: GridMapping) -> xr.Dataset
             var_configs=var_configs,
         )
     else:
-        # TODO sofar only nearest neighbor interpolation; cubic is not implemented in xcube.
-        ds = reproject_dataset(
-            ds,
-            source_gm=source_gm,
-            target_gm=target_gm,
-        )
+        # TODO update reproject_dataset method in xcube
+        spline_orders = open_params.get("spline_orders")
+        # this can be removed once xcube reproject_dataset can handle interpolation
+        # mode per data variable.
+        if spline_orders:
+            LOG.warning(
+                "User-defined spline-orders is not supported yet, when reprojecting "
+                "to a different CRS. Default interpolation will be used: "
+                "bilinear for continuous data, and nearest-neighbor for 'scl'."
+            )
+        agg_methods = open_params.get("agg_methods")
+        var_configs = {}
+        for key, var in ds.data_vars.items():
+            var_configs[key] = dict(
+                recover_nan=True,
+                aggregator=_get_var_agg_method(agg_methods, key, var),
+            )
+        # this can be removed once xcube reproject_dataset can handle interpolation
+        # mode per data variable.
+        if "scl" in ds:
+            dss = [ds.drop_vars("scl"), ds[["scl"]]]
+            spline_orders = [2, 0]
+        else:
+            dss = [ds]
+            spline_orders = [2]
+        dss_reprojected = []
+        for ds, spline_order in zip(dss, spline_orders):
+            dss_reprojected.append(
+                reproject_dataset(
+                    ds,
+                    source_gm=source_gm,
+                    target_gm=target_gm,
+                    interpolation=_INTERPOLATIONS[spline_order],
+                    downscale_var_configs=var_configs,
+                )
+            )
+        if len(dss_reprojected) == 1:
+            ds = dss_reprojected[0]
+        else:
+            ds = dss_reprojected[0].update(dss_reprojected[1])
     return ds
+
+
+def _get_var_spline_order(
+    spline_orders: int | dict[int, list[str | type]] | None,
+    key: str,
+    var: xr.DataArray,
+) -> int:
+    spline_order = None
+    if isinstance(spline_orders, dict):
+        for sp_key, sp_var_list in spline_orders.items():
+            if key in sp_var_list or var.dtype in sp_var_list:
+                spline_order = sp_key
+                break
+    else:
+        spline_order = spline_orders
+
+    if spline_order is None:
+        spline_order = 0 if key == "scl" else 3
+    if key == "scl" and spline_order != 0:
+        LOG.warning(
+            f"Spline order {spline_order!r} selected for 'scl' (categorical data). "
+            f"This may produce corrupted results."
+        )
+
+    return spline_order
+
+
+def _get_var_agg_method(
+    agg_methods: AggMethod | dict[AggMethod, list[type, str]] | None,
+    key: str,
+    var: xr.DataArray,
+) -> AggMethod:
+    agg_method = None
+    if isinstance(agg_methods, dict):
+        for agg_key, agg_var_list in agg_methods.items():
+            if key in agg_var_list or var.dtype in agg_var_list:
+                agg_method = agg_key
+                break
+    else:
+        agg_method = agg_methods
+
+    if agg_method is None:
+        agg_method = "center" if key == "scl" else "mean"
+    if key == "scl" and agg_method not in ["center", "first", "last", "max", "min"]:
+        LOG.warning(
+            f"Aggregation method {agg_method!r} selected for 'scl' (categorical data). "
+            f"This may produce corrupted results."
+        )
+    # noinspection PyTypeChecker
+    return AGG_METHODS[agg_method]
 
 
 def _get_bounding_box(grouped_items: xr.DataArray) -> list[float | int]:
