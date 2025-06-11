@@ -545,7 +545,7 @@ def _resample_dataset_soft(
 
 
 def _get_var_spline_order(
-    spline_orders: int | dict[int, list[str | np.dtype]] | None,
+    spline_orders: int | dict[int, list[str | type]] | None,
     key: str,
     var: xr.DataArray,
 ) -> int:
