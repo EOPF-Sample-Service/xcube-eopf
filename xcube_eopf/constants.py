@@ -24,7 +24,7 @@ CONVERSION_FACTOR_DEG_METER = 111320
 LOG = logging.getLogger("xcube.eopf")
 
 # general schema definition
-ITIONAL_QUERY = JsonObjectSchema(
+SCHEMA_ADDITIONAL_QUERY = JsonObjectSchema(
     additional_properties=True,
     title="Additional query options used during item search of STAC API.",
     description=(
