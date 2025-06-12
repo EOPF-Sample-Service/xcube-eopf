@@ -1,7 +1,8 @@
 ## Accessing EOPF Sentinel Zarr Data Cubes with xcube
 
 The `"eopf-zarr"` xcube data store enables you to create analysis-ready data cubes 
-(ARDCs) from Sentinel Zarr sample products published by the [EOPF Sentinel Zarr Sample Service](https://zarr.eopf.copernicus.eu/).
+(ARDCs) from Sentinel Zarr sample products published by the 
+[EOPF Sentinel Zarr Sample Service](https://zarr.eopf.copernicus.eu/).
 
 This plugin provides convenient access to analysis-ready data from the Sentinel-1,
 Sentinel-2, and Sentinel-3 missions.
@@ -33,7 +34,8 @@ To list all available data IDs:
 ```python
 store.list_data_ids()
 ```
-Each `data_id` is documented in the respective sections for the supported missions.
+Each `data_id` is documented in the respective sections for the supported missions 
+below.
 
 ### 3. Open a Spatiotemporal Data Cube
 
@@ -47,8 +49,8 @@ ds = store.open_data(
     crs="EPSG:4326",
 )
 ```
-It uses the [xarray-eopf](https://eopf-sample-service.github.io/xarray-eopf/) backend 
-is used as a reading routine to open the EOPF Zarr Samples. 
+It uses the [xarray-eopf](https://eopf-sample-service.github.io/xarray-eopf/) backend  as a reading routine to open the EOPF Zarr 
+Samples. 
 
 > ⚠️ **Note**  
 > `open_data()` builds a Dask graph and returns a lazy `xarray.Dataset`.
@@ -61,16 +63,18 @@ is used as a reading routine to open the EOPF Zarr Samples.
 - `spatial_res`: Spatial resolution in meter of degree (depending on the CRS).
 - `crs`: Coordinate reference system (e.g. `"EPSG:4326"`).
 
+These parameters control the STAC API query and define the output cube's spatial grid.
+
 **Optional parameters:**
 
 - `variables`: Variables to include in the dataset. Can be a name or regex pattern 
   or iterable of the latter.
-- `tile_size`: Spatial tile size of the returned dataset.
+- `tile_size`: Spatial tile size of the returned dataset `(width, height)`.
 - `query`: Additional query options for filtering STAC Items by properties. See 
   [STAC Query Extension](https://github.com/stac-api-extensions/query) for details.
 
-These parameters control the STAC API query and define the output cube's spatial grid.
-Additional product-specific parameters are documented per Sentinel mission.
+Additional parameters specific to each Sentinel mission are documented in
+[the section below](#specific-parameters-for-each-sentinel-mission-).
 
 ### 4. Inspect, Visualize, and Save the Data Cube
 
@@ -161,21 +165,22 @@ These tiles are stored in their native UTM CRS, which varies by geographic locat
 
 **Data Cube Generation Workflow**
 
-1. **STAC Query:** A STAC API request returns relevant STAC Items (tiles).
+1. **STAC Query:** A STAC API request returns relevant STAC Items (tiles) based on 
+   spatial and temporal extent (`bbox` and `time_range` argument).
 2. **Sorting:** Items are ordered by solar acquisition time and Tile ID.
 3. **Native Alignment:** Within each UTM zone, tiles from the same solar day are 
-  aligned without reprojection. Overlaps are resolved by selecting the first non-NaN
-  pixel value in item order.
+   aligned in the native UMT without reprojection. Overlaps are resolved by selecting 
+   the first non-NaN pixel value in item order.
 4. **Cube Assembly:** The method of cube creation depends on the user's request,
   as summarized below:
 
-| Scenario         | Native Resolution Preservation                                                                                                           | Reprojected or Resampled Cube                                                                                              |
-|------------------|-----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| Condition        | Requested bounding box lies within a single UTM zone, native CRS is requested, and the spatial resolution matches the native resolution | Data spans multiple UTM zones, a different CRS is requested (e.g., EPSG:4326), or a custom spatial resolution is provided    |
-| Processing steps | Data cube is directly cropped using the requested bounding box, preserving original pixel values. Spatial extent may deviate slightly due to alignment with native pixel grid             | A target grid mapping is computed from bounding box, spatial resolution, and CRS. Data from each UTM zone is reprojected/resampled to this grid. Overlaps resolved by first non-NaN pixel |
+| Scenario         | Native Resolution Preservation                                                                                                                                                                                                                                                      | Reprojected or Resampled Cube                                                                                                                                                              |
+|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Condition        | Requested bounding box lies within a single UTM zone, native CRS is requested, and the spatial resolution matches the native resolution.                                                                                                                                            | Data spans multiple UTM zones, a different CRS is requested (e.g., EPSG:4326), or a custom spatial resolution is requested.                                                                |
+| Processing steps | Only upsampling or downsampling is applied to align the differing resolutions of the spectral bands. Data cube is directly cropped using the requested bounding box, preserving original pixel values. Spatial extent may deviate slightly due to alignment with native pixel grid. | A target grid mapping is computed from bounding box, spatial resolution, and CRS. Data from each UTM zone is reprojected/resampled to this grid. Overlaps resolved by first non-NaN pixel. |
 
 Upsampling and downsampling are controlled using the `agg_methods` and `spline_order`
-parameters [see below](#remarks-to-opening-parameters).
+parameters ([see below](#remarks-to-opening-parameters)).
 
 #### Data Identifiers
 The EOPF xcube data store supports two Sentinel-2 product types via the `data_id` argument:
@@ -189,30 +194,43 @@ The EOPF xcube data store supports two Sentinel-2 product types via the `data_id
 
 #### Remarks to Opening Parameters
 
-Users can specify any spatial resolution when opening data with `open_data`. As a 
-result, spectral bands may be resampled — either upscaled or downscaled — based on the 
-target grid mapping.
+Users can specify any spatial resolution and coordinate reference system (CRS) when 
+opening data with `open_data`. As a result, spectral bands may be resampled — either 
+upsampled or downsampled — and reprojected to match the target grid. If both 
+reprojection with a lower resolution is required, downsampling is performed first, 
+followed by reprojection.
 
-**Upsampling:**  
+
+**Upsampling / Reprojecting:**  
 
 - Controlled via 2D interpolation using the `spline_orders` parameter. 
 - Accepts a single order for all variables, or a dictionary mapping orders to variable 
   names or data types.
 - Supported spline orders: 
-  - `0`: nearest neighbor (default for `scl`)
-  - `1`: linear
-  - `2`: bi-linear
-  - `3`: cubic (default)
+    - `0`: nearest neighbor (default for `scl`)
+    - `1`: linear
+    - `2`: bi-linear
+    - `3`: cubic (default)
 
 **Downsampling:**  
 
 - Controlled via the `agg_methods` parameter.
 - Can be specified as a single method for all variables, or as a dictionary mapping
   methods to variable names or data types.  
-- Supported aggregation methods:\
-  `"center"` (default for `scl`), `"count"`, `"first"`,
-  `"last"`, `"max"`, `"mean"` (default), `"median"`, `"mode"`, `"min"`, `"prod"`,
-  `"std"`, `"sum"`, and `"var"`. 
+- Supported aggregation methods:
+    - `"center"` (default for `scl`)
+    - `"count"`
+    - `"first"`
+    - `"last"`
+    - `"max"`
+    - `"mean"` (default)
+    - `"median"`
+    - `"mode"`
+    - `"min"`
+    - `"prod"`
+    - `"std"`
+    - `"sum"`
+    - `"var"`
 
 ### 🛰️ Sentinel-3
 
