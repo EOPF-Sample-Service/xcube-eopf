@@ -84,7 +84,7 @@ You can visualize a time slice:
 ds.b04.isel(time=0).plot()
 ```
 > ⚠️ **Warning**  
-> This operation trigger data downloads and processing. For large regions, use with care.
+> This operation triggers data downloads and processing. For large regions, use with care.
 
 #### Saving the Data Cube
 
