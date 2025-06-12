@@ -9,7 +9,7 @@
 # xcube-eopf
 
 `xcube-eopf` is a Python package and [xcube plugin](https://xcube.readthedocs.io/en/latest/plugins.html) that adds a [data store](https://xcube.readthedocs.io/en/latest/api.html#data-store-framework)
-named `eopf` to xcube. The data store is used to access ESA EOPF data products as an 
+named `eopf-zarr` to xcube. The data store is used to access ESA EOPF data products as an 
 analysis-ready datacube (ARDC).
 
 ## Features
@@ -62,7 +62,7 @@ the following steps:
 ```python
 from xcube.core.store import new_data_store
 
-store = new_data_store("eopf-stac")
+store = new_data_store("eopf-zarr")
 ds = store.open_data(
     data_id="sentinel-2-l2a",
     bbox=[9.7, 53.4, 10.3, 53.7],
@@ -89,7 +89,7 @@ a xcube EOPF data store.
 ```python
 from xcube.core.store import new_data_store
 
-store = new_data_store("eopf-stac")
+store = new_data_store("eopf-zarr")
 ds = store.open_data(
     data_id="sentinel-2-l2a",
     bbox=[9.7, 53.4, 10.3, 53.7],
