@@ -365,9 +365,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-select-a-product" class="md-nav__link">
+  <a href="#2-select-a-data-product" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Select a Product
+      2. Select a Data Product
     </span>
   </a>
   
@@ -421,13 +421,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#specific-parameters-for-each-sentinel-mission" class="md-nav__link">
+  <a href="#specific-parameters-for-supported-sentinel-missions" class="md-nav__link">
     <span class="md-ellipsis">
-      Specific Parameters for each Sentinel Mission
+      Specific Parameters for supported Sentinel Missions
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Specific Parameters for each Sentinel Mission">
+    <nav class="md-nav" aria-label="Specific Parameters for supported Sentinel Missions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -582,9 +582,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-select-a-product" class="md-nav__link">
+  <a href="#2-select-a-data-product" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Select a Product
+      2. Select a Data Product
     </span>
   </a>
   
@@ -638,13 +638,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#specific-parameters-for-each-sentinel-mission" class="md-nav__link">
+  <a href="#specific-parameters-for-supported-sentinel-missions" class="md-nav__link">
     <span class="md-ellipsis">
-      Specific Parameters for each Sentinel Mission
+      Specific Parameters for supported Sentinel Missions
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Specific Parameters for each Sentinel Mission">
+    <nav class="md-nav" aria-label="Specific Parameters for supported Sentinel Missions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -745,14 +745,14 @@ Currently, only Sentinel-2 products are supported.</p>
 
 <span class="n">store</span> <span class="o">=</span> <span class="n">new_data_store</span><span class="p">(</span><span class="s2">&quot;eopf-stac&quot;</span><span class="p">)</span>
 </code></pre></div></p>
-<h3 id="2-select-a-product">2. Select a Product</h3>
+<h3 id="2-select-a-data-product">2. Select a Data Product</h3>
 <p>Data products from Sentinel-1, -2, and -3 are accessed via the <code>data_id</code> parameter, 
 which corresponds to collection names in the <a href="https://stac.browser.user.eopf.eodc.eu/">EOPF STAC API</a>.</p>
 <p>To list all available data IDs:
 <div class="highlight"><pre><span></span><code><span class="n">store</span><span class="o">.</span><span class="n">list_data_ids</span><span class="p">()</span>
 </code></pre></div>
-Each <code>data_id</code> is documented in the respective sections for the supported missions 
-below.</p>
+Each <code>data_id</code> is documented in the respective sections for the 
+<a href="#specific-parameters-for-each-sentinel-mission">supported missions</a> below.</p>
 <h3 id="3-open-a-spatiotemporal-data-cube">3. Open a Spatiotemporal Data Cube</h3>
 <p>To open a cube (e.g., for Sentinel-2 Level-2A):
 <div class="highlight"><pre><span></span><code><span class="n">ds</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">open_data</span><span class="p">(</span>
@@ -766,7 +766,7 @@ below.</p>
 It uses the <a href="https://eopf-sample-service.github.io/xarray-eopf/">xarray-eopf</a> backend  as a reading routine to open the EOPF Zarr 
 Samples. </p>
 <blockquote>
-<p>⚠️ <strong>Note</strong><br />
+<p>💡 <strong>Note</strong><br />
 <code>open_data()</code> builds a Dask graph and returns a lazy <code>xarray.Dataset</code>.
 No actual data is loaded at this point. </p>
 </blockquote>
@@ -787,17 +787,14 @@ No actual data is loaded at this point. </p>
   <a href="https://github.com/stac-api-extensions/query">STAC Query Extension</a> for details.</li>
 </ul>
 <p>Additional parameters specific to each Sentinel mission are documented in
-<a href="#specific-parameters-for-each-sentinel-mission-">the section below</a>.</p>
+<a href="#specific-parameters-for-each-sentinel-mission">the section below</a>.</p>
 <h3 id="4-inspect-visualize-and-save-the-data-cube">4. Inspect, Visualize, and Save the Data Cube</h3>
-<p>To access and load band values (e.g., band b04, red, for Sentinel-2):</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">ds</span><span class="o">.</span><span class="n">b04</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-</code></pre></div>
-You can visualize a time slice:</p>
+<p>You can visualize a time slice:</p>
 <div class="highlight"><pre><span></span><code><span class="n">ds</span><span class="o">.</span><span class="n">b04</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </code></pre></div>
 <blockquote>
 <p>⚠️ <strong>Warning</strong><br />
-These operations trigger data downloads and processing. For large regions, use with care.</p>
+This operation trigger data downloads and processing. For large regions, use with care.</p>
 </blockquote>
 <h4 id="saving-the-data-cube">Saving the Data Cube</h4>
 <p>Although the EOPF xcube plugin focuses on data access, it integrates seamlessly with 
@@ -823,7 +820,7 @@ More info: <a href="https://xcube.readthedocs.io/en/latest/dataaccess.html#files
 <div class="highlight"><pre><span></span><code><span class="n">storage</span><span class="o">.</span><span class="n">write_data</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;path/to/file.zarr&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="visualize-in-xcube-viewer">Visualize in xcube Viewer</h4>
-<p>Once saved as Zarr, you can use <a href="https://xcube.readthedocs.io/en/latest/viewer.html">xcube Viewer</a>,
+<p>Once saved as Zarr, you can use <a href="https://xcube-dev.github.io/xcube-viewer/build_viewer/#build-and-deploy">xcube Viewer</a>,
 to visualize the cube:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">xcube.webapi.viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Viewer</span>
 
@@ -836,7 +833,7 @@ to visualize the cube:</p>
 <div class="highlight"><pre><span></span><code><span class="n">viewer</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </code></pre></div>
 <hr />
-<h2 id="specific-parameters-for-each-sentinel-mission">Specific Parameters for each Sentinel Mission</h2>
+<h2 id="specific-parameters-for-supported-sentinel-missions">Specific Parameters for supported Sentinel Missions</h2>
 <h3 id="sentinel-1">🛰️ Sentinel-1</h3>
 <p>Support for Sentinel-1 will be added in an upcoming release.</p>
 <hr />
@@ -905,11 +902,21 @@ parameters (<a href="#remarks-to-opening-parameters">see below</a>).</p>
 </table>
 <hr />
 <h4 id="remarks-to-opening-parameters">Remarks to Opening Parameters</h4>
+<p>The opening parameters mentioned in the Section <a href="#3-open-a-spatiotemporal-data-cube">Open a Spatiotemporal Data Cube</a>
+also apply to this data product.</p>
+<p><strong>Supported Variables</strong></p>
+<ul>
+<li><strong>Surface reflectance bands</strong>:<br />
+<code>b01</code>, <code>b02</code>, <code>b03</code>, <code>b04</code>, <code>b05</code>, <code>b06</code>, <code>b07</code>, <code>b08</code>, <code>b8a</code>, <code>b09</code>, <code>b11</code>, <code>b12</code></li>
+<li><strong>Classification/Quality layers</strong> (L2A only):<br />
+<code>cld</code>, <code>scl</code>, <code>snw</code></li>
+</ul>
+<p><strong>Parameters governing Resampling and Reprojection</strong></p>
 <p>Users can specify any spatial resolution and coordinate reference system (CRS) when 
 opening data with <code>open_data</code>. As a result, spectral bands may be resampled — either 
-upsampled or downsampled — and reprojected to match the target grid. If both 
-reprojection with a lower resolution is required, downsampling is performed first, 
-followed by reprojection.</p>
+upsampled or downsampled — and reprojected to match the target grid. If reprojection 
+is needed at a lower resolution, the process first downsamples the data and 
+subsequently performs the reprojection.</p>
 <p><strong>Upsampling / Reprojecting:</strong>  </p>
 <ul>
 <li>Controlled via 2D interpolation using the <code>spline_orders</code> parameter. </li>
