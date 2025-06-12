@@ -25,7 +25,7 @@ from xcube.core.store import new_data_store
 
 store = new_data_store("eopf-stac")
 ```
-### 2. Select a Product
+### 2. Select a Data Product
 
 Data products from Sentinel-1, -2, and -3 are accessed via the `data_id` parameter, 
 which corresponds to collection names in the [EOPF STAC API](https://stac.browser.user.eopf.eodc.eu/).
@@ -34,8 +34,8 @@ To list all available data IDs:
 ```python
 store.list_data_ids()
 ```
-Each `data_id` is documented in the respective sections for the supported missions 
-below.
+Each `data_id` is documented in the respective sections for the 
+[supported missions](#specific-parameters-for-supported-sentinel-missions) below.
 
 ### 3. Open a Spatiotemporal Data Cube
 
@@ -52,7 +52,7 @@ ds = store.open_data(
 It uses the [xarray-eopf](https://eopf-sample-service.github.io/xarray-eopf/) backend  as a reading routine to open the EOPF Zarr 
 Samples. 
 
-> ⚠️ **Note**  
+> 💡 **Note**  
 > `open_data()` builds a Dask graph and returns a lazy `xarray.Dataset`.
 > No actual data is loaded at this point. 
 
@@ -74,22 +74,17 @@ These parameters control the STAC API query and define the output cube's spatial
   [STAC Query Extension](https://github.com/stac-api-extensions/query) for details.
 
 Additional parameters specific to each Sentinel mission are documented in
-[the section below](#specific-parameters-for-each-sentinel-mission-).
+[the section below](#specific-parameters-for-supported-sentinel-missions).
 
 ### 4. Inspect, Visualize, and Save the Data Cube
 
-To access and load band values (e.g., band b04, red, for Sentinel-2):
-
-```python
-ds.b04.data.compute()
-```
 You can visualize a time slice:
 
 ```python
 ds.b04.isel(time=0).plot()
 ```
 > ⚠️ **Warning**  
-> These operations trigger data downloads and processing. For large regions, use with care.
+> This operation trigger data downloads and processing. For large regions, use with care.
 
 #### Saving the Data Cube
 
@@ -124,7 +119,7 @@ storage.write_data(ds, "path/to/file.zarr")
 ```
 
 #### Visualize in xcube Viewer
-Once saved as Zarr, you can use [xcube Viewer](https://xcube.readthedocs.io/en/latest/viewer.html),
+Once saved as Zarr, you can use [xcube Viewer](https://xcube-dev.github.io/xcube-viewer/build_viewer/#build-and-deploy),
 to visualize the cube:
 
 ```python
@@ -144,7 +139,7 @@ viewer.info()
 
 
 ---
-## Specific Parameters for each Sentinel Mission 
+## Specific Parameters for supported Sentinel Missions
 
 ### 🛰️ Sentinel-1
 
@@ -194,12 +189,23 @@ The EOPF xcube data store supports two Sentinel-2 product types via the `data_id
 
 #### Remarks to Opening Parameters
 
+The opening parameters mentioned in the Section [Open a Spatiotemporal Data Cube](#3-open-a-spatiotemporal-data-cube)
+also apply to this data product.
+
+**Supported Variables**
+
+- **Surface reflectance bands**:  
+  `b01`, `b02`, `b03`, `b04`, `b05`, `b06`, `b07`, `b08`, `b8a`, `b09`, `b11`, `b12`
+- **Classification/Quality layers** (L2A only):  
+  `cld`, `scl`, `snw`
+
+**Parameters governing Resampling and Reprojection**
+
 Users can specify any spatial resolution and coordinate reference system (CRS) when 
 opening data with `open_data`. As a result, spectral bands may be resampled — either 
-upsampled or downsampled — and reprojected to match the target grid. If both 
-reprojection with a lower resolution is required, downsampling is performed first, 
-followed by reprojection.
-
+upsampled or downsampled — and reprojected to match the target grid. If reprojection 
+is needed at a lower resolution, the process first downsamples the data and 
+subsequently performs the reprojection.
 
 **Upsampling / Reprojecting:**  
 

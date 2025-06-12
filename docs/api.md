@@ -11,4 +11,3 @@
         - has_data
         - get_open_data_params_schema
         - open_data
-        - describe_data

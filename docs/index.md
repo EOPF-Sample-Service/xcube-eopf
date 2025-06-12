@@ -1,6 +1,6 @@
 # xcube EOPF Data Store
 
-`xcube-eopf` is a Python package that extends [xcube](https://xcube.readthedocs.io/en/latest/dataaccess.html#available-data-stores) with a new [data store](https://xcube.readthedocs.io/en/latest/dataaccess.html#available-data-stores)
+`xcube-eopf` is a Python package that extends [xcube](https://xcube.readthedocs.io/en/latest) with a new [data store](https://xcube.readthedocs.io/en/latest/dataaccess.html#available-data-stores)
 called `"eopf-zarr"`. This plugin enables the creation of analysis-ready data cubes 
 (ARDC) from Sentinel products published by the [EOPF Sentinel Zarr Sample Service](https://zarr.eopf.copernicus.eu/).
 
@@ -13,7 +13,7 @@ data cube format through the standard xcube data store interface. You can:
 - Check data availability
 - Get metadata of the data sources
 - View available open parameters for each source
-- Open data sources directly as xarray datasets
+- Open data source directly as [xcube Dataset](https://xcube.readthedocs.io/en/latest/cubespec.html)
 
 To explore all available functions, see the [Python API](api.md).
 
