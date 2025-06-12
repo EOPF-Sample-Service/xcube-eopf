@@ -752,7 +752,7 @@ which corresponds to collection names in the <a href="https://stac.browser.user.
 <div class="highlight"><pre><span></span><code><span class="n">store</span><span class="o">.</span><span class="n">list_data_ids</span><span class="p">()</span>
 </code></pre></div>
 Each <code>data_id</code> is documented in the respective sections for the 
-<a href="#specific-parameters-for-each-sentinel-mission">supported missions</a> below.</p>
+<a href="#specific-parameters-for-supported-sentinel-missions">supported missions</a> below.</p>
 <h3 id="3-open-a-spatiotemporal-data-cube">3. Open a Spatiotemporal Data Cube</h3>
 <p>To open a cube (e.g., for Sentinel-2 Level-2A):
 <div class="highlight"><pre><span></span><code><span class="n">ds</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">open_data</span><span class="p">(</span>
@@ -787,7 +787,7 @@ No actual data is loaded at this point. </p>
   <a href="https://github.com/stac-api-extensions/query">STAC Query Extension</a> for details.</li>
 </ul>
 <p>Additional parameters specific to each Sentinel mission are documented in
-<a href="#specific-parameters-for-each-sentinel-mission">the section below</a>.</p>
+<a href="#specific-parameters-for-supported-sentinel-missions">the section below</a>.</p>
 <h3 id="4-inspect-visualize-and-save-the-data-cube">4. Inspect, Visualize, and Save the Data Cube</h3>
 <p>You can visualize a time slice:</p>
 <div class="highlight"><pre><span></span><code><span class="n">ds</span><span class="o">.</span><span class="n">b04</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
