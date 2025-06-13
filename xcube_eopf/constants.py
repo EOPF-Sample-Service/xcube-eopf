@@ -6,6 +6,7 @@ import logging
 
 from xcube.util.jsonschema import (
     JsonArraySchema,
+    JsonComplexSchema,
     JsonDateSchema,
     JsonIntegerSchema,
     JsonNumberSchema,
@@ -54,11 +55,20 @@ SCHEMA_TIME_RANGE = JsonArraySchema(
         "Start and stop are inclusive."
     ),
 )
-SCHEMA_VARIABLES = JsonArraySchema(
-    items=(JsonStringSchema(min_length=0)),
-    unique_items=True,
+SCHEMA_VARIABLES = JsonComplexSchema(
     title="Names of variables in dataset",
     description="Names of variables which will be included in the data cube.",
+    one_of=[
+        JsonStringSchema(
+            title="Variable name or regex pattern",
+            min_length=0,
+        ),
+        JsonArraySchema(
+            title="Iterable of variables",
+            items=(JsonStringSchema(min_length=0)),
+            unique_items=True,
+        ),
+    ],
 )
 SCHEMA_SPATIAL_RES = JsonNumberSchema(title="Spatial Resolution", exclusive_minimum=0.0)
 SCHEMA_CRS = JsonStringSchema(title="Coordinate reference system")
@@ -66,7 +76,7 @@ SCHEMA_TILE_SIZE = JsonArraySchema(
     nullable=True,
     title="Tile size of returned dataset",
     description=(
-        "Tile size in y and x (or lat and lon if crs is geographic) "
+        "Spatial tile size in y and x (or lat and lon if crs is geographic) "
         "in returned dataset."
     ),
     items=[JsonIntegerSchema(minimum=1), JsonIntegerSchema(minimum=1)],
