@@ -55,6 +55,11 @@ _ATTRIBUTE_KEYS = [
     "flag_colors",
     "grid_mapping",
 ]
+_LONG_NAME_TRANSLATION = {
+    "cld": "Cloud probability, based on Sen2Cor processor",
+    "scl": "Scene classification data, based on Sen2Cor processor",
+    "snw": "Snow probability, based on Sen2Cor processor",
+}
 _INTERPOLATIONS = {0: "nearest", 2: "bilinear"}
 _SCHEMA_SPLINE_ORDERS = JsonComplexSchema(
     title="Spline orders for updampling",
@@ -727,5 +732,7 @@ def _create_empty_dataset(
             for k in _ATTRIBUTE_KEYS
             if k in sample_ds[key].attrs
         }
+        if key in _LONG_NAME_TRANSLATION.keys():
+            ds[key].attrs["long_name"] = _LONG_NAME_TRANSLATION[key]
 
     return ds
