@@ -736,7 +736,3 @@ def _create_empty_dataset(
             ds[key].attrs["long_name"] = _LONG_NAME_TRANSLATION[key]
 
     return ds
-
-
-def _create_empty_data(dtype, shape, chunks):
-    return da.full(shape, fill_value=np.nan, dtype=dtype, chunks=chunks)
