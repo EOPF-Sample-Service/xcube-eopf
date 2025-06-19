@@ -709,14 +709,14 @@ def _create_empty_dataset(
     )
     x = np.arange(x_start + half_res, x_end, spatial_res)
 
-    empty_data = da.full(
-        (grouped_items.sizes["time"], len(y), len(x)),
-        np.nan,
-        chunks=(1, _TILE_SIZE, _TILE_SIZE),
-    )
+    chunks = (1, _TILE_SIZE, _TILE_SIZE)
+    shape = (grouped_items.sizes["time"], len(y), len(x))
     ds = xr.Dataset(
         {
-            key: (("time", "y", "x"), empty_data.astype(var))
+            key: (
+                ("time", "y", "x"),
+                da.full(shape, np.nan, dtype=var.dtype, chunks=chunks),
+            )
             for (key, var) in sample_ds.data_vars.items()
         },
         coords={
