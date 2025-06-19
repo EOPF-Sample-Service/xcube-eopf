@@ -716,7 +716,7 @@ def _create_empty_dataset(
     )
     ds = xr.Dataset(
         {
-            key: (("time", "y", "x"), empty_data.astype(var))
+            key: (("time", "y", "x"), empty_data.copy().astype(var))
             for (key, var) in sample_ds.data_vars.items()
         },
         coords={
