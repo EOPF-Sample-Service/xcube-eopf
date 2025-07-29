@@ -23,7 +23,7 @@ To instantiate the data store:
 ```python
 from xcube.core.store import new_data_store
 
-store = new_data_store("eopf-stac")
+store = new_data_store("eopf-zarr")
 ```
 ### 2. Select a Data Product
 
