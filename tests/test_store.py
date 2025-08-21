@@ -117,7 +117,7 @@ class EOPFZarrDataStoreTest(TestCase):
             spatial_res=10,
             crs="EPSG:32632",
             variables=["b02", "b03", "b04", "scl"],
-            spline_orders={0: [np.float32], 3: ["scl"]},
+            interp_methods={np.float32: 0, "scl": 3},
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
@@ -135,26 +135,17 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
-    def test_open_data_5m_spline_order(self, mock_xarray):
+    def test_open_data_5m_interp_method(self, mock_xarray):
         mock_xarray.return_value = l2a_10m()
-
-        with self.assertLogs("xcube.eopf", level="WARNING") as cm:
-            ds = self.store.open_data(
-                data_id="sentinel-2-l2a",
-                bbox=(610000, 5880000, 630000, 5900000),
-                time_range=["2025-05-01", "2025-05-15"],
-                spatial_res=5,
-                crs="EPSG:32632",
-                variables=["b02", "b03", "b04", "scl"],
-                spline_orders={0: [np.float32], 3: ["scl"]},
-            )
-        self.assertEqual(1, len(cm.output))
-        msg = (
-            f"WARNING:xcube.eopf:Spline order 3 selected for 'scl' "
-            f"(categorical data). This may produce corrupted results."
+        ds = self.store.open_data(
+            data_id="sentinel-2-l2a",
+            bbox=(610000, 5880000, 630000, 5900000),
+            time_range=["2025-05-01", "2025-05-15"],
+            spatial_res=5,
+            crs="EPSG:32632",
+            variables=["b02", "b03", "b04", "scl"],
+            interp_methods={np.dtype("float64"): "bilinear", "scl": "nearest"},
         )
-        self.assertEqual(msg, str(cm.output[-1]))
-
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertCountEqual(
@@ -173,24 +164,15 @@ class EOPFZarrDataStoreTest(TestCase):
     @patch("xarray.open_dataset")
     def test_open_data_100m_agg_methods(self, mock_xarray):
         mock_xarray.return_value = l2a_60m()
-
-        with self.assertLogs("xcube.eopf", level="WARNING") as cm:
-            ds = self.store.open_data(
-                data_id="sentinel-2-l2a",
-                bbox=(610000, 5880000, 630000, 5900000),
-                time_range=["2025-05-01", "2025-05-15"],
-                spatial_res=100,
-                crs="EPSG:32632",
-                variables=["b02", "b03", "b04", "scl"],
-                agg_methods={"max": [np.float32], "mean": ["scl"]},
-            )
-        self.assertEqual(1, len(cm.output))
-        msg = (
-            "WARNING:xcube.eopf:Aggregation method 'mean' selected for 'scl' "
-            "(categorical data). This may produce corrupted results."
+        ds = self.store.open_data(
+            data_id="sentinel-2-l2a",
+            bbox=(610000, 5880000, 630000, 5900000),
+            time_range=["2025-05-01", "2025-05-15"],
+            spatial_res=100,
+            crs="EPSG:32632",
+            variables=["b02", "b03", "b04", "scl"],
+            agg_methods={np.dtype("float64"): "max", "scl": "mode"},
         )
-        self.assertEqual(msg, str(cm.output[-1]))
-
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertCountEqual(
@@ -223,48 +205,6 @@ class EOPFZarrDataStoreTest(TestCase):
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
-        self.assertCountEqual(
-            [4, 412, 684], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
-        )
-        self.assertEqual(
-            [1, 412, 684],
-            [
-                ds.chunksizes["time"][0],
-                ds.chunksizes["lat"][0],
-                ds.chunksizes["lon"][0],
-            ],
-        )
-        self.assertIn("stac_url", ds.attrs)
-        self.assertIn("stac_items", ds.attrs)
-        self.assertIn("open_params", ds.attrs)
-        self.assertIn("xcube_eopf_version", ds.attrs)
-
-    @pytest.mark.vcr()
-    @patch("xarray.open_dataset")
-    def test_open_data_spline_order_raise_logs(self, mock_xarray):
-        mock_xarray.return_value = l2a_60m()
-
-        bbox = [610000, 5880000, 630000, 5900000]
-        bbox_wgs84 = reproject_bbox(bbox, "EPSG:32632", "EPSG:4326")
-        with self.assertLogs("xcube.eopf", level="WARNING") as cm:
-            ds = self.store.open_data(
-                data_id="sentinel-2-l2a",
-                bbox=bbox_wgs84,
-                time_range=["2025-05-01", "2025-05-15"],
-                spatial_res=50 / CONVERSION_FACTOR_DEG_METER,
-                crs="EPSG:4326",
-                variables=["b02", "b03", "b04", "scl"],
-                spline_orders=2,
-            )
-        self.assertEqual(1, len(cm.output))
-        msg = (
-            "WARNING:xcube.eopf:User-defined spline-orders is not supported yet, "
-            "when reprojecting to a different CRS. Default interpolation will be "
-            "used: bilinear for continuous data, and nearest-neighbor for 'scl'."
-        )
-        self.assertEqual(msg, str(cm.output[-1]))
-        self.assertIsInstance(ds, xr.Dataset)
-        self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertCountEqual(
             [4, 412, 684], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )

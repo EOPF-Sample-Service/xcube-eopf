@@ -9,7 +9,7 @@ import numpy as np
 import pyproj
 import pystac
 import xarray as xr
-from xcube.core.gridmapping import GridMapping
+from xcube_resampling.gridmapping import GridMapping
 from xcube.core.store import DataStoreError
 
 from xcube_eopf.utils import (
