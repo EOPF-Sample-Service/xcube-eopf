@@ -10,7 +10,7 @@ dependencies:
   - pystac
   - pystac-client
   - xarray
-  - xarray-eopf >=0.1.1
+  - xarray-eopf ==0.1.2 # change after next xarray-eopf release
   - xcube >=1.11.0
   - xcube-resampling
   # Development Dependencies - Tools

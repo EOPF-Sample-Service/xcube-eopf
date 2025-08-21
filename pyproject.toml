@@ -47,7 +47,7 @@ dependencies = [
   "pystac",
   "pystac-client",
   "xarray",
-  "xarray-eopf>=0.1.1",
+  "xarray-eopf==0.1.2",
   "xcube-core>=1.11.0",
   "xcube-resampling",
 ]
