@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.4
     method: GET
     uri: https://stac.core.eopf.eodc.eu/
   response:
@@ -45,7 +45,7 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:16 GMT
+      - Thu, 21 Aug 2025 10:59:41 GMT
       vary:
       - Accept-Encoding
     status:
@@ -61,7 +61,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.4
     method: GET
     uri: https://stac.core.eopf.eodc.eu/
   response:
@@ -97,7 +97,7 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:16 GMT
+      - Thu, 21 Aug 2025 10:59:41 GMT
       vary:
       - Accept-Encoding
     status:
@@ -118,7 +118,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.4
     method: POST
     uri: https://stac.core.eopf.eodc.eu/search
   response:
@@ -916,7 +916,7 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:15 GMT
+      - Thu, 21 Aug 2025 10:59:41 GMT
       vary:
       - Accept-Encoding
     status:
@@ -938,7 +938,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.4
     method: POST
     uri: https://stac.core.eopf.eodc.eu/search
   response:
@@ -1112,7 +1112,7 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:16 GMT
+      - Thu, 21 Aug 2025 10:59:43 GMT
       vary:
       - Accept-Encoding
     status:
