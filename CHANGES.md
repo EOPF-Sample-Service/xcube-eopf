@@ -1,3 +1,12 @@
+## Changes in 0.2.0
+
+* Switched to [xcube-resampling](https://xcube-dev.github.io/xcube-resampling/) 
+  for dataset resampling and reprojection.  
+* Renamed the keyword argument `spline_orders` to `interp_methods` to align with 
+  the naming convention used in xcube-resampling.  
+* Fixed issue #39: resolved `AttributeError: 'dict' object has no attribute 'coords'`.
+
+
 ## Changes in 0.1.1
 
 * Fixed a bug in Sentinel-2 cube generation where, during mosaicking of adjacent tiles 

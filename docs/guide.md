@@ -174,7 +174,7 @@ These tiles are stored in their native UTM CRS, which varies by geographic locat
 | Condition        | Requested bounding box lies within a single UTM zone, native CRS is requested, and the spatial resolution matches the native resolution.                                                                                                                                            | Data spans multiple UTM zones, a different CRS is requested (e.g., EPSG:4326), or a custom spatial resolution is requested.                                                                |
 | Processing steps | Only upsampling or downsampling is applied to align the differing resolutions of the spectral bands. Data cube is directly cropped using the requested bounding box, preserving original pixel values. Spatial extent may deviate slightly due to alignment with native pixel grid. | A target grid mapping is computed from bounding box, spatial resolution, and CRS. Data from each UTM zone is reprojected/resampled to this grid. Overlaps resolved by first non-NaN pixel. |
 
-Upsampling and downsampling are controlled using the `agg_methods` and `spline_order`
+Upsampling and downsampling are controlled using the `agg_methods` and `interp_methods`
 parameters ([see below](#remarks-to-opening-parameters)).
 
 #### Data Identifiers
@@ -209,20 +209,21 @@ subsequently performs the reprojection.
 
 **Upsampling / Reprojecting:**  
 
-- Controlled via 2D interpolation using the `spline_orders` parameter. 
-- Accepts a single order for all variables, or a dictionary mapping orders to variable 
-  names or data types.
-- Supported spline orders: 
-    - `0`: nearest neighbor (default for `scl`)
-    - `1`: linear
-    - `2`: bi-linear
-    - `3`: cubic (default)
+- Controlled via 2D interpolation using the `interp_methods` parameter. 
+- Accepts a single interpolation method for all variables, or a dictionary mapping from
+  variable names or data types to specific interpolation methods.
+- Supported interpolation methods: 
+    - `0` (nearest neighbor)
+    - `1` (linear / bilinear)
+    - `"nearest"`
+    - `"triangular"`
+    - `"bilinear"`
 
 **Downsampling:**  
 
 - Controlled via the `agg_methods` parameter.
-- Can be specified as a single method for all variables, or as a dictionary mapping
-  methods to variable names or data types.  
+- Can be specified as a single method for all variables, or a dictionary mapping from
+  variable names or data types to specific interpolation methods. 
 - Supported aggregation methods:
     - `"center"` (default for `scl`)
     - `"count"`
