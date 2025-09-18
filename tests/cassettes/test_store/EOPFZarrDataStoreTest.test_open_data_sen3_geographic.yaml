@@ -1,0 +1,288 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br, zstd
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://stac.core.eopf.eodc.eu/
+  response:
+    body:
+      string: '{"type":"Catalog","id":"eopf-sample-service-stac-api","title":"EOPF
+        Sentinel Zarr Samples Service STAC API","description":"STAC catalog of the
+        EOPF Sentinel Zarr Samples Service","stac_version":"1.0.0","conformsTo":["http://www.opengis.net/spec/cql2/1.0/conf/basic-cql2","http://www.opengis.net/spec/cql2/1.0/conf/cql2-json","http://www.opengis.net/spec/cql2/1.0/conf/cql2-text","http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core","http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson","http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30","http://www.opengis.net/spec/ogcapi-features-3/1.0/conf/features-filter","http://www.opengis.net/spec/ogcapi-features-3/1.0/conf/filter","https://api.stacspec.org/v1.0.0-rc.2/item-search#filter","https://api.stacspec.org/v1.0.0/collections","https://api.stacspec.org/v1.0.0/collections/extensions/transaction","https://api.stacspec.org/v1.0.0/core","https://api.stacspec.org/v1.0.0/item-search","https://api.stacspec.org/v1.0.0/item-search#fields","https://api.stacspec.org/v1.0.0/item-search#query","https://api.stacspec.org/v1.0.0/item-search#sort","https://api.stacspec.org/v1.0.0/ogcapi-features","https://api.stacspec.org/v1.0.0/ogcapi-features#fields","https://api.stacspec.org/v1.0.0/ogcapi-features#query","https://api.stacspec.org/v1.0.0/ogcapi-features#sort","https://api.stacspec.org/v1.0.0/ogcapi-features/extensions/transaction"],"links":[{"rel":"self","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"data","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections"},{"rel":"conformance","type":"application/json","title":"STAC/OGC
+        conformance classes implemented by this server","href":"https://stac.core.eopf.eodc.eu/conformance"},{"rel":"search","type":"application/geo+json","title":"STAC
+        search","href":"https://stac.core.eopf.eodc.eu/search","method":"GET"},{"rel":"search","type":"application/geo+json","title":"STAC
+        search","href":"https://stac.core.eopf.eodc.eu/search","method":"POST"},{"rel":"http://www.opengis.net/def/rel/ogc/1.0/queryables","type":"application/schema+json","title":"Queryables","href":"https://stac.core.eopf.eodc.eu/queryables","method":"GET"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 SLC","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-slc"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 EFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LRR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lrr"},{"rel":"service-desc","type":"application/vnd.oai.openapi+json;version=3.0","title":"OpenAPI
+        service description","href":"https://stac.core.eopf.eodc.eu/api"},{"rel":"service-doc","type":"text/html","title":"OpenAPI
+        service documentation","href":"https://stac.core.eopf.eodc.eu/api.html"}],"stac_extensions":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '804'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX/3.7.0
+      content-encoding:
+      - br
+      date:
+      - Thu, 18 Sep 2025 10:25:25 GMT
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br, zstd
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://stac.core.eopf.eodc.eu/
+  response:
+    body:
+      string: '{"type":"Catalog","id":"eopf-sample-service-stac-api","title":"EOPF
+        Sentinel Zarr Samples Service STAC API","description":"STAC catalog of the
+        EOPF Sentinel Zarr Samples Service","stac_version":"1.0.0","conformsTo":["http://www.opengis.net/spec/cql2/1.0/conf/basic-cql2","http://www.opengis.net/spec/cql2/1.0/conf/cql2-json","http://www.opengis.net/spec/cql2/1.0/conf/cql2-text","http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core","http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson","http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30","http://www.opengis.net/spec/ogcapi-features-3/1.0/conf/features-filter","http://www.opengis.net/spec/ogcapi-features-3/1.0/conf/filter","https://api.stacspec.org/v1.0.0-rc.2/item-search#filter","https://api.stacspec.org/v1.0.0/collections","https://api.stacspec.org/v1.0.0/collections/extensions/transaction","https://api.stacspec.org/v1.0.0/core","https://api.stacspec.org/v1.0.0/item-search","https://api.stacspec.org/v1.0.0/item-search#fields","https://api.stacspec.org/v1.0.0/item-search#query","https://api.stacspec.org/v1.0.0/item-search#sort","https://api.stacspec.org/v1.0.0/ogcapi-features","https://api.stacspec.org/v1.0.0/ogcapi-features#fields","https://api.stacspec.org/v1.0.0/ogcapi-features#query","https://api.stacspec.org/v1.0.0/ogcapi-features#sort","https://api.stacspec.org/v1.0.0/ogcapi-features/extensions/transaction"],"links":[{"rel":"self","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"data","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections"},{"rel":"conformance","type":"application/json","title":"STAC/OGC
+        conformance classes implemented by this server","href":"https://stac.core.eopf.eodc.eu/conformance"},{"rel":"search","type":"application/geo+json","title":"STAC
+        search","href":"https://stac.core.eopf.eodc.eu/search","method":"GET"},{"rel":"search","type":"application/geo+json","title":"STAC
+        search","href":"https://stac.core.eopf.eodc.eu/search","method":"POST"},{"rel":"http://www.opengis.net/def/rel/ogc/1.0/queryables","type":"application/schema+json","title":"Queryables","href":"https://stac.core.eopf.eodc.eu/queryables","method":"GET"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 SLC","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-slc"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 EFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LRR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lrr"},{"rel":"service-desc","type":"application/vnd.oai.openapi+json;version=3.0","title":"OpenAPI
+        service description","href":"https://stac.core.eopf.eodc.eu/api"},{"rel":"service-doc","type":"text/html","title":"OpenAPI
+        service documentation","href":"https://stac.core.eopf.eodc.eu/api.html"}],"stac_extensions":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '804'
+      Content-Type:
+      - application/json
+      Server:
+      - APISIX/3.7.0
+      content-encoding:
+      - br
+      date:
+      - Thu, 18 Sep 2025 10:25:25 GMT
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"datetime": "2025-05-01T00:00:00Z/2025-05-21T23:59:59Z", "collections":
+      ["sentinel-3-olci-l1-efr"], "intersects": {"type": "Polygon", "coordinates":
+      [[[5.0, 53.0], [10.0, 53.0], [10.0, 57.0], [5.0, 57.0], [5.0, 53.0]]]}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br, zstd
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '221'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.32.5
+    method: POST
+    uri: https://stac.core.eopf.eodc.eu/search
+  response:
+    body:
+      string: '{"type":"FeatureCollection","links":[{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/json","href":"https://stac.core.eopf.eodc.eu/search"}],"features":[{"id":"S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004","bbox":[-4.09796,49.8841,21.4103,62.9114],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"parent","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/geo+json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr/items/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004"},{"rel":"license","href":"https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice","type":"application/pdf","title":"Legal
+        notice on the use of Copernicus Sentinel Data and Service Information"}],"assets":{"product":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr","type":"application/vnd+zarr","roles":["data","metadata"],"title":"EOPF
+        Product","description":"The full Zarr hierarchy of the EOPF product","xarray:open_datatree_kwargs":{"chunks":{},"engine":"eopf-zarr","op_mode":"native"}},"radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements","type":"application/vnd+zarr","bands":[{"name":"Oa01","description":"Band
+        1 - Aerosol correction, improved water constituent retrieval","center_wavelength":400,"full_width_half_max":15},{"name":"Oa02","description":"Band
+        2 - Yellow substance and detrital pigments (turbidity)","center_wavelength":412.5,"full_width_half_max":10},{"name":"Oa03","description":"Band
+        3 - Chlorophyll absorption maximum, biogeochemistry, vegetation","center_wavelength":442.5,"full_width_half_max":10},{"name":"Oa04","description":"Band
+        4 - Chlorophyll","center_wavelength":490,"full_width_half_max":10},{"name":"Oa05","description":"Band
+        5 - Chlorophyll, sediment, turbidity, red tide","center_wavelength":510,"full_width_half_max":10},{"name":"Oa06","description":"Band
+        6 - Chlorophyll reference (minimum)","center_wavelength":560,"full_width_half_max":10},{"name":"Oa07","description":"Band
+        7 - Sediment loading","center_wavelength":620,"full_width_half_max":10},{"name":"Oa08","description":"Band
+        8 - 2nd Chlorophyll absorption maximum, sediment, yellow substance / vegetation","center_wavelength":665,"full_width_half_max":10},{"name":"Oa09","description":"Band
+        9 - Improved fluorescence retrieval","center_wavelength":673.75,"full_width_half_max":7.5},{"name":"Oa10","description":"Band
+        10 - Chlorophyll fluorescence peak, red edge","center_wavelength":681.25,"full_width_half_max":7.5},{"name":"Oa11","description":"Band
+        11 - Chlorophyll fluorescence baseline, red edge transition","center_wavelength":708.75,"full_width_half_max":10},{"name":"Oa12","description":"Band
+        12 - O2 absorption / clouds, vegetation","center_wavelength":753.75,"full_width_half_max":7.5},{"name":"Oa13","description":"Band
+        13 - O2 absorption / aerosol correction","center_wavelength":761.25,"full_width_half_max":2.5},{"name":"Oa14","description":"Band
+        14 - Atmospheric correction","center_wavelength":764.375,"full_width_half_max":3.75},{"name":"Oa15","description":"Band
+        15 - O2 absorption used for cloud top pressure, fluorescence over land","center_wavelength":767.5,"full_width_half_max":2.5},{"name":"Oa16","description":"Band
+        16 - Atmospheric / aerosol correction","center_wavelength":778.75,"full_width_half_max":15},{"name":"Oa17","description":"Band
+        17 - Atmospheric / aerosol correction, clouds, pixel co-registration","center_wavelength":865,"full_width_half_max":20},{"name":"Oa18","description":"Band
+        18 - Water vapour absorption reference. Common reference band with SLSTR.
+        Vegetation monitoring","center_wavelength":885,"full_width_half_max":10},{"name":"Oa19","description":"Band
+        19 - Water vapour absorption, vegetation monitoring (maximum REFLECTANCE)","center_wavelength":900,"full_width_half_max":10},{"name":"Oa20","description":"Band
+        20 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":940,"full_width_half_max":20},{"name":"Oa21","description":"Band
+        21 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":1020,"full_width_half_max":40}],"roles":["data","dataset"],"title":"TOA
+        radiance for OLCI acquisition bands 01 to 21","xarray:open_dataset_kwargs":{"chunks":{},"engine":"eopf-zarr","op_mode":"native"}},"product_metadata":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/.zmetadata","type":"application/json","roles":["metadata"],"title":"Consolidated
+        Metadata","description":"Consolidated metadata of the EOPF product"},"Oa01_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa01_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa01","description":"Band
+        1 - Aerosol correction, improved water constituent retrieval","center_wavelength":400,"full_width_half_max":15}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa01"},"Oa02_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa02_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa02","description":"Band
+        2 - Yellow substance and detrital pigments (turbidity)","center_wavelength":412.5,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa02"},"Oa03_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa03_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa03","description":"Band
+        3 - Chlorophyll absorption maximum, biogeochemistry, vegetation","center_wavelength":442.5,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa03"},"Oa04_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa04_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa04","description":"Band
+        4 - Chlorophyll","center_wavelength":490,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa04"},"Oa05_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa05_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa05","description":"Band
+        5 - Chlorophyll, sediment, turbidity, red tide","center_wavelength":510,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa05"},"Oa06_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa06_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa06","description":"Band
+        6 - Chlorophyll reference (minimum)","center_wavelength":560,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa06"},"Oa07_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa07_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa07","description":"Band
+        7 - Sediment loading","center_wavelength":620,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa07"},"Oa08_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa08_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa08","description":"Band
+        8 - 2nd Chlorophyll absorption maximum, sediment, yellow substance / vegetation","center_wavelength":665,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa08"},"Oa09_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa09_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa09","description":"Band
+        9 - Improved fluorescence retrieval","center_wavelength":673.75,"full_width_half_max":7.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa09"},"Oa10_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa10_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa10","description":"Band
+        10 - Chlorophyll fluorescence peak, red edge","center_wavelength":681.25,"full_width_half_max":7.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa10"},"Oa11_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa11_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa11","description":"Band
+        11 - Chlorophyll fluorescence baseline, red edge transition","center_wavelength":708.75,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa11"},"Oa12_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa12_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa12","description":"Band
+        12 - O2 absorption / clouds, vegetation","center_wavelength":753.75,"full_width_half_max":7.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa12"},"Oa13_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa13_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa13","description":"Band
+        13 - O2 absorption / aerosol correction","center_wavelength":761.25,"full_width_half_max":2.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa13"},"Oa14_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa14_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa14","description":"Band
+        14 - Atmospheric correction","center_wavelength":764.375,"full_width_half_max":3.75}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa14"},"Oa15_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa15_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa15","description":"Band
+        15 - O2 absorption used for cloud top pressure, fluorescence over land","center_wavelength":767.5,"full_width_half_max":2.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa15"},"Oa16_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa16_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa16","description":"Band
+        16 - Atmospheric / aerosol correction","center_wavelength":778.75,"full_width_half_max":15}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa16"},"Oa17_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa17_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa17","description":"Band
+        17 - Atmospheric / aerosol correction, clouds, pixel co-registration","center_wavelength":865,"full_width_half_max":20}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa17"},"Oa18_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa18_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa18","description":"Band
+        18 - Water vapour absorption reference. Common reference band with SLSTR.
+        Vegetation monitoring","center_wavelength":885,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa18"},"Oa19_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa19_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa19","description":"Band
+        19 - Water vapour absorption, vegetation monitoring (maximum REFLECTANCE)","center_wavelength":900,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa19"},"Oa20_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa20_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa20","description":"Band
+        20 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":940,"full_width_half_max":20}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa20"},"Oa21_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/16/products/cpm_v256/S3B_OL_1_EFR____20250516T100122_20250516T100422_20250621T093102_0180_106_293_1980_ESA_O_NT_004.zarr/measurements/oa21_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa21","description":"Band
+        21 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":1020,"full_width_half_max":40}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa21"}},"geometry":{"type":"Polygon","coordinates":[[[-4.09796,52.4536],[-3.07953,52.3932],[-2.07216,52.3228],[-1.07574,52.2446],[-0.072103,52.157],[0.925423,52.0638],[1.91676,51.9599],[2.90714,51.8466],[3.88683,51.7261],[4.8642,51.5972],[5.83857,51.4608],[6.80161,51.3164],[7.76219,51.1636],[8.71551,51.0039],[9.66203,50.8358],[10.6002,50.6604],[11.5318,50.4769],[12.4552,50.2867],[13.3715,50.0889],[14.2851,49.8841],[15.7688,52.4313],[17.4251,54.9645],[19.2889,57.4743],[21.4103,59.9553],[20.2785,60.2096],[19.1284,60.4557],[17.9602,60.6916],[16.7785,60.9169],[15.5816,61.1312],[14.3679,61.3349],[13.1333,61.5277],[11.8936,61.7087],[10.6359,61.8789],[9.36649,62.0364],[8.08178,62.1835],[6.77738,62.3194],[5.464,62.443],[4.14508,62.5534],[2.81459,62.6488],[1.4735,62.7343],[0.128101,62.8069],[-1.21522,62.8663],[-2.57561,62.9114],[-2.94589,60.2978],[-3.32367,57.6829],[-3.70824,55.0663],[-4.09796,52.4536]]]},"collection":"sentinel-3-olci-l1-efr","properties":{"gsd":300.0,"created":"2025-06-21T09:31:02Z","mission":"Sentinel-3","updated":"2025-06-21T09:31:02Z","datetime":"2025-05-16T10:01:22.380733Z","platform":"sentinel-3b","providers":[{"url":"https://commission.europa.eu/","name":"European
+        Commission","roles":["licensor"]},{"url":"https://sentinel.esa.int/web/sentinel/missions/sentinel-3","name":"ESA","roles":["producer","processor"]},{"url":"https://zarr.eopf.copernicus.eu/","name":"EOPF
+        Sentinel Zarr Samples Service","roles":["host","processor"]}],"published":"2025-06-21T09:31:02Z","instruments":["olci"],"end_datetime":"2025-05-16T10:04:22.380733Z","product:type":"S03OLCEFR","constellation":"sentinel-3","start_datetime":"2025-05-16T10:01:22.380733Z","sat:orbit_state":"descending","processing:level":"L1","product:timeliness":"P1M","sat:absolute_orbit":36755,"sat:relative_orbit":293,"processing:facility":"OPE","processing:software":{"PUG":"03.50"},"product:timeliness_category":"NT","sat:platform_international_designator":"2018-039A"},"stac_version":"1.1.0","stac_extensions":["https://stac-extensions.github.io/timestamps/v1.1.0/schema.json","https://stac-extensions.github.io/sat/v1.0.0/schema.json","https://stac-extensions.github.io/processing/v1.2.0/schema.json","https://stac-extensions.github.io/product/v0.1.0/schema.json","https://cs-si.github.io/eopf-stac-extension/v1.2.0/schema.json"]},{"id":"S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004","bbox":[6.18845,49.8779,31.693,62.9061],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"parent","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/geo+json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr/items/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004"},{"rel":"license","href":"https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice","type":"application/pdf","title":"Legal
+        notice on the use of Copernicus Sentinel Data and Service Information"}],"assets":{"product":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr","type":"application/vnd+zarr","roles":["data","metadata"],"title":"EOPF
+        Product","description":"The full Zarr hierarchy of the EOPF product","xarray:open_datatree_kwargs":{"chunks":{},"engine":"eopf-zarr","op_mode":"native"}},"radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements","type":"application/vnd+zarr","bands":[{"name":"Oa01","description":"Band
+        1 - Aerosol correction, improved water constituent retrieval","center_wavelength":400,"full_width_half_max":15},{"name":"Oa02","description":"Band
+        2 - Yellow substance and detrital pigments (turbidity)","center_wavelength":412.5,"full_width_half_max":10},{"name":"Oa03","description":"Band
+        3 - Chlorophyll absorption maximum, biogeochemistry, vegetation","center_wavelength":442.5,"full_width_half_max":10},{"name":"Oa04","description":"Band
+        4 - Chlorophyll","center_wavelength":490,"full_width_half_max":10},{"name":"Oa05","description":"Band
+        5 - Chlorophyll, sediment, turbidity, red tide","center_wavelength":510,"full_width_half_max":10},{"name":"Oa06","description":"Band
+        6 - Chlorophyll reference (minimum)","center_wavelength":560,"full_width_half_max":10},{"name":"Oa07","description":"Band
+        7 - Sediment loading","center_wavelength":620,"full_width_half_max":10},{"name":"Oa08","description":"Band
+        8 - 2nd Chlorophyll absorption maximum, sediment, yellow substance / vegetation","center_wavelength":665,"full_width_half_max":10},{"name":"Oa09","description":"Band
+        9 - Improved fluorescence retrieval","center_wavelength":673.75,"full_width_half_max":7.5},{"name":"Oa10","description":"Band
+        10 - Chlorophyll fluorescence peak, red edge","center_wavelength":681.25,"full_width_half_max":7.5},{"name":"Oa11","description":"Band
+        11 - Chlorophyll fluorescence baseline, red edge transition","center_wavelength":708.75,"full_width_half_max":10},{"name":"Oa12","description":"Band
+        12 - O2 absorption / clouds, vegetation","center_wavelength":753.75,"full_width_half_max":7.5},{"name":"Oa13","description":"Band
+        13 - O2 absorption / aerosol correction","center_wavelength":761.25,"full_width_half_max":2.5},{"name":"Oa14","description":"Band
+        14 - Atmospheric correction","center_wavelength":764.375,"full_width_half_max":3.75},{"name":"Oa15","description":"Band
+        15 - O2 absorption used for cloud top pressure, fluorescence over land","center_wavelength":767.5,"full_width_half_max":2.5},{"name":"Oa16","description":"Band
+        16 - Atmospheric / aerosol correction","center_wavelength":778.75,"full_width_half_max":15},{"name":"Oa17","description":"Band
+        17 - Atmospheric / aerosol correction, clouds, pixel co-registration","center_wavelength":865,"full_width_half_max":20},{"name":"Oa18","description":"Band
+        18 - Water vapour absorption reference. Common reference band with SLSTR.
+        Vegetation monitoring","center_wavelength":885,"full_width_half_max":10},{"name":"Oa19","description":"Band
+        19 - Water vapour absorption, vegetation monitoring (maximum REFLECTANCE)","center_wavelength":900,"full_width_half_max":10},{"name":"Oa20","description":"Band
+        20 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":940,"full_width_half_max":20},{"name":"Oa21","description":"Band
+        21 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":1020,"full_width_half_max":40}],"roles":["data","dataset"],"title":"TOA
+        radiance for OLCI acquisition bands 01 to 21","xarray:open_dataset_kwargs":{"chunks":{},"engine":"eopf-zarr","op_mode":"native"}},"product_metadata":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/.zmetadata","type":"application/json","roles":["metadata"],"title":"Consolidated
+        Metadata","description":"Consolidated metadata of the EOPF product"},"Oa01_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa01_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa01","description":"Band
+        1 - Aerosol correction, improved water constituent retrieval","center_wavelength":400,"full_width_half_max":15}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa01"},"Oa02_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa02_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa02","description":"Band
+        2 - Yellow substance and detrital pigments (turbidity)","center_wavelength":412.5,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa02"},"Oa03_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa03_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa03","description":"Band
+        3 - Chlorophyll absorption maximum, biogeochemistry, vegetation","center_wavelength":442.5,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa03"},"Oa04_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa04_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa04","description":"Band
+        4 - Chlorophyll","center_wavelength":490,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa04"},"Oa05_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa05_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa05","description":"Band
+        5 - Chlorophyll, sediment, turbidity, red tide","center_wavelength":510,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa05"},"Oa06_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa06_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa06","description":"Band
+        6 - Chlorophyll reference (minimum)","center_wavelength":560,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa06"},"Oa07_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa07_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa07","description":"Band
+        7 - Sediment loading","center_wavelength":620,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa07"},"Oa08_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa08_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa08","description":"Band
+        8 - 2nd Chlorophyll absorption maximum, sediment, yellow substance / vegetation","center_wavelength":665,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa08"},"Oa09_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa09_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa09","description":"Band
+        9 - Improved fluorescence retrieval","center_wavelength":673.75,"full_width_half_max":7.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa09"},"Oa10_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa10_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa10","description":"Band
+        10 - Chlorophyll fluorescence peak, red edge","center_wavelength":681.25,"full_width_half_max":7.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa10"},"Oa11_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa11_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa11","description":"Band
+        11 - Chlorophyll fluorescence baseline, red edge transition","center_wavelength":708.75,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa11"},"Oa12_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa12_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa12","description":"Band
+        12 - O2 absorption / clouds, vegetation","center_wavelength":753.75,"full_width_half_max":7.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa12"},"Oa13_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa13_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa13","description":"Band
+        13 - O2 absorption / aerosol correction","center_wavelength":761.25,"full_width_half_max":2.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa13"},"Oa14_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa14_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa14","description":"Band
+        14 - Atmospheric correction","center_wavelength":764.375,"full_width_half_max":3.75}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa14"},"Oa15_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa15_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa15","description":"Band
+        15 - O2 absorption used for cloud top pressure, fluorescence over land","center_wavelength":767.5,"full_width_half_max":2.5}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa15"},"Oa16_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa16_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa16","description":"Band
+        16 - Atmospheric / aerosol correction","center_wavelength":778.75,"full_width_half_max":15}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa16"},"Oa17_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa17_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa17","description":"Band
+        17 - Atmospheric / aerosol correction, clouds, pixel co-registration","center_wavelength":865,"full_width_half_max":20}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa17"},"Oa18_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa18_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa18","description":"Band
+        18 - Water vapour absorption reference. Common reference band with SLSTR.
+        Vegetation monitoring","center_wavelength":885,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa18"},"Oa19_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa19_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa19","description":"Band
+        19 - Water vapour absorption, vegetation monitoring (maximum REFLECTANCE)","center_wavelength":900,"full_width_half_max":10}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa19"},"Oa20_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa20_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa20","description":"Band
+        20 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":940,"full_width_half_max":20}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa20"},"Oa21_radianceData":{"href":"https://objects.eodc.eu:443/e05ab01a9d56408d82ac32d69a5aae2a:202505-s03olcefr/06/products/cpm_v256/S3B_OL_1_EFR____20250506T092012_20250506T092312_20250609T093032_0179_106_150_1980_ESA_O_NT_004.zarr/measurements/oa21_radiance","type":"application/vnd+zarr","bands":[{"name":"Oa21","description":"Band
+        21 - Water vapour absorption, atmospheric / aerosol correction","center_wavelength":1020,"full_width_half_max":40}],"roles":["data"],"title":"TOA
+        radiance for OLCI acquisition band Oa21"}},"geometry":{"type":"Polygon","coordinates":[[[6.18845,52.4473],[7.20351,52.3871],[8.20824,52.317],[9.21383,52.238],[10.2167,52.1504],[11.2145,52.0572],[12.2051,51.9533],[13.1894,51.8407],[14.1741,51.7196],[15.1515,51.5906],[16.1208,51.4549],[17.0877,51.3099],[18.0466,51.1573],[19.0002,50.9977],[19.9466,50.8295],[20.8847,50.6541],[21.8168,50.4706],[22.7405,50.2802],[23.6557,50.0827],[24.569,49.8779],[26.0519,52.4261],[27.7087,54.9585],[29.5719,57.4688],[31.693,59.9499],[30.5601,60.2046],[29.4105,60.4505],[28.2476,60.6854],[27.0617,60.9116],[25.8652,61.1258],[24.6511,61.3296],[23.4165,61.5224],[22.1733,61.7039],[20.9141,61.8743],[19.6412,62.0322],[18.3534,62.1795],[17.0586,62.3144],[15.7499,62.4376],[14.4314,62.5479],[13.1063,62.643],[11.7813,62.7277],[10.4349,62.8006],[9.09737,62.86],[7.71124,62.9061],[7.34061,60.2923],[6.96317,57.6765],[6.57737,55.0616],[6.18845,52.4473]]]},"collection":"sentinel-3-olci-l1-efr","properties":{"gsd":300.0,"created":"2025-06-09T09:30:32Z","mission":"Sentinel-3","updated":"2025-06-09T09:30:32Z","datetime":"2025-05-06T09:20:12.064170Z","platform":"sentinel-3b","providers":[{"url":"https://commission.europa.eu/","name":"European
+        Commission","roles":["licensor"]},{"url":"https://sentinel.esa.int/web/sentinel/missions/sentinel-3","name":"ESA","roles":["producer","processor"]},{"url":"https://zarr.eopf.copernicus.eu/","name":"EOPF
+        Sentinel Zarr Samples Service","roles":["host","processor"]}],"published":"2025-06-09T09:30:32Z","instruments":["olci"],"end_datetime":"2025-05-06T09:23:12.064170Z","product:type":"S03OLCEFR","constellation":"sentinel-3","start_datetime":"2025-05-06T09:20:12.064170Z","sat:orbit_state":"descending","processing:level":"L1","product:timeliness":"P1M","sat:absolute_orbit":36612,"sat:relative_orbit":150,"processing:facility":"OPE","processing:software":{"PUG":"03.50"},"product:timeliness_category":"NT","sat:platform_international_designator":"2018-039A"},"stac_version":"1.1.0","stac_extensions":["https://stac-extensions.github.io/timestamps/v1.1.0/schema.json","https://stac-extensions.github.io/sat/v1.0.0/schema.json","https://stac-extensions.github.io/processing/v1.2.0/schema.json","https://stac-extensions.github.io/product/v0.1.0/schema.json","https://cs-si.github.io/eopf-stac-extension/v1.2.0/schema.json"]}],"numberReturned":2}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '3406'
+      Content-Type:
+      - application/geo+json
+      Server:
+      - APISIX/3.7.0
+      content-encoding:
+      - br
+      date:
+      - Thu, 18 Sep 2025 10:25:25 GMT
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+version: 1

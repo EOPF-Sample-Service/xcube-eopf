@@ -1,3 +1,5 @@
+## Changes in 0.3.0 (under development)
+
 ## Changes in 0.2.0
 
 * Switched to [xcube-resampling](https://xcube-dev.github.io/xcube-resampling/) 

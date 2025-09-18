@@ -9,36 +9,11 @@ import xarray as xr
 from xcube.core.store import new_data_store
 
 from xcube_eopf.utils import reproject_bbox
+from .helper import timeit
 
 
 allowed_open_time = 30  # seconds
 show_chunking = False
-
-
-class timeit:
-    """A context manager used to measure time it takes
-    to execute its with-block.
-    The result is available as `time_delta` attribute.
-
-    Args:
-        label: A text label
-        silent: Whether to suppress printing the result
-    """
-
-    def __init__(self, label: str | None = None, silent: bool = False):
-        self.label = label
-        self.silent = silent
-        self.start_time: float | None = None
-        self.time_delta: float | None = None
-
-    def __enter__(self) -> "timeit":
-        self.start_time = time.process_time()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.time_delta = time.process_time() - self.start_time
-        if not self.silent:
-            print(f"{self.label or 'code block'} took {self.time_delta:.3f} seconds")
 
 
 class Sentinel2Test(TestCase):
@@ -62,7 +37,7 @@ class Sentinel2Test(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
         self.assertCountEqual(
-            [3, 3394, 4023], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [2, 3394, 4023], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
             [1, 1830, 1830],

@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: GET
     uri: https://stac.core.eopf.eodc.eu/
   response:
@@ -20,16 +20,16 @@ interactions:
         conformance classes implemented by this server","href":"https://stac.core.eopf.eodc.eu/conformance"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"GET"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"POST"},{"rel":"http://www.opengis.net/def/rel/ogc/1.0/queryables","type":"application/schema+json","title":"Queryables","href":"https://stac.core.eopf.eodc.eu/queryables","method":"GET"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-1
         Level-1 SLC","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-slc"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-1 EFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-2 LRR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lrr"},{"rel":"service-desc","type":"application/vnd.oai.openapi+json;version=3.0","title":"OpenAPI
         service description","href":"https://stac.core.eopf.eodc.eu/api"},{"rel":"service-doc","type":"text/html","title":"OpenAPI
         service documentation","href":"https://stac.core.eopf.eodc.eu/api.html"}],"stac_extensions":[]}'
@@ -37,7 +37,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '812'
+      - '804'
       Content-Type:
       - application/json
       Server:
@@ -45,7 +45,7 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:14 GMT
+      - Thu, 18 Sep 2025 10:25:21 GMT
       vary:
       - Accept-Encoding
     status:
@@ -61,7 +61,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: GET
     uri: https://stac.core.eopf.eodc.eu/
   response:
@@ -72,16 +72,16 @@ interactions:
         conformance classes implemented by this server","href":"https://stac.core.eopf.eodc.eu/conformance"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"GET"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"POST"},{"rel":"http://www.opengis.net/def/rel/ogc/1.0/queryables","type":"application/schema+json","title":"Queryables","href":"https://stac.core.eopf.eodc.eu/queryables","method":"GET"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-1
         Level-1 SLC","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-slc"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-1 EFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-2 LRR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lrr"},{"rel":"service-desc","type":"application/vnd.oai.openapi+json;version=3.0","title":"OpenAPI
         service description","href":"https://stac.core.eopf.eodc.eu/api"},{"rel":"service-doc","type":"text/html","title":"OpenAPI
         service documentation","href":"https://stac.core.eopf.eodc.eu/api.html"}],"stac_extensions":[]}'
@@ -89,7 +89,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '812'
+      - '804'
       Content-Type:
       - application/json
       Server:
@@ -97,15 +97,18 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:14 GMT
+      - Thu, 18 Sep 2025 10:25:21 GMT
       vary:
       - Accept-Encoding
     status:
       code: 200
       message: OK
 - request:
-    body: '{"bbox": [10.641359519532669, 53.0536720941606, 10.947730608944445, 53.23787163529459],
-      "datetime": "2025-05-01T00:00:00Z/2025-05-15T23:59:59Z", "collections": ["sentinel-2-l2a"]}'
+    body: '{"datetime": "2025-05-01T00:00:00Z/2025-05-15T23:59:59Z", "collections":
+      ["sentinel-2-l2a"], "intersects": {"type": "Polygon", "coordinates": [[[10.641359519532669,
+      53.0536720941606], [10.947730608944445, 53.0536720941606], [10.947730608944445,
+      53.23787163529459], [10.641359519532669, 53.23787163529459], [10.641359519532669,
+      53.0536720941606]]]}}'
     headers:
       Accept:
       - '*/*'
@@ -114,16 +117,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '179'
+      - '348'
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: POST
     uri: https://stac.core.eopf.eodc.eu/search
   response:
     body:
-      string: '{"type":"FeatureCollection","links":[{"rel":"next","type":"application/geo+json","method":"POST","href":"https://stac.core.eopf.eodc.eu/search","body":{"bbox":[10.641359519532669,53.0536720941606,10.947730608944445,53.23787163529459],"datetime":"2025-05-01T00:00:00Z/2025-05-15T23:59:59Z","collections":["sentinel-2-l2a"],"token":"next:sentinel-2-l2a:S2B_MSIL2A_20250510T101559_N0511_R065_T32UND_20250510T123915"}},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/json","href":"https://stac.core.eopf.eodc.eu/search"}],"features":[{"id":"S2C_MSIL2A_20250515T101611_N0511_R065_T32UPE_20250515T154718","bbox":[10.495379581512257,53.119880621881606,12.209260084873382,54.13563629423107],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"parent","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/geo+json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250515T101611_N0511_R065_T32UPE_20250515T154718"},{"rel":"cite-as","href":"https://doi.org/10.5270/S2_-znk9xsj"},{"rel":"license","href":"https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice","type":"application/pdf","title":"Legal
+      string: '{"type":"FeatureCollection","links":[{"rel":"next","type":"application/geo+json","method":"POST","href":"https://stac.core.eopf.eodc.eu/search","body":{"datetime":"2025-05-01T00:00:00Z/2025-05-15T23:59:59Z","collections":["sentinel-2-l2a"],"intersects":{"type":"Polygon","coordinates":[[[10.641359519532669,53.0536720941606],[10.947730608944445,53.0536720941606],[10.947730608944445,53.23787163529459],[10.641359519532669,53.23787163529459],[10.641359519532669,53.0536720941606]]]},"token":"next:sentinel-2-l2a:S2B_MSIL2A_20250510T101559_N0511_R065_T32UND_20250510T123915"}},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/json","href":"https://stac.core.eopf.eodc.eu/search"}],"features":[{"id":"S2C_MSIL2A_20250515T101611_N0511_R065_T32UPE_20250515T154718","bbox":[10.495379581512257,53.119880621881606,12.209260084873382,54.13563629423107],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"parent","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/geo+json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250515T101611_N0511_R065_T32UPE_20250515T154718"},{"rel":"cite-as","href":"https://doi.org/10.5270/S2_-znk9xsj"},{"rel":"license","href":"https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice","type":"application/pdf","title":"Legal
         notice on the use of Copernicus Sentinel Data and Service Information"}],"assets":{"SR_10m":{"gsd":10,"href":"https://objectstore.eodc.eu:2222/e05ab01a9d56408d82ac32d69a5aae2a:202505-s02msil2a/15/products/cpm_v256/S2C_MSIL2A_20250515T101611_N0511_R065_T32UPE_20250515T154718.zarr/measurements/reflectance/r10m","type":"application/vnd+zarr","bands":[{"name":"B02","common_name":"blue","description":"Blue
         (band 2)","center_wavelength":0.49,"full_width_half_max":0.098},{"name":"B03","common_name":"green","description":"Green
         (band 3)","center_wavelength":0.56,"full_width_half_max":0.045},{"name":"B04","common_name":"red","description":"Red
@@ -908,7 +911,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '8001'
+      - '8008'
       Content-Type:
       - application/geo+json
       Server:
@@ -916,16 +919,18 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:14 GMT
+      - Thu, 18 Sep 2025 10:25:21 GMT
       vary:
       - Accept-Encoding
     status:
       code: 200
       message: OK
 - request:
-    body: '{"bbox": [10.641359519532669, 53.0536720941606, 10.947730608944445, 53.23787163529459],
-      "datetime": "2025-05-01T00:00:00Z/2025-05-15T23:59:59Z", "collections": ["sentinel-2-l2a"],
-      "token": "next:sentinel-2-l2a:S2B_MSIL2A_20250510T101559_N0511_R065_T32UND_20250510T123915"}'
+    body: '{"datetime": "2025-05-01T00:00:00Z/2025-05-15T23:59:59Z", "collections":
+      ["sentinel-2-l2a"], "intersects": {"type": "Polygon", "coordinates": [[[10.641359519532669,
+      53.0536720941606], [10.947730608944445, 53.0536720941606], [10.947730608944445,
+      53.23787163529459], [10.641359519532669, 53.23787163529459], [10.641359519532669,
+      53.0536720941606]]]}, "token": "next:sentinel-2-l2a:S2B_MSIL2A_20250510T101559_N0511_R065_T32UND_20250510T123915"}'
     headers:
       Accept:
       - '*/*'
@@ -934,16 +939,16 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '272'
+      - '441'
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: POST
     uri: https://stac.core.eopf.eodc.eu/search
   response:
     body:
-      string: '{"type":"FeatureCollection","links":[{"rel":"previous","type":"application/geo+json","method":"POST","href":"https://stac.core.eopf.eodc.eu/search","body":{"bbox":[10.641359519532669,53.0536720941606,10.947730608944445,53.23787163529459],"datetime":"2025-05-01T00:00:00Z/2025-05-15T23:59:59Z","collections":["sentinel-2-l2a"],"token":"prev:sentinel-2-l2a:S2C_MSIL2A_20250505T101621_N0511_R065_T32UNE_20250505T141459"}},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/json","href":"https://stac.core.eopf.eodc.eu/search"}],"features":[{"id":"S2C_MSIL2A_20250505T101621_N0511_R065_T32UNE_20250505T141459","bbox":[10.215199077269268,53.14985988974457,10.680335868325267,54.136542433732735],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"parent","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/geo+json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250505T101621_N0511_R065_T32UNE_20250505T141459"},{"rel":"cite-as","href":"https://doi.org/10.5270/S2_-znk9xsj"},{"rel":"license","href":"https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice","type":"application/pdf","title":"Legal
+      string: '{"type":"FeatureCollection","links":[{"rel":"previous","type":"application/geo+json","method":"POST","href":"https://stac.core.eopf.eodc.eu/search","body":{"datetime":"2025-05-01T00:00:00Z/2025-05-15T23:59:59Z","collections":["sentinel-2-l2a"],"intersects":{"type":"Polygon","coordinates":[[[10.641359519532669,53.0536720941606],[10.947730608944445,53.0536720941606],[10.947730608944445,53.23787163529459],[10.641359519532669,53.23787163529459],[10.641359519532669,53.0536720941606]]]},"token":"prev:sentinel-2-l2a:S2C_MSIL2A_20250505T101621_N0511_R065_T32UNE_20250505T141459"}},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/json","href":"https://stac.core.eopf.eodc.eu/search"}],"features":[{"id":"S2C_MSIL2A_20250505T101621_N0511_R065_T32UNE_20250505T141459","bbox":[10.215199077269268,53.14985988974457,10.680335868325267,54.136542433732735],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"parent","type":"application/json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"root","type":"application/json","href":"https://stac.core.eopf.eodc.eu/"},{"rel":"self","type":"application/geo+json","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250505T101621_N0511_R065_T32UNE_20250505T141459"},{"rel":"cite-as","href":"https://doi.org/10.5270/S2_-znk9xsj"},{"rel":"license","href":"https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice","type":"application/pdf","title":"Legal
         notice on the use of Copernicus Sentinel Data and Service Information"}],"assets":{"SR_10m":{"gsd":10,"href":"https://objectstore.eodc.eu:2222/e05ab01a9d56408d82ac32d69a5aae2a:202505-s02msil2a/05/products/cpm_v256/S2C_MSIL2A_20250505T101621_N0511_R065_T32UNE_20250505T141459.zarr/measurements/reflectance/r10m","type":"application/vnd+zarr","bands":[{"name":"B02","common_name":"blue","description":"Blue
         (band 2)","center_wavelength":0.49,"full_width_half_max":0.098},{"name":"B03","common_name":"green","description":"Green
         (band 3)","center_wavelength":0.56,"full_width_half_max":0.045},{"name":"B04","common_name":"red","description":"Red
@@ -1104,7 +1109,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '3787'
+      - '3806'
       Content-Type:
       - application/geo+json
       Server:
@@ -1112,7 +1117,7 @@ interactions:
       content-encoding:
       - br
       date:
-      - Tue, 10 Jun 2025 11:21:15 GMT
+      - Thu, 18 Sep 2025 10:25:22 GMT
       vary:
       - Accept-Encoding
     status:

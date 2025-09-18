@@ -13,11 +13,11 @@ from xcube.util.jsonschema import (
     JsonObjectSchema,
     JsonStringSchema,
 )
+from xcube_resampling.constants import AGG_METHODS
 
 # general stac constants
 DATA_STORE_ID = "eopf-zarr"
 STAC_URL = "https://stac.core.eopf.eodc.eu"
-SUPPORTED_STAC_COLLECTIONS = ["sentinel-2-l1c", "sentinel-2-l2a"]
 EOPF_ZARR_OPENR_ID = "dataset:zarr:eopf-zarr"
 
 # other constants
@@ -80,4 +80,42 @@ SCHEMA_TILE_SIZE = JsonArraySchema(
         "in returned dataset."
     ),
     items=[JsonIntegerSchema(minimum=1), JsonIntegerSchema(minimum=1)],
+)
+SCHEMA_INTERP_METHODS = JsonComplexSchema(
+    title="Interpolation method for updampling",
+    description=(
+        "Specifies the interpolation method used for upsampling spatial data variables. "
+        "You can provide a single method for all variables or a dictionary mapping "
+        "variable names or data types to specific interpolation methods. "
+        "For detailed documentation, see https://xcube-dev.github.io/xcube-resampling/."
+    ),
+    one_of=[
+        JsonIntegerSchema(enum=[0, 1], description="0: nearest neighbor; 1: bilinear"),
+        JsonStringSchema(enum=["nearest", "triangular", "bilinear"]),
+        JsonObjectSchema(
+            title=(
+                "dictionary mapping variable names or data types"
+                " to specific interpolation methods."
+            )
+        ),
+    ],
+)
+
+SCHEMA_AGG_METHODS = JsonComplexSchema(
+    title="Aggregation methods for downsampling",
+    description=(
+        "Specifies the aggregation method used for downsampling spatial data variables. "
+        "You can provide a single method for all variables or a dictionary mapping "
+        "variable names or data types to specific aggregation methods. "
+        "For detailed documentation, see https://xcube-dev.github.io/xcube-resampling/."
+    ),
+    one_of=[
+        JsonStringSchema(enum=list(AGG_METHODS.keys())),
+        JsonObjectSchema(
+            title=(
+                "dictionary mapping variable names or data types"
+                " to specific aggregation methods."
+            )
+        ),
+    ],
 )

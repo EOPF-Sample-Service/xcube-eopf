@@ -46,8 +46,9 @@ dependencies = [
   "pyproj",
   "pystac",
   "pystac-client",
+  "shapely",
   "xarray",
-  "xarray-eopf==0.1.2",
+  "xarray-eopf>=0.2.0",
   "xcube-core>=1.11.0",
   "xcube-resampling",
 ]

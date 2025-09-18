@@ -6,6 +6,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Type
 
+import pystac
 import xarray as xr
 from xcube.util.jsonschema import JsonObjectSchema
 
@@ -53,7 +54,7 @@ class ProductHandler(ABC):
         """Return opening parameters specific for the product handler."""
 
     @abstractmethod
-    def open_data(self, **open_params) -> xr.Dataset:
+    def open_data(self, items: list[pystac.Item], **open_params) -> xr.Dataset:
         """Open and return the dataset corresponding to the given parameters
         for the product handler.
         """

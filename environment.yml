@@ -9,8 +9,9 @@ dependencies:
   - pyproj
   - pystac
   - pystac-client
+  - shapely
   - xarray
-  - xarray-eopf ==0.1.2 # change after next xarray-eopf release
+  - xarray-eopf >=0.2.0
   - xcube >=1.11.0
   - xcube-resampling
   # Development Dependencies - Tools
