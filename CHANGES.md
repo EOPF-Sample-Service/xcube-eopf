@@ -1,4 +1,16 @@
-## Changes in 0.3.0 (under development)
+## Changes in 0.3.0
+
+* Added workflows for generating 3D data cubes from multiple Sentinel-3 tiles.  
+  The workflow includes **rectification** of 2D irregular grids, **spatial mosaicking** 
+  of adjacent tiles, and **temporal stacking** of multiple observations.
+
+  Supported products:  
+  * `sentinel-3-olci-l1-efr` — Level-1 top-of-atmosphere radiance from the OLCI 
+    instrument.  
+  * `sentinel-3-olci-l2-lfr` — Level-2 land and atmospheric geophysical parameters 
+    derived from OLCI.  
+  * `sentinel-3-slstr-l2-lst` — Level-2 land surface temperature derived from SLSTR.
+
 
 ## Changes in 0.2.0
 
