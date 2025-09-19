@@ -477,15 +477,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#sentinel-3-datasets" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sentinel-3 Datasets
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -691,15 +682,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sentinel-3-datasets" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sentinel-3 Datasets
-    </span>
-  </a>
   
 </li>
       
@@ -942,12 +924,13 @@ parameters (see <a href="#optional-parameters">Optional Parameters</a>).</p>
   - 500 m (visible &amp; shortwave infrared bands).
   - 1 km (thermal infrared bands).
 - <strong>Swath width</strong>: ~1,400 km</p>
-<p>Sentinel-3 products are organized as STAC Items, each representing a single tile. The
-dataset is given in its native 2d irregular grid. </p>
+<p>Sentinel-3 data products are distributed as <strong>STAC Items</strong>, where each item 
+corresponds to a single tile. The datasets are provided in their 
+<strong>native 2D irregular grid</strong> and typically require rectification for analysis-ready 
+applications. </p>
 <p><strong>Data Identifiers</strong></p>
 <p>The EOPF xcube data store so far supports three Sentinel-3 product types via the 
 <code>data_id</code> argument:</p>
-<h2 id="sentinel-3-datasets">Sentinel-3 Datasets</h2>
 <table>
 <thead>
 <tr>
@@ -997,12 +980,12 @@ the following steps:</p>
    for each variable (e.g., spectral bands).</li>
 </ol>
 <p>⚠️ <strong>Important considerations</strong>:<br />
-- <strong>Rectification</strong> (irregular → regular grid) is computationally expensive and may 
+- Rectification (irregular → regular grid) is computationally expensive and may 
   slow down cube generation.<br />
 - Users can specify any spatial resolution and coordinate reference system (CRS) when 
   opening data with <code>open_data</code>. During rectification, spectral bands are internally 
   reprojected to the target grid. If a lower-resolution grid is requested, 
-  downsampling is applied <strong>prior</strong> to rectification.<br />
+  downsampling is applied prior to rectification.<br />
 - Resampling behavior is controlled via the <a href="#optional-parameters"><code>agg_methods</code></a> 
   (downsampling) and <a href="#optional-parameters"><code>interp_methods</code></a> 
   (upsampling/interpolation) parameters.  </p>
