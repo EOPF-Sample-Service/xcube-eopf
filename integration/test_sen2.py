@@ -3,14 +3,13 @@
 #  https://opensource.org/license/apache-2-0.
 
 from unittest import TestCase
-import time
 
 import xarray as xr
 from xcube.core.store import new_data_store
 
 from xcube_eopf.utils import reproject_bbox
-from .helper import timeit
 
+from .helper import timeit
 
 allowed_open_time = 30  # seconds
 show_chunking = False

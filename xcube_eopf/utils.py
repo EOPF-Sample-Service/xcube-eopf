@@ -2,17 +2,16 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from collections.abc import Sequence
 import datetime
+from collections.abc import Sequence
 
 import dask.array as da
 import numpy as np
 import pyproj
 import pystac
-import shapely
 import xarray as xr
-from xcube_resampling.gridmapping import GridMapping
 from xcube.core.store import DataStoreError
+from xcube_resampling.gridmapping import GridMapping
 
 from .constants import STAC_URL
 from .version import version

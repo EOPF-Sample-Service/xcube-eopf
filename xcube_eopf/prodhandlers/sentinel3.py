@@ -6,30 +6,27 @@ from abc import ABC
 
 import numpy as np
 import pystac
-import pystac_client
-import shapely
 import xarray as xr
 from xcube.util.jsonschema import JsonObjectSchema
 from xcube_resampling import rectify_dataset
 
-from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.constants import (
     SCHEMA_ADDITIONAL_QUERY,
+    SCHEMA_AGG_METHODS,
     SCHEMA_BBOX,
     SCHEMA_CRS,
+    SCHEMA_INTERP_METHODS,
     SCHEMA_SPATIAL_RES,
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
-    STAC_URL,
-    SCHEMA_AGG_METHODS,
-    SCHEMA_INTERP_METHODS,
 )
+from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
+    add_attributes,
     add_nominal_datetime,
     get_gridmapping,
     mosaic_spatial_take_first,
-    add_attributes,
 )
 
 _TILE_SIZE = 1024  # native chunk size of EOPF Sen3 Zarr samples

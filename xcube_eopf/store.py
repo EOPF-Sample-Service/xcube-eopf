@@ -21,10 +21,10 @@ from .constants import EOPF_ZARR_OPENR_ID, STAC_URL
 from .prodhandler import ProductHandler
 from .prodhandlers import register_product_handlers
 from .utils import (
-    reproject_bbox,
     bbox_to_geojson,
     filter_items_deprecated,
     filter_items_wrong_footprint,
+    reproject_bbox,
 )
 
 

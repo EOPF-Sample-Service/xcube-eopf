@@ -9,33 +9,31 @@ import dask.array as da
 import numpy as np
 import pyproj
 import pystac
-import pystac_client
 import xarray as xr
+from xcube.util.jsonschema import JsonObjectSchema
 from xcube_resampling.gridmapping import GridMapping
 from xcube_resampling.spatial import resample_in_space
-from xcube.core.store import DataStoreError
-from xcube.util.jsonschema import JsonObjectSchema
 
 from xcube_eopf.constants import (
     CONVERSION_FACTOR_DEG_METER,
     SCHEMA_ADDITIONAL_QUERY,
+    SCHEMA_AGG_METHODS,
     SCHEMA_BBOX,
     SCHEMA_CRS,
+    SCHEMA_INTERP_METHODS,
     SCHEMA_SPATIAL_RES,
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
-    SCHEMA_AGG_METHODS,
-    SCHEMA_INTERP_METHODS,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
+    add_attributes,
     add_nominal_datetime,
     get_gridmapping,
     mosaic_spatial_take_first,
     normalize_crs,
     reproject_bbox,
-    add_attributes,
 )
 
 _SEN2_SPATIAL_RES = np.array([10, 20, 60])

@@ -8,8 +8,8 @@ import xarray as xr
 from xcube.core.store import new_data_store
 
 from xcube_eopf.utils import reproject_bbox
-from .helper import timeit
 
+from .helper import timeit
 
 allowed_open_time = 120  # seconds
 show_chunking = False
