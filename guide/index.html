@@ -912,18 +912,22 @@ subsequently performs the reprojection. Upsampling and downsampling are controll
 parameters (see <a href="#optional-parameters">Optional Parameters</a>).</p>
 <h3 id="sentinel-3">🛰️ Sentinel-3</h3>
 <p>Sentinel-3 has two instruments on board: </p>
-<p>🌊 <strong>OLCI — Ocean and Land Colour Instrument</strong>
-* <strong>Purpose</strong>: Primarily designed for ocean and land surface monitoring.
-* <strong>Spectral bands</strong>: 21 bands (400–1020 nm).
-* <strong>Spatial resolution</strong>: 300 m.
-* <strong>Swath width</strong>: ~1,270 km</p>
-<p>🔥 <strong>SLSTR — Sea and Land Surface Temperature Radiometer</strong>
-* <strong>Purpose</strong>: Measures global sea and land surface temperatures with high accuracy.
-* <strong>Spectral bands</strong>: 9 bands (visible to thermal infrared, 0.55–12 μm).
-* <strong>Spatial resolution</strong>:
-  * 500 m (visible &amp; shortwave infrared bands). 
-  * 1 km (thermal infrared bands).
-* <strong>Swath width</strong>: ~1,400 km</p>
+<p>🌊 <strong>OLCI — Ocean and Land Colour Instrument</strong></p>
+<ul>
+<li><strong>Purpose</strong>: Primarily designed for ocean and land surface monitoring.</li>
+<li><strong>Spectral bands</strong>: 21 bands (400–1020 nm).</li>
+<li><strong>Spatial resolution</strong>: 300 m.</li>
+<li><strong>Swath width</strong>: ~1,270 km</li>
+</ul>
+<p>🔥 <strong>SLSTR — Sea and Land Surface Temperature Radiometer</strong></p>
+<ul>
+<li><strong>Purpose</strong>: Measures global sea and land surface temperatures with high accuracy.</li>
+<li><strong>Spectral bands</strong>: 9 bands (visible to thermal infrared, 0.55–12 μm).</li>
+<li><strong>Spatial resolution</strong>:</li>
+<li>500 m (visible &amp; shortwave infrared bands).</li>
+<li>1 km (thermal infrared bands).</li>
+<li><strong>Swath width</strong>: ~1,400 km</li>
+</ul>
 <p>Sentinel-3 data products are distributed as <strong>STAC Items</strong>, where each item 
 corresponds to a single tile. The datasets are provided in their 
 <strong>native 2D irregular grid</strong> and typically require rectification for analysis-ready 
@@ -979,16 +983,18 @@ the following steps:</p>
 <li><strong>Stack</strong> the daily mosaics along the temporal axis to form 3D data cubes 
    for each variable (e.g., spectral bands).</li>
 </ol>
-<p>⚠️ <strong>Important considerations</strong>:<br />
-* Rectification (irregular → regular grid) is computationally expensive and may 
-  slow down cube generation.
-* Users can specify any spatial resolution and coordinate reference system (CRS) when 
+<p>⚠️ <strong>Important considerations</strong>:  </p>
+<ul>
+<li>Rectification (irregular → regular grid) is computationally expensive and may 
+  slow down cube generation.  </li>
+<li>Users can specify any spatial resolution and coordinate reference system (CRS) when 
   opening data with <code>open_data</code>. During rectification, spectral bands are internally 
   reprojected to the target grid. If a lower-resolution grid is requested, 
-  downsampling is applied prior to rectification.
-* Resampling behavior is controlled via the <a href="#optional-parameters"><code>agg_methods</code></a> 
+  downsampling is applied prior to rectification.  </li>
+<li>Resampling behavior is controlled via the <a href="#optional-parameters"><code>agg_methods</code></a> 
   (downsampling) and <a href="#optional-parameters"><code>interp_methods</code></a> 
-  (upsampling/interpolation) parameters.  </p>
+  (upsampling/interpolation) parameters.  </li>
+</ul>
 <hr />
 
 
