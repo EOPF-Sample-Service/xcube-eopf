@@ -382,6 +382,21 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optional Parameters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optional Parameters">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#4-inspect-visualize-and-save-the-data-cube" class="md-nav__link">
     <span class="md-ellipsis">
@@ -446,30 +461,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🛰️ Sentinel-2">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#data-identifiers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data Identifiers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#remarks-to-opening-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Remarks to Opening Parameters
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -483,6 +474,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sentinel-3-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sentinel-3 Datasets
+    </span>
+  </a>
   
 </li>
       
@@ -599,6 +599,21 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optional Parameters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optional Parameters">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#4-inspect-visualize-and-save-the-data-cube" class="md-nav__link">
     <span class="md-ellipsis">
@@ -663,30 +678,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🛰️ Sentinel-2">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#data-identifiers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data Identifiers
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#remarks-to-opening-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      Remarks to Opening Parameters
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -700,6 +691,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sentinel-3-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sentinel-3 Datasets
+    </span>
+  </a>
   
 </li>
       
@@ -778,16 +778,33 @@ No actual data is loaded at this point. </p>
 <li><code>crs</code>: Coordinate reference system (e.g. <code>"EPSG:4326"</code>).</li>
 </ul>
 <p>These parameters control the STAC API query and define the output cube's spatial grid.</p>
-<p><strong>Optional parameters:</strong></p>
+<h2 id="optional-parameters">Optional Parameters</h2>
 <ul>
-<li><code>variables</code>: Variables to include in the dataset. Can be a name or regex pattern 
-  or iterable of the latter.</li>
-<li><code>tile_size</code>: Spatial tile size of the returned dataset <code>(width, height)</code>.</li>
-<li><code>query</code>: Additional query options for filtering STAC Items by properties. See 
+<li><code>variables</code>: Variables to include in the dataset. Accepts a single name, a regex pattern, or an iterable of either.</li>
+<li><code>tile_size</code>: Spatial tile size of the returned dataset, given as <code>(width, height)</code>.</li>
+<li><code>query</code>: Additional filtering options for STAC Items by their properties. See the 
   <a href="https://github.com/stac-api-extensions/query">STAC Query Extension</a> for details.</li>
+<li><code>agg_methods</code>: Aggregation method(s) for downsampling spatial variables. Accepts:  </li>
+<li>A single method applied to all variables, or  </li>
+<li>A dictionary mapping variable names or dtypes to methods.</li>
 </ul>
-<p>Additional parameters specific to each Sentinel mission are documented in
-<a href="#specific-parameters-for-supported-sentinel-missions">the section below</a>.</p>
+<p>Supported methods include:<br />
+<code>"center"</code>, <code>"count"</code>, <code>"first"</code>, <code>"last"</code>, <code>"max"</code>, <code>"mean"</code>, <code>"median"</code>,<br />
+<code>"mode"</code>, <code>"min"</code>, <code>"prod"</code>, <code>"std"</code>, <code>"sum"</code>, <code>"var"</code>.  </p>
+<p><em>Default:</em> <code>"center"</code> for integer arrays, <code>"mean"</code> otherwise.<br />
+  For details, see the <a href="https://xcube-dev.github.io/xcube-resampling/">xcube-resampling documentation</a>.  </p>
+<ul>
+<li><code>interp_methods</code>: Interpolation method(s) for upsampling spatial variables. Accepts:  </li>
+<li>A single method applied to all variables, or  </li>
+<li>A dictionary mapping variable names or dtypes to methods.  </li>
+</ul>
+<p>Supported methods include:<br />
+  - <code>0</code> — nearest neighbor (<em>default for categorical / integer datasets</em>)<br />
+  - <code>1</code> — linear / bilinear (<em>default for float datasets</em>)<br />
+  - <code>"nearest"</code><br />
+  - <code>"triangular"</code><br />
+  - <code>"bilinear"</code>  </p>
+<p>For details, see the <a href="https://xcube-dev.github.io/xcube-resampling/">xcube-resampling documentation</a>. </p>
 <h3 id="4-inspect-visualize-and-save-the-data-cube">4. Inspect, Visualize, and Save the Data Cube</h3>
 <p>You can visualize a time slice:</p>
 <div class="highlight"><pre><span></span><code><span class="n">ds</span><span class="o">.</span><span class="n">b04</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -846,6 +863,33 @@ to visualize the cube:</p>
 </ul>
 <p>Sentinel-2 products are organized as STAC Items, each representing a single tile. 
 These tiles are stored in their native UTM CRS, which varies by geographic location.</p>
+<p><strong>Data Identifiers</strong></p>
+<p>The EOPF xcube data store supports two Sentinel-2 product types via the <code>data_id</code> argument:</p>
+<table>
+<thead>
+<tr>
+<th>Data ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sentinel-2-l1c</code></td>
+<td>Level‑1C top‑of‑atmosphere (TOA) reflectance</td>
+</tr>
+<tr>
+<td><code>sentinel-2-l2a</code></td>
+<td>Level‑2A atmospherically corrected surface reflectance</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Supported Variables</strong></p>
+<ul>
+<li><strong>Surface reflectance bands</strong>:<br />
+<code>b01</code>, <code>b02</code>, <code>b03</code>, <code>b04</code>, <code>b05</code>, <code>b06</code>, <code>b07</code>, <code>b08</code>, <code>b8a</code>, <code>b09</code>, <code>b11</code>, <code>b12</code></li>
+<li><strong>Classification/Quality layers</strong> (L2A only):<br />
+<code>cld</code>, <code>scl</code>, <code>snw</code></li>
+</ul>
 <p><strong>Data Cube Generation Workflow</strong></p>
 <ol>
 <li><strong>STAC Query:</strong> A STAC API request returns relevant STAC Items (tiles) based on 
@@ -878,10 +922,32 @@ These tiles are stored in their native UTM CRS, which varies by geographic locat
 </tr>
 </tbody>
 </table>
-<p>Upsampling and downsampling are controlled using the <code>agg_methods</code> and <code>interp_methods</code>
-parameters (<a href="#remarks-to-opening-parameters">see below</a>).</p>
-<h4 id="data-identifiers">Data Identifiers</h4>
-<p>The EOPF xcube data store supports two Sentinel-2 product types via the <code>data_id</code> argument:</p>
+<p>Users can specify any spatial resolution and coordinate reference system (CRS) when 
+opening data with <code>open_data</code>. As a result, spectral bands may be resampled — either 
+upsampled or downsampled — and reprojected to match the target grid. If reprojection 
+is needed at a lower resolution, the process first downsamples the data and 
+subsequently performs the reprojection. Upsampling and downsampling are controlled using the <code>agg_methods</code> and <code>interp_methods</code>
+parameters (see <a href="#optional-parameters">Optional Parameters</a>).</p>
+<h3 id="sentinel-3">🛰️ Sentinel-3</h3>
+<p>Sentinel-3 has two instruments on board: </p>
+<p>🌊 <strong>OLCI — Ocean and Land Colour Instrument</strong>
+- <strong>Purpose</strong>: Primarily designed for ocean and land surface monitoring.<br />
+- <strong>Spectral bands</strong>: 21 bands (400–1020 nm).
+- <strong>Spatial resolution</strong>: 300 m.<br />
+- <strong>Swath width</strong>: ~1,270 km</p>
+<p>🔥 <strong>SLSTR — Sea and Land Surface Temperature Radiometer</strong>
+- <strong>Purpose</strong>: Measures global sea and land surface temperatures with high accuracy.<br />
+- <strong>Spectral bands</strong>: 9 bands (visible to thermal infrared, 0.55–12 μm).
+- <strong>Spatial resolution</strong>:<br />
+  - 500 m (visible &amp; shortwave infrared bands).<br />
+  - 1 km (thermal infrared bands).<br />
+- <strong>Swath width</strong>: ~1,400 km</p>
+<p>Sentinel-3 products are organized as STAC Items, each representing a single tile. The
+dataset is given in its native 2d irregular grid. </p>
+<p><strong>Data Identifiers</strong></p>
+<p>The EOPF xcube data store so far supports three Sentinel-3 product types via the 
+<code>data_id</code> argument:</p>
+<h2 id="sentinel-3-datasets">Sentinel-3 Datasets</h2>
 <table>
 <thead>
 <tr>
@@ -891,70 +957,55 @@ parameters (<a href="#remarks-to-opening-parameters">see below</a>).</p>
 </thead>
 <tbody>
 <tr>
-<td><code>sentinel-2-l1c</code></td>
-<td>Level‑1C top‑of‑atmosphere (TOA) reflectance</td>
+<td><code>sentinel-3-olci-l1-efr</code></td>
+<td>Level-1 full-resolution top-of-atmosphere radiances from the OLCI</td>
 </tr>
 <tr>
-<td><code>sentinel-2-l2a</code></td>
-<td>Level‑2A atmospherically corrected surface reflectance</td>
+<td><code>sentinel-3-olci-l2-lfr</code></td>
+<td>Level-2 land and atmospheric geophysical parameters derived from OLCI</td>
+</tr>
+<tr>
+<td><code>sentinel-3-slstr-l2-lst</code></td>
+<td>Level-2 land surface temperature products derived from SLSTR</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h4 id="remarks-to-opening-parameters">Remarks to Opening Parameters</h4>
-<p>The opening parameters mentioned in the Section <a href="#3-open-a-spatiotemporal-data-cube">Open a Spatiotemporal Data Cube</a>
-also apply to this data product.</p>
 <p><strong>Supported Variables</strong></p>
 <ul>
-<li><strong>Surface reflectance bands</strong>:<br />
-<code>b01</code>, <code>b02</code>, <code>b03</code>, <code>b04</code>, <code>b05</code>, <code>b06</code>, <code>b07</code>, <code>b08</code>, <code>b8a</code>, <code>b09</code>, <code>b11</code>, <code>b12</code></li>
-<li><strong>Classification/Quality layers</strong> (L2A only):<br />
-<code>cld</code>, <code>scl</code>, <code>snw</code></li>
+<li><code>sentinel-3-olci-l1-efr</code>:<br />
+<code>oa01_radiance</code>, <code>oa02_radiance</code>, <code>oa03_radiance</code>, <code>oa04_radiance</code>, <code>oa05_radiance</code>,
+  <code>oa06_radiance</code>, <code>oa07_radiance</code>, <code>oa08_radiance</code>, <code>oa09_radiance</code>, <code>oa10_radiance</code>,
+  <code>oa11_radiance</code>, <code>oa12_radiance</code>, <code>oa13_radiance</code>, <code>oa14_radiance</code>, <code>oa15_radiance</code>,
+  <code>oa16_radiance</code>, <code>oa17_radiance</code>, <code>oa18_radiance</code>, <code>oa19_radiance</code>, <code>oa20_radiance</code>,
+  <code>oa21_radiance</code></li>
+<li><code>sentinel-3-olci-l2-lfr</code>:<br />
+<code>gifapar</code>, <code>iwv</code>, <code>otci</code>, <code>rc681</code>, <code>rc865</code></li>
+<li><code>sentinel-3-slstr-l2-lst</code>:<br />
+<code>lst</code></li>
 </ul>
-<p><strong>Parameters governing Resampling and Reprojection</strong></p>
-<p>Users can specify any spatial resolution and coordinate reference system (CRS) when 
-opening data with <code>open_data</code>. As a result, spectral bands may be resampled — either 
-upsampled or downsampled — and reprojected to match the target grid. If reprojection 
-is needed at a lower resolution, the process first downsamples the data and 
-subsequently performs the reprojection.</p>
-<p><strong>Upsampling / Reprojecting:</strong>  </p>
-<ul>
-<li>Controlled via 2D interpolation using the <code>interp_methods</code> parameter. </li>
-<li>Accepts a single interpolation method for all variables, or a dictionary mapping from
-  variable names or data types to specific interpolation methods.</li>
-<li>Supported interpolation methods: <ul>
-<li><code>0</code> (nearest neighbor)</li>
-<li><code>1</code> (linear / bilinear)</li>
-<li><code>"nearest"</code></li>
-<li><code>"triangular"</code></li>
-<li><code>"bilinear"</code></li>
-</ul>
-</li>
-</ul>
-<p><strong>Downsampling:</strong>  </p>
-<ul>
-<li>Controlled via the <code>agg_methods</code> parameter.</li>
-<li>Can be specified as a single method for all variables, or a dictionary mapping from
-  variable names or data types to specific interpolation methods. </li>
-<li>Supported aggregation methods:<ul>
-<li><code>"center"</code> (default for <code>scl</code>)</li>
-<li><code>"count"</code></li>
-<li><code>"first"</code></li>
-<li><code>"last"</code></li>
-<li><code>"max"</code></li>
-<li><code>"mean"</code> (default)</li>
-<li><code>"median"</code></li>
-<li><code>"mode"</code></li>
-<li><code>"min"</code></li>
-<li><code>"prod"</code></li>
-<li><code>"std"</code></li>
-<li><code>"sum"</code></li>
-<li><code>"var"</code></li>
-</ul>
-</li>
-</ul>
-<h3 id="sentinel-3">🛰️ Sentinel-3</h3>
-<p>Support for Sentinel-3 products will be added in an upcoming release.</p>
+<p><strong>Data Cube Generation Workflow</strong></p>
+<p>The workflow for building 3D analysis-ready cubes from Sentinel-3 products involves 
+the following steps:</p>
+<ol>
+<li><strong>Query</strong> tiles using the <a href="https://stac.core.eopf.eodc.eu/">EOPF Zarr Sample Service STAC API</a> for a given time range and 
+   spatial extent.</li>
+<li><strong>Group</strong> items by solar day.</li>
+<li><strong>Rectify</strong> data from the native 2D irregular grid to a regular grid using 
+   <a href="https://xcube-dev.github.io/xcube-resampling/guide/#3-rectification">xcube-resampling</a>.</li>
+<li><strong>Mosaic</strong> adjacent tiles into seamless daily scenes.</li>
+<li><strong>Stack</strong> the daily mosaics along the temporal axis to form 3D data cubes 
+   for each variable (e.g., spectral bands).</li>
+</ol>
+<p>⚠️ <strong>Important considerations</strong>:<br />
+- <strong>Rectification</strong> (irregular → regular grid) is computationally expensive and may 
+  slow down cube generation.<br />
+- Users can specify any spatial resolution and coordinate reference system (CRS) when 
+  opening data with <code>open_data</code>. During rectification, spectral bands are internally 
+  reprojected to the target grid. If a lower-resolution grid is requested, 
+  downsampling is applied <strong>prior</strong> to rectification.<br />
+- Resampling behavior is controlled via the <a href="#optional-parameters"><code>agg_methods</code></a> 
+  (downsampling) and <a href="#optional-parameters"><code>interp_methods</code></a> 
+  (upsampling/interpolation) parameters.  </p>
 <hr />
 
 

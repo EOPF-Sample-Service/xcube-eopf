@@ -435,6 +435,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Testing and Coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#some-notes-on-the-strategy-of-unit-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Some notes on the strategy of unit-testing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -547,6 +562,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Testing and Coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#some-notes-on-the-strategy-of-unit-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Some notes on the strategy of unit-testing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -632,6 +662,18 @@ environment, do</p>
 and code coverage analysis.</p>
 <div class="highlight"><pre><span></span><code>pytest<span class="w"> </span>tests/<span class="w"> </span>--cov<span class="o">=</span>xarray_eopf<span class="w"> </span>--cov-report<span class="w"> </span>html
 </code></pre></div>
+<h4 id="some-notes-on-the-strategy-of-unit-testing">Some notes on the strategy of unit-testing</h4>
+<p>The unit test suite uses <a href="https://pypi.org/project/pytest-recording/">pytest-recording</a>
+to mock STAC catalogs. During development an actual HTTP request is performed
+to a STAC catalog and the responses are saved in <code>cassettes/**.yaml</code> files.
+During testing, only the <code>cassettes/**.yaml</code> files are used without an actual
+HTTP request. During development, to save the responses to <code>cassettes/**.yaml</code>, run</p>
+<p><div class="highlight"><pre><span></span><code>pytest<span class="w"> </span>-v<span class="w"> </span>-s<span class="w"> </span>--record-mode<span class="w"> </span>new_episodes
+</code></pre></div>
+Note that <code>--record-mode new_episodes</code> overwrites all cassettes. If the user only
+wants to write cassettes which are not saved already, <code>--record-mode once</code> can be used.
+<a href="https://pypi.org/project/pytest-recording/">pytest-recording</a> supports all records modes given by <a href="https://vcrpy.readthedocs.io/en/latest/usage.html#record-modes">VCR.py</a>.
+After recording the cassettes, testing can be performed as usual.</p>
 <h3 id="code-style">Code Style</h3>
 <p>The <code>xcube-eopf</code> source code is formatted and quality-controlled 
 using <a href="https://docs.astral.sh/ruff/">ruff</a>:</p>

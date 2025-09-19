@@ -371,6 +371,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Sentinel-3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cube-generation-workflow_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cube Generation Workflow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supported-variables_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supported Variables
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -577,6 +601,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Sentinel-3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cube-generation-workflow_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cube Generation Workflow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supported-variables_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supported Variables
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -644,7 +692,7 @@ Some features may be partially implemented or still in progress.</p>
 EOPF Sentinel Zarr samples for Sentinel-1, Sentinel-2, and Sentinel-3 missions. The
 main features are summarized below. A more in depth documentation is given in the 
 <a href="guide/">User Guide</a>. </p>
-<p>Currently, support is focused on <strong>Sentinel-2</strong> products.</p>
+<p>Currently, support is focused on <strong>Sentinel-2</strong> and <strong>Sentinel-3</strong> products.</p>
 <hr />
 <h3 id="sentinel-1">Sentinel-1</h3>
 <p>Support for Sentinel-1 will be added in an upcoming release.</p>
@@ -689,7 +737,53 @@ the following steps:</p>
 </code></pre></div></p>
 <hr />
 <h3 id="sentinel-3">Sentinel-3</h3>
-<p>Support for Sentinel-3 products will be added in an upcoming release.</p>
+<p>The current implementation supports three Sentinel-3 product levels, available as 
+<code>data_id</code> values:</p>
+<ul>
+<li><code>sentinel-3-olci-l1-efr</code>: Level-1 top-of-atmosphere radiance from OLCI instrument</li>
+<li><code>sentinel-3-olci-l2-lfr</code>: Level-2 land and atmospheric geophysical parameters 
+   derived from OLCI instrument</li>
+<li><code>sentinel-3-slstr-l2-lst</code>: Level-2  land surface temperature derived from SLSTR 
+   instrument</li>
+</ul>
+<h4 id="cube-generation-workflow_1">Cube Generation Workflow</h4>
+<p>The workflow for building 3D analysis-ready cubes from Sentinel-3 products involves 
+the following steps:</p>
+<ol>
+<li><strong>Query</strong> tiles using the <a href="https://stac.core.eopf.eodc.eu/">EOPF Zarr Sample Service STAC API</a> for a given time range and 
+   spatial extent.</li>
+<li><strong>Group</strong> items by solar day.</li>
+<li><strong>Rectify</strong> data from the native 2D irregular grid to a regular grid using 
+   <a href="https://xcube-dev.github.io/xcube-resampling/guide/#3-rectification">xcube-resampling</a>.</li>
+<li><strong>Mosaic</strong> adjacent tiles into seamless daily scenes.</li>
+<li><strong>Stack</strong> the daily mosaics along the temporal axis to form 3D data cubes 
+   for each variable (e.g., spectral bands).</li>
+</ol>
+<h4 id="supported-variables_1">Supported Variables</h4>
+<ul>
+<li><code>sentinel-3-olci-l1-efr</code>:<br />
+<code>oa01_radiance</code>, <code>oa02_radiance</code>, <code>oa03_radiance</code>, <code>oa04_radiance</code>, <code>oa05_radiance</code>,
+  <code>oa06_radiance</code>, <code>oa07_radiance</code>, <code>oa08_radiance</code>, <code>oa09_radiance</code>, <code>oa10_radiance</code>,
+  <code>oa11_radiance</code>, <code>oa12_radiance</code>, <code>oa13_radiance</code>, <code>oa14_radiance</code>, <code>oa15_radiance</code>,
+  <code>oa16_radiance</code>, <code>oa17_radiance</code>, <code>oa18_radiance</code>, <code>oa19_radiance</code>, <code>oa20_radiance</code>,
+  <code>oa21_radiance</code></li>
+<li><code>sentinel-3-olci-l2-lfr</code>:<br />
+<code>gifapar</code>, <code>iwv</code>, <code>otci</code>, <code>rc681</code>, <code>rc865</code></li>
+<li><code>sentinel-3-slstr-l2-lst</code>:<br />
+<code>lst</code></li>
+</ul>
+<p><strong>Example: Sentinel-3 SLSTR Level-2 LST</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">xcube.core.store</span><span class="w"> </span><span class="kn">import</span> <span class="n">new_data_store</span>
+
+<span class="n">store</span> <span class="o">=</span> <span class="n">new_data_store</span><span class="p">(</span><span class="s2">&quot;eopf-stac&quot;</span><span class="p">)</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">open_data</span><span class="p">(</span>
+    <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;sentinel-3-slstr-l2-lst&quot;</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="mf">9.</span><span class="p">,</span> <span class="mf">53.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span> <span class="mf">54.</span><span class="p">],</span>
+    <span class="n">time_range</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2025-06-05&quot;</span><span class="p">],</span>
+    <span class="n">spatial_res</span><span class="o">=</span><span class="mi">300</span> <span class="o">/</span> <span class="mi">111320</span><span class="p">,</span> <span class="c1"># conversion to degree approx.</span>
+    <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span>
+<span class="p">)</span>
+</code></pre></div></p>
 <hr />
 <h2 id="license">License</h2>
 <p>The package is open source and released under the 
