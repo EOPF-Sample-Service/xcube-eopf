@@ -49,6 +49,22 @@ and code coverage analysis.
 pytest tests/ --cov=xarray_eopf --cov-report html
 ```
 
+#### Some notes on the strategy of unit-testing
+
+The unit test suite uses [pytest-recording](https://pypi.org/project/pytest-recording/)
+to mock STAC catalogs. During development an actual HTTP request is performed
+to a STAC catalog and the responses are saved in `cassettes/**.yaml` files.
+During testing, only the `cassettes/**.yaml` files are used without an actual
+HTTP request. During development, to save the responses to `cassettes/**.yaml`, run
+
+```bash
+pytest -v -s --record-mode new_episodes
+```
+Note that `--record-mode new_episodes` overwrites all cassettes. If the user only
+wants to write cassettes which are not saved already, `--record-mode once` can be used.
+[pytest-recording](https://pypi.org/project/pytest-recording/) supports all records modes given by [VCR.py](https://vcrpy.readthedocs.io/en/latest/usage.html#record-modes).
+After recording the cassettes, testing can be performed as usual.
+
 ### Code Style
 
 The `xcube-eopf` source code is formatted and quality-controlled 

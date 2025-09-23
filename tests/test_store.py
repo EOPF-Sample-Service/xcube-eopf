@@ -14,7 +14,7 @@ from xcube.util.jsonschema import JsonObjectSchema
 from xcube_eopf.constants import CONVERSION_FACTOR_DEG_METER, DATA_STORE_ID
 from xcube_eopf.utils import reproject_bbox
 
-from .helpers import l2a_10m, l2a_60m, l2a_60m_wo_scl
+from .helpers import sen2_l2a_10m, sen2_l2a_60m, sen2_l2a_60m_wo_scl, sen3_ol1efr_data
 
 
 class EOPFZarrDataStoreTest(TestCase):
@@ -42,16 +42,30 @@ class EOPFZarrDataStoreTest(TestCase):
 
     def test_get_data_ids(self):
         self.assertCountEqual(
-            ["sentinel-2-l1c", "sentinel-2-l2a"], self.store.get_data_ids()
+            [
+                "sentinel-2-l1c",
+                "sentinel-2-l2a",
+                "sentinel-3-olci-l2-lfr",
+                "sentinel-3-olci-l1-efr",
+                "sentinel-3-slstr-l2-lst",
+            ],
+            self.store.get_data_ids(),
         )
         self.assertCountEqual(
-            [("sentinel-2-l1c", {}), ("sentinel-2-l2a", {})],
+            [
+                ("sentinel-2-l1c", {}),
+                ("sentinel-2-l2a", {}),
+                ("sentinel-3-olci-l2-lfr", {}),
+                ("sentinel-3-olci-l1-efr", {}),
+                ("sentinel-3-slstr-l2-lst", {}),
+            ],
             self.store.get_data_ids(include_attrs=True),
         )
 
     def test_has_data(self):
         self.assertTrue(self.store.has_data("sentinel-2-l1c"))
         self.assertTrue(self.store.has_data("sentinel-2-l2a"))
+        self.assertTrue(self.store.has_data("sentinel-3-olci-l2-lfr"))
         self.assertFalse(self.store.has_data("sentinel-2-l3a"))
         self.assertTrue(self.store.has_data("sentinel-2-l2a", data_type="dataset"))
         with self.assertRaises(DataStoreError) as cm:
@@ -80,9 +94,29 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(schema, JsonObjectSchema)
         self.assertIn("sentinel-2-l1c", schema.properties)
         self.assertIn("sentinel-2-l2a", schema.properties)
+        self.assertIn("sentinel-3-olci-l2-lfr", schema.properties)
+        self.assertIn("sentinel-3-olci-l1-efr", schema.properties)
+        self.assertIn("sentinel-3-slstr-l2-lst", schema.properties)
 
-        # with data_id argument
+        # with data_id argument for Sen2
         schema = self.store.get_open_data_params_schema(data_id="sentinel-2-l2a")
+        self.assertIsInstance(schema, JsonObjectSchema)
+        self.assertIn("variables", schema.properties)
+        self.assertIn("spatial_res", schema.properties)
+        self.assertIn("time_range", schema.properties)
+        self.assertIn("bbox", schema.properties)
+        self.assertIn("crs", schema.properties)
+        self.assertIn("tile_size", schema.properties)
+        self.assertIn("query", schema.properties)
+        self.assertNotIn("test", schema.properties)
+        self.assertCountEqual(
+            ["time_range", "bbox", "crs", "spatial_res"], schema.required
+        )
+
+        # with data_id argument for Sen3
+        schema = self.store.get_open_data_params_schema(
+            data_id="sentinel-3-olci-l1-efr"
+        )
         self.assertIsInstance(schema, JsonObjectSchema)
         self.assertIn("variables", schema.properties)
         self.assertIn("spatial_res", schema.properties)
@@ -107,8 +141,8 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
-    def test_open_data_10m(self, mock_xarray):
-        mock_xarray.return_value = l2a_10m()
+    def test_open_data_sen2_10m(self, mock_xarray):
+        mock_xarray.return_value = sen2_l2a_10m()
 
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
@@ -121,7 +155,7 @@ class EOPFZarrDataStoreTest(TestCase):
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
-        self.assertCountEqual(
+        self.assertEqual(
             [4, 2000, 2000], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
@@ -135,8 +169,8 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
-    def test_open_data_5m_interp_method(self, mock_xarray):
-        mock_xarray.return_value = l2a_10m()
+    def test_open_data_sen2_5m_interp_method(self, mock_xarray):
+        mock_xarray.return_value = sen2_l2a_10m()
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
             bbox=(610000, 5880000, 630000, 5900000),
@@ -148,7 +182,7 @@ class EOPFZarrDataStoreTest(TestCase):
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
-        self.assertCountEqual(
+        self.assertEqual(
             [4, 4001, 4001], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
@@ -162,8 +196,8 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
-    def test_open_data_100m_agg_methods(self, mock_xarray):
-        mock_xarray.return_value = l2a_60m()
+    def test_open_data_sen2_100m_agg_methods(self, mock_xarray):
+        mock_xarray.return_value = sen2_l2a_60m()
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
             bbox=(610000, 5880000, 630000, 5900000),
@@ -175,7 +209,7 @@ class EOPFZarrDataStoreTest(TestCase):
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
-        self.assertCountEqual(
+        self.assertEqual(
             [4, 201, 201], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
@@ -189,8 +223,8 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
-    def test_open_data_geographic(self, mock_xarray):
-        mock_xarray.return_value = l2a_60m_wo_scl()
+    def test_open_data_sen2_geographic(self, mock_xarray):
+        mock_xarray.return_value = sen2_l2a_60m_wo_scl()
 
         # open Sentinel-2 L2A
         bbox = [610000, 5880000, 630000, 5900000]
@@ -205,11 +239,44 @@ class EOPFZarrDataStoreTest(TestCase):
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
-        self.assertCountEqual(
+        self.assertEqual(
             [4, 412, 684], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
             [1, 412, 684],
+            [
+                ds.chunksizes["time"][0],
+                ds.chunksizes["lat"][0],
+                ds.chunksizes["lon"][0],
+            ],
+        )
+        self.assertIn("stac_url", ds.attrs)
+        self.assertIn("stac_items", ds.attrs)
+        self.assertIn("open_params", ds.attrs)
+        self.assertIn("xcube_eopf_version", ds.attrs)
+
+    @pytest.mark.vcr()
+    @patch("xarray.open_dataset")
+    def test_open_data_sen3_geographic(self, mock_xarray):
+        mock_xarray.return_value = sen3_ol1efr_data()
+
+        # open Sentinel-3 OL1EFR
+        bbox = [5.0, 53.0, 10.0, 57.0]
+        ds = self.store.open_data(
+            data_id="sentinel-3-olci-l1-efr",
+            bbox=bbox,
+            time_range=["2025-05-01", "2025-05-21"],
+            spatial_res=300 / CONVERSION_FACTOR_DEG_METER,
+            crs="EPSG:4326",
+            variables=["oa01_radiance", "oa02_radiance"],
+        )
+        self.assertIsInstance(ds, xr.Dataset)
+        self.assertCountEqual(["oa01_radiance", "oa02_radiance"], list(ds.data_vars))
+        self.assertEqual(
+            [2, 1486, 1857], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+        )
+        self.assertEqual(
+            [1, 1024, 1024],
             [
                 ds.chunksizes["time"][0],
                 ds.chunksizes["lat"][0],
@@ -232,13 +299,7 @@ class EOPFZarrDataStoreTest(TestCase):
                 crs="EPSG:32632",
                 variables=["b02", "b03", "b04", "scl"],
             )
-        self.assertEqual(
-            str(cm.exception),
-            "No items found for search_params {'collections': "
-            "['sentinel-2-l2a'], 'datetime': ['2016-05-01', '2017-05-15'], "
-            "'bbox': (10.641359519532669, 53.0536720941606, 10.947730608944445, "
-            "53.23787163529459), 'query': None}.",
-        )
+        self.assertIn("No items found for search_params", str(cm.exception))
 
     def test_describe_data(self):
         with self.assertRaises(NotImplementedError) as cm:

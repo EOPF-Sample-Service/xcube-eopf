@@ -9,40 +9,32 @@ import dask.array as da
 import numpy as np
 import pyproj
 import pystac
-import pystac_client
 import xarray as xr
+from xcube.util.jsonschema import JsonObjectSchema
 from xcube_resampling.gridmapping import GridMapping
 from xcube_resampling.spatial import resample_in_space
-from xcube_resampling.constants import AGG_METHODS
-from xcube.core.store import DataStoreError
-from xcube.util.jsonschema import (
-    JsonIntegerSchema,
-    JsonObjectSchema,
-    JsonStringSchema,
-    JsonComplexSchema,
-)
-
 
 from xcube_eopf.constants import (
     CONVERSION_FACTOR_DEG_METER,
     SCHEMA_ADDITIONAL_QUERY,
+    SCHEMA_AGG_METHODS,
     SCHEMA_BBOX,
     SCHEMA_CRS,
+    SCHEMA_INTERP_METHODS,
     SCHEMA_SPATIAL_RES,
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
-    STAC_URL,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
+    add_attributes,
     add_nominal_datetime,
     get_gridmapping,
     mosaic_spatial_take_first,
     normalize_crs,
     reproject_bbox,
 )
-from xcube_eopf.version import version
 
 _SEN2_SPATIAL_RES = np.array([10, 20, 60])
 _TILE_SIZE = 1830  # chunk size of 10m resolution and a multiple of 20m and 60m
@@ -54,45 +46,6 @@ _ATTRIBUTE_KEYS = [
     "flag_colors",
     "grid_mapping",
 ]
-
-_SCHEMA_INTERP_METHODS = JsonComplexSchema(
-    title="Interpolation method for updampling",
-    description=(
-        "Specifies the interpolation method used for upsampling spatial data variables. "
-        "You can provide a single method for all variables or a dictionary mapping "
-        "variable names or data types to specific interpolation methods. "
-        "For detailed documentation, see https://xcube-dev.github.io/xcube-resampling/."
-    ),
-    one_of=[
-        JsonIntegerSchema(enum=[0, 1], description="0: nearest neighbor; 1: bilinear"),
-        JsonStringSchema(enum=["nearest", "triangular", "bilinear"]),
-        JsonObjectSchema(
-            title=(
-                "dictionary mapping variable names or data types"
-                " to specific interpolation methods."
-            )
-        ),
-    ],
-)
-
-_SCHEMA_AGG_METHODS = JsonComplexSchema(
-    title="Aggregation methods for downsampling",
-    description=(
-        "Specifies the aggregation method used for downsampling spatial data variables. "
-        "You can provide a single method for all variables or a dictionary mapping "
-        "variable names or data types to specific aggregation methods. "
-        "For detailed documentation, see https://xcube-dev.github.io/xcube-resampling/."
-    ),
-    one_of=[
-        JsonStringSchema(enum=list(AGG_METHODS.keys())),
-        JsonObjectSchema(
-            title=(
-                "dictionary mapping variable names or data types"
-                " to specific aggregation methods."
-            )
-        ),
-    ],
-)
 
 
 class Sen2ProductHandler(ProductHandler, ABC):
@@ -112,33 +65,15 @@ class Sen2ProductHandler(ProductHandler, ABC):
                 crs=SCHEMA_CRS,
                 tile_size=SCHEMA_TILE_SIZE,
                 query=SCHEMA_ADDITIONAL_QUERY,
-                agg_methods=_SCHEMA_AGG_METHODS,
-                interp_methods=_SCHEMA_INTERP_METHODS,
+                agg_methods=SCHEMA_AGG_METHODS,
+                interp_methods=SCHEMA_INTERP_METHODS,
             ),
             required=["time_range", "bbox", "crs", "spatial_res"],
             additional_properties=False,
         )
 
-    def open_data(self, **open_params) -> xr.Dataset:
-        schema = self.get_open_data_params_schema()
-        schema.validate_instance(open_params)
-
-        # search for items
-        bbox_wgs84 = reproject_bbox(
-            open_params["bbox"], open_params["crs"], "EPSG:4326"
-        )
-        search_params = dict(
-            collections=[self.data_id],
-            datetime=open_params["time_range"],
-            bbox=bbox_wgs84,
-            query=open_params.get("query"),
-        )
-        catalog = pystac_client.Client.open(STAC_URL)
-        items = list(catalog.search(**search_params).items())
-        if len(items) == 0:
-            raise DataStoreError(f"No items found for search_params {search_params}.")
-
-        # get STAC items grouped by solar day
+    def open_data(self, items: list[pystac.Item], **open_params) -> xr.Dataset:
+        # get STAC items grouped by solar day and MRGS tile
         grouped_items = group_items(items)
 
         # generate cube by mosaicking and stacking tiles
@@ -228,12 +163,12 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     dts = []
     for date in grouped_items.time.values:
         item = np.sum(grouped_items.sel(time=date).values)[0]
-        dts.append(
-            np.datetime64(
-                item.properties["datetime_nominal"].replace(tzinfo=None)
-            ).astype("datetime64[ns]")
-        )
-    grouped_items = grouped_items.assign_coords(time=dts)
+        dts.append(item.datetime.replace(tzinfo=None))
+    grouped_items = grouped_items.assign_coords(
+        time=np.array(dts, dtype="datetime64[ns]")
+    )
+    grouped_items["time"].encoding["units"] = "seconds since 1970-01-01"
+    grouped_items["time"].encoding["calendar"] = "standard"
 
     return grouped_items
 
@@ -276,42 +211,6 @@ def generate_cube(grouped_items: xr.DataArray, **open_params) -> xr.Dataset:
     return ds_final
 
 
-def add_attributes(
-    ds: xr.Dataset, grouped_items: xr.DataArray, **open_params
-) -> xr.Dataset:
-    """Adds metadata attributes to the final dataset.
-
-    This function enriches the input dataset with additional metadata attributes:
-    - 'stac_url': A predefined URL for the EOPF STAC API.
-    - 'stac_items': A mapping from time steps to lists of STAC item IDs.
-    - 'open_params': Opening parameters.
-    - 'xcube_eopf_version': The version of the xcube-eopf package being used.
-
-    Parameters:
-        ds: The input dataset to which attributes will be added.
-        grouped_items: An array containing STAC items grouped by time and tile ID.
-        **open_params: Opening parameters that are stored as a metadata attribute.
-
-    Returns:
-        The modified dataset with added metadata attributes.
-    """
-    ds.attrs["stac_url"] = STAC_URL
-    ds.attrs["stac_items"] = dict(
-        {
-            dt.astype("datetime64[ms]")
-            .astype("O")
-            .isoformat(): [
-                item.id for item in np.sum(grouped_items.sel(time=dt).values)
-            ]
-            for dt in grouped_items.time.values
-        }
-    )
-    ds.attrs["open_params"] = open_params
-    ds.attrs["xcube_eopf_version"] = version
-
-    return ds
-
-
 def _generate_utm_cube(
     grouped_items: xr.DataArray,
     crs_utm: str,
@@ -342,7 +241,7 @@ def _generate_utm_cube(
     spatial_res = _get_spatial_res(open_params)
     xarray_open_params = dict(
         resolution=spatial_res,
-        spline_orders=open_params.get("interp_method"),
+        interp_methods=open_params.get("interp_method"),
         agg_methods=open_params.get("agg_methods"),
         variables=open_params.get("variables"),
     )

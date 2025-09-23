@@ -65,16 +65,36 @@ Samples.
 
 These parameters control the STAC API query and define the output cube's spatial grid.
 
-**Optional parameters:**
+## Optional Parameters
 
-- `variables`: Variables to include in the dataset. Can be a name or regex pattern 
-  or iterable of the latter.
-- `tile_size`: Spatial tile size of the returned dataset `(width, height)`.
-- `query`: Additional query options for filtering STAC Items by properties. See 
+- `variables`: Variables to include in the dataset. Accepts a single name, a regex pattern, or an iterable of either.
+- `tile_size`: Spatial tile size of the returned dataset, given as `(width, height)`.
+- `query`: Additional filtering options for STAC Items by their properties. See the 
   [STAC Query Extension](https://github.com/stac-api-extensions/query) for details.
+- `agg_methods`: Aggregation method(s) for downsampling spatial variables. Accepts:  
+  - A single method applied to all variables, or  
+  - A dictionary mapping variable names or dtypes to methods.
 
-Additional parameters specific to each Sentinel mission are documented in
-[the section below](#specific-parameters-for-supported-sentinel-missions).
+  Supported methods include:  
+  `"center"`, `"count"`, `"first"`, `"last"`, `"max"`, `"mean"`, `"median"`,  
+  `"mode"`, `"min"`, `"prod"`, `"std"`, `"sum"`, `"var"`.  
+
+  *Default:* `"center"` for integer arrays, `"mean"` otherwise.  
+  For details, see the [xcube-resampling documentation](https://xcube-dev.github.io/xcube-resampling/).  
+
+- `interp_methods`: Interpolation method(s) for upsampling spatial variables. Accepts:  
+  - A single method applied to all variables, or  
+  - A dictionary mapping variable names or dtypes to methods.  
+
+  Supported methods include:  
+  - `0` — nearest neighbor (*default for categorical / integer datasets*)  
+  - `1` — linear / bilinear (*default for float datasets*)  
+  - `"nearest"` - alias for `0` 
+  - `"triangular"` - linearly interpolate between 4 points using two triangles 
+  - `"bilinear"` - alias for `1` 
+
+  For details, see the [xcube-resampling documentation](https://xcube-dev.github.io/xcube-resampling/). 
+
 
 ### 4. Inspect, Visualize, and Save the Data Cube
 
@@ -158,6 +178,23 @@ Sentinel-2 provides multi-spectral imagery at different native resolutions:
 Sentinel-2 products are organized as STAC Items, each representing a single tile. 
 These tiles are stored in their native UTM CRS, which varies by geographic location.
 
+**Data Identifiers**
+
+The EOPF xcube data store supports two Sentinel-2 product types via the `data_id` argument:
+
+| Data ID             | Description                                            |
+|---------------------|--------------------------------------------------------|
+| `sentinel-2-l1c`    | Level‑1C top‑of‑atmosphere (TOA) reflectance           |
+| `sentinel-2-l2a`    | Level‑2A atmospherically corrected surface reflectance |
+
+
+**Supported Variables**
+
+- **Surface reflectance bands**:  
+  `b01`, `b02`, `b03`, `b04`, `b05`, `b06`, `b07`, `b08`, `b8a`, `b09`, `b11`, `b12`
+- **Classification/Quality layers** (L2A only):  
+  `cld`, `scl`, `snw`
+
 **Data Cube Generation Workflow**
 
 1. **STAC Query:** A STAC API request returns relevant STAC Items (tiles) based on 
@@ -174,73 +211,90 @@ These tiles are stored in their native UTM CRS, which varies by geographic locat
 | Condition        | Requested bounding box lies within a single UTM zone, native CRS is requested, and the spatial resolution matches the native resolution.                                                                                                                                            | Data spans multiple UTM zones, a different CRS is requested (e.g., EPSG:4326), or a custom spatial resolution is requested.                                                                |
 | Processing steps | Only upsampling or downsampling is applied to align the differing resolutions of the spectral bands. Data cube is directly cropped using the requested bounding box, preserving original pixel values. Spatial extent may deviate slightly due to alignment with native pixel grid. | A target grid mapping is computed from bounding box, spatial resolution, and CRS. Data from each UTM zone is reprojected/resampled to this grid. Overlaps resolved by first non-NaN pixel. |
 
-Upsampling and downsampling are controlled using the `agg_methods` and `interp_methods`
-parameters ([see below](#remarks-to-opening-parameters)).
-
-#### Data Identifiers
-The EOPF xcube data store supports two Sentinel-2 product types via the `data_id` argument:
-
-| Data ID             | Description                                            |
-|---------------------|--------------------------------------------------------|
-| `sentinel-2-l1c`    | Level‑1C top‑of‑atmosphere (TOA) reflectance           |
-| `sentinel-2-l2a`    | Level‑2A atmospherically corrected surface reflectance |
-
---- 
-
-#### Remarks to Opening Parameters
-
-The opening parameters mentioned in the Section [Open a Spatiotemporal Data Cube](#3-open-a-spatiotemporal-data-cube)
-also apply to this data product.
-
-**Supported Variables**
-
-- **Surface reflectance bands**:  
-  `b01`, `b02`, `b03`, `b04`, `b05`, `b06`, `b07`, `b08`, `b8a`, `b09`, `b11`, `b12`
-- **Classification/Quality layers** (L2A only):  
-  `cld`, `scl`, `snw`
-
-**Parameters governing Resampling and Reprojection**
-
 Users can specify any spatial resolution and coordinate reference system (CRS) when 
 opening data with `open_data`. As a result, spectral bands may be resampled — either 
 upsampled or downsampled — and reprojected to match the target grid. If reprojection 
 is needed at a lower resolution, the process first downsamples the data and 
-subsequently performs the reprojection.
+subsequently performs the reprojection. Upsampling and downsampling are controlled using the `agg_methods` and `interp_methods`
+parameters (see [Optional Parameters](#optional-parameters)).
 
-**Upsampling / Reprojecting:**  
 
-- Controlled via 2D interpolation using the `interp_methods` parameter. 
-- Accepts a single interpolation method for all variables, or a dictionary mapping from
-  variable names or data types to specific interpolation methods.
-- Supported interpolation methods: 
-    - `0` (nearest neighbor)
-    - `1` (linear / bilinear)
-    - `"nearest"`
-    - `"triangular"`
-    - `"bilinear"`
 
-**Downsampling:**  
 
-- Controlled via the `agg_methods` parameter.
-- Can be specified as a single method for all variables, or a dictionary mapping from
-  variable names or data types to specific interpolation methods. 
-- Supported aggregation methods:
-    - `"center"` (default for `scl`)
-    - `"count"`
-    - `"first"`
-    - `"last"`
-    - `"max"`
-    - `"mean"` (default)
-    - `"median"`
-    - `"mode"`
-    - `"min"`
-    - `"prod"`
-    - `"std"`
-    - `"sum"`
-    - `"var"`
 
 ### 🛰️ Sentinel-3
 
-Support for Sentinel-3 products will be added in an upcoming release.
+Sentinel-3 has two instruments on board: 
+
+🌊 **OLCI — Ocean and Land Colour Instrument**
+
+- **Purpose**: Primarily designed for ocean and land surface monitoring.
+- **Spectral bands**: 21 bands (400–1020 nm).
+- **Spatial resolution**: 300 m.
+- **Swath width**: ~1,270 km
+
+🔥 **SLSTR — Sea and Land Surface Temperature Radiometer**
+
+- **Purpose**: Measures global sea and land surface temperatures with high accuracy.
+- **Spectral bands**: 9 bands (visible to thermal infrared, 0.55–12 μm).
+- **Spatial resolution**: 500 m (visible & shortwave infrared bands) and 1 km 
+  (thermal infrared bands).
+- **Swath width**: ~1,400 km
+
+Sentinel-3 data products are distributed as **STAC Items**, where each item 
+corresponds to a single tile. The datasets are provided in their 
+**native 2D irregular grid** and typically require rectification for analysis-ready 
+applications. 
+
+**Data Identifiers**
+
+The EOPF xcube data store so far supports three Sentinel-3 product types via the 
+`data_id` argument:
+
+| Data ID                   | Description                                                           |
+|---------------------------|-----------------------------------------------------------------------|
+| `sentinel-3-olci-l1-efr`  | Level-1 full-resolution top-of-atmosphere radiances from the OLCI     |
+| `sentinel-3-olci-l2-lfr`  | Level-2 land and atmospheric geophysical parameters derived from OLCI |
+| `sentinel-3-slstr-l2-lst` | Level-2 land surface temperature products derived from SLSTR          |
+
+
+**Supported Variables**
+
+- `sentinel-3-olci-l1-efr`:  
+  `oa01_radiance`, `oa02_radiance`, `oa03_radiance`, `oa04_radiance`, `oa05_radiance`,
+  `oa06_radiance`, `oa07_radiance`, `oa08_radiance`, `oa09_radiance`, `oa10_radiance`,
+  `oa11_radiance`, `oa12_radiance`, `oa13_radiance`, `oa14_radiance`, `oa15_radiance`,
+  `oa16_radiance`, `oa17_radiance`, `oa18_radiance`, `oa19_radiance`, `oa20_radiance`,
+  `oa21_radiance`
+- `sentinel-3-olci-l2-lfr`:  
+  `gifapar`, `iwv`, `otci`, `rc681`, `rc865`
+- `sentinel-3-slstr-l2-lst`:  
+  `lst`
+
+**Data Cube Generation Workflow**
+
+The workflow for building 3D analysis-ready cubes from Sentinel-3 products involves 
+the following steps:
+
+1. **Query** tiles using the [EOPF Zarr Sample Service STAC API](https://stac.core.eopf.eodc.eu/) for a given time range and 
+   spatial extent.
+2. **Group** items by solar day.
+3. **Rectify** data from the native 2D irregular grid to a regular grid using 
+   [xcube-resampling](https://xcube-dev.github.io/xcube-resampling/guide/#3-rectification).
+4. **Mosaic** adjacent tiles into seamless daily scenes.
+5. **Stack** the daily mosaics along the temporal axis to form 3D data cubes 
+   for each variable (e.g., spectral bands).
+
+⚠️ **Important considerations**:  
+
+- Rectification (irregular → regular grid) is computationally expensive and may 
+  slow down cube generation.  
+- Users can specify any spatial resolution and coordinate reference system (CRS) when 
+  opening data with `open_data`. During rectification, spectral bands are internally 
+  reprojected to the target grid. If a lower-resolution grid is requested, 
+  downsampling is applied prior to rectification.  
+- Resampling behavior is controlled via the [`agg_methods`](#optional-parameters) 
+  (downsampling) and [`interp_methods`](#optional-parameters) 
+  (upsampling/interpolation) parameters.  
 
 ---

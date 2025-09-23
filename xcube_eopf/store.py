@@ -5,6 +5,7 @@
 from collections.abc import Container, Iterator
 from typing import Any
 
+import pystac_client
 import xarray as xr
 from xcube.core.mldataset import MultiLevelDataset
 from xcube.core.store import (
@@ -16,12 +17,15 @@ from xcube.core.store import (
 )
 from xcube.util.jsonschema import JsonObjectSchema
 
-from .constants import (
-    EOPF_ZARR_OPENR_ID,
-    SUPPORTED_STAC_COLLECTIONS,
-)
+from .constants import EOPF_ZARR_OPENR_ID, STAC_URL
 from .prodhandler import ProductHandler
 from .prodhandlers import register_product_handlers
+from .utils import (
+    bbox_to_geojson,
+    filter_items_deprecated,
+    filter_items_wrong_footprint,
+    reproject_bbox,
+)
 
 
 class EOPFZarrDataStore(DataStore):
@@ -53,7 +57,7 @@ class EOPFZarrDataStore(DataStore):
         include_attrs: Container[str] | bool = False,
     ) -> Iterator[str | tuple[str, dict[str, Any]], None]:
         self._assert_valid_data_type(data_type)
-        for data_id in SUPPORTED_STAC_COLLECTIONS:
+        for data_id in ProductHandler.registry.keys():
             if not include_attrs:
                 yield data_id
             else:
@@ -61,7 +65,7 @@ class EOPFZarrDataStore(DataStore):
 
     def has_data(self, data_id: str, data_type: DataTypeLike = None) -> bool:
         self._assert_valid_data_type(data_type)
-        if data_id in SUPPORTED_STAC_COLLECTIONS:
+        if data_id in ProductHandler.registry.keys():
             return True
         return False
 
@@ -102,8 +106,31 @@ class EOPFZarrDataStore(DataStore):
         self._assert_has_data(data_id)
         self._assert_valid_data_type(data_type)
         self._assert_valid_opener_id(opener_id)
+        schema = self.get_open_data_params_schema()
+        schema.validate_instance(open_params)
+
+        # search for items
+        bbox_wgs84 = reproject_bbox(
+            open_params["bbox"], open_params["crs"], "EPSG:4326"
+        )
+
+        search_params = dict(
+            collections=[data_id],
+            datetime=open_params["time_range"],
+            intersects=bbox_to_geojson(bbox_wgs84),
+            query=open_params.get("query"),
+        )
+        catalog = pystac_client.Client.open(STAC_URL)
+        items = list(catalog.search(**search_params).items())
+        # filter deprecated items
+        items = filter_items_deprecated(items)
+        # fiter items with incorrectly assigned footprint
+        items = filter_items_wrong_footprint(items)
+        if len(items) == 0:
+            raise DataStoreError(f"No items found for search_params {search_params}.")
+
         product_handler = ProductHandler.guess(data_id)
-        return product_handler.open_data(**open_params)
+        return product_handler.open_data(items, **open_params)
 
     def describe_data(
         self, data_id: str, data_type: DataTypeLike = None

@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: GET
     uri: https://stac.core.eopf.eodc.eu/
   response:
@@ -20,16 +20,16 @@ interactions:
         conformance classes implemented by this server","href":"https://stac.core.eopf.eodc.eu/conformance"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"GET"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"POST"},{"rel":"http://www.opengis.net/def/rel/ogc/1.0/queryables","type":"application/schema+json","title":"Queryables","href":"https://stac.core.eopf.eodc.eu/queryables","method":"GET"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-1
         Level-1 SLC","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-slc"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-1 EFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-2 LRR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lrr"},{"rel":"service-desc","type":"application/vnd.oai.openapi+json;version=3.0","title":"OpenAPI
         service description","href":"https://stac.core.eopf.eodc.eu/api"},{"rel":"service-doc","type":"text/html","title":"OpenAPI
         service documentation","href":"https://stac.core.eopf.eodc.eu/api.html"}],"stac_extensions":[]}'
@@ -37,7 +37,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '812'
+      - '804'
       Content-Type:
       - application/json
       Server:
@@ -45,7 +45,7 @@ interactions:
       content-encoding:
       - br
       date:
-      - Wed, 04 Jun 2025 14:08:30 GMT
+      - Thu, 18 Sep 2025 10:30:12 GMT
       vary:
       - Accept-Encoding
     status:
@@ -61,7 +61,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: GET
     uri: https://stac.core.eopf.eodc.eu/
   response:
@@ -72,16 +72,16 @@ interactions:
         conformance classes implemented by this server","href":"https://stac.core.eopf.eodc.eu/conformance"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"GET"},{"rel":"search","type":"application/geo+json","title":"STAC
         search","href":"https://stac.core.eopf.eodc.eu/search","method":"POST"},{"rel":"http://www.opengis.net/def/rel/ogc/1.0/queryables","type":"application/schema+json","title":"Queryables","href":"https://stac.core.eopf.eodc.eu/queryables","method":"GET"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-2
-        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2A","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l2a"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-2 LST","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l2-lst"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-2 LFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lfr"},{"rel":"child","type":"application/json","title":"Sentinel-1
+        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-2
+        Level-1C","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-2-l1c"},{"rel":"child","type":"application/json","title":"Sentinel-1
         Level-1 SLC","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-slc"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        SLSTR Level-1 RBT","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-slstr-l1-rbt"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-1 EFR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-efr"},{"rel":"child","type":"application/json","title":"Sentinel-3
-        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-2 OCN","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l2-ocn"},{"rel":"child","type":"application/json","title":"Sentinel-1
-        Level-1 GRD","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-1-l1-grd"},{"rel":"child","type":"application/json","title":"Sentinel-3
+        OLCI Level-1 ERR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l1-err"},{"rel":"child","type":"application/json","title":"Sentinel-3
         OLCI Level-2 LRR","href":"https://stac.core.eopf.eodc.eu/collections/sentinel-3-olci-l2-lrr"},{"rel":"service-desc","type":"application/vnd.oai.openapi+json;version=3.0","title":"OpenAPI
         service description","href":"https://stac.core.eopf.eodc.eu/api"},{"rel":"service-doc","type":"text/html","title":"OpenAPI
         service documentation","href":"https://stac.core.eopf.eodc.eu/api.html"}],"stac_extensions":[]}'
@@ -89,7 +89,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '812'
+      - '804'
       Content-Type:
       - application/json
       Server:
@@ -97,15 +97,18 @@ interactions:
       content-encoding:
       - br
       date:
-      - Wed, 04 Jun 2025 14:08:30 GMT
+      - Thu, 18 Sep 2025 10:30:12 GMT
       vary:
       - Accept-Encoding
     status:
       code: 200
       message: OK
 - request:
-    body: '{"bbox": [10.641359519532669, 53.0536720941606, 10.947730608944445, 53.23787163529459],
-      "datetime": "2016-05-01T00:00:00Z/2017-05-15T23:59:59Z", "collections": ["sentinel-2-l2a"]}'
+    body: '{"datetime": "2016-05-01T00:00:00Z/2017-05-15T23:59:59Z", "collections":
+      ["sentinel-2-l2a"], "intersects": {"type": "Polygon", "coordinates": [[[10.641359519532669,
+      53.0536720941606], [10.947730608944445, 53.0536720941606], [10.947730608944445,
+      53.23787163529459], [10.641359519532669, 53.23787163529459], [10.641359519532669,
+      53.0536720941606]]]}}'
     headers:
       Accept:
       - '*/*'
@@ -114,11 +117,11 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '179'
+      - '348'
       Content-Type:
       - application/json
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.5
     method: POST
     uri: https://stac.core.eopf.eodc.eu/search
   response:
@@ -134,7 +137,7 @@ interactions:
       Server:
       - APISIX/3.7.0
       date:
-      - Wed, 04 Jun 2025 14:08:30 GMT
+      - Thu, 18 Sep 2025 10:30:12 GMT
     status:
       code: 200
       message: OK

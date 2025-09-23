@@ -38,7 +38,7 @@ EOPF Sentinel Zarr samples for Sentinel-1, Sentinel-2, and Sentinel-3 missions. 
 main features are summarized below. A more in depth documentation is given in the 
 [User Guide](guide.md). 
 
-Currently, support is focused on **Sentinel-2** products.
+Currently, support is focused on **Sentinel-2** and **Sentinel-3** products.
 
 ---
 
@@ -92,7 +92,55 @@ ds = store.open_data(
 --- 
 ### Sentinel-3
 
-Support for Sentinel-3 products will be added in an upcoming release.
+The current implementation supports three Sentinel-3 product levels, available as 
+`data_id` values:
+
+- `sentinel-3-olci-l1-efr`: Level-1 top-of-atmosphere radiance from OLCI instrument
+- `sentinel-3-olci-l2-lfr`: Level-2 land and atmospheric geophysical parameters 
+   derived from OLCI instrument
+- `sentinel-3-slstr-l2-lst`: Level-2  land surface temperature derived from SLSTR 
+   instrument
+
+#### Cube Generation Workflow
+
+The workflow for building 3D analysis-ready cubes from Sentinel-3 products involves 
+the following steps:
+
+1. **Query** tiles using the [EOPF Zarr Sample Service STAC API](https://stac.core.eopf.eodc.eu/) for a given time range and 
+   spatial extent.
+2. **Group** items by solar day.
+3. **Rectify** data from the native 2D irregular grid to a regular grid using 
+   [xcube-resampling](https://xcube-dev.github.io/xcube-resampling/guide/#3-rectification).
+4. **Mosaic** adjacent tiles into seamless daily scenes.
+5. **Stack** the daily mosaics along the temporal axis to form 3D data cubes 
+   for each variable (e.g., spectral bands).
+
+#### Supported Variables
+
+- `sentinel-3-olci-l1-efr`:  
+  `oa01_radiance`, `oa02_radiance`, `oa03_radiance`, `oa04_radiance`, `oa05_radiance`,
+  `oa06_radiance`, `oa07_radiance`, `oa08_radiance`, `oa09_radiance`, `oa10_radiance`,
+  `oa11_radiance`, `oa12_radiance`, `oa13_radiance`, `oa14_radiance`, `oa15_radiance`,
+  `oa16_radiance`, `oa17_radiance`, `oa18_radiance`, `oa19_radiance`, `oa20_radiance`,
+  `oa21_radiance`
+- `sentinel-3-olci-l2-lfr`:  
+  `gifapar`, `iwv`, `otci`, `rc681`, `rc865`
+- `sentinel-3-slstr-l2-lst`:  
+  `lst`
+
+**Example: Sentinel-3 SLSTR Level-2 LST**
+```python
+from xcube.core.store import new_data_store
+
+store = new_data_store("eopf-stac")
+ds = store.open_data(
+    data_id="sentinel-3-slstr-l2-lst",
+    bbox=[9., 53., 11., 54.],
+    time_range=["2025-06-01", "2025-06-05"],
+    spatial_res=300 / 111320, # conversion to degree approx.
+    crs="EPSG:4326"
+)
+```
 
 ---
 ## License

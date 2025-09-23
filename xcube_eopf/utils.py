@@ -3,22 +3,26 @@
 #  https://opensource.org/license/apache-2-0.
 
 import datetime
+from collections.abc import Sequence
 
 import dask.array as da
 import numpy as np
 import pyproj
 import pystac
 import xarray as xr
-from xcube_resampling.gridmapping import GridMapping
 from xcube.core.store import DataStoreError
+from xcube_resampling.gridmapping import GridMapping
+
+from .constants import STAC_URL
+from .version import version
 
 
 def reproject_bbox(
-    source_bbox: tuple[int] | tuple[float] | list[int] | list[float],
+    source_bbox: Sequence[int | float],
     source_crs: pyproj.CRS | str,
     target_crs: pyproj.CRS | str,
     buffer: float = 0.0,
-) -> tuple[int] | tuple[float]:
+) -> Sequence[int | float]:
     """Reprojects a bounding box from a source CRS to a target CRS, with optional
     buffering.
 
@@ -82,7 +86,7 @@ def normalize_crs(crs: str | pyproj.CRS) -> pyproj.CRS:
         return pyproj.CRS.from_string(crs)
 
 
-def add_nominal_datetime(items: list[pystac.Item]) -> list[pystac.Item]:
+def add_nominal_datetime(items: Sequence[pystac.Item]) -> Sequence[pystac.Item]:
     """Adds the nominal (solar) time to each STAC item's properties under the key
     "datetime_nominal", based on the item's original UTC datetime.
 
@@ -102,9 +106,7 @@ def add_nominal_datetime(items: list[pystac.Item]) -> list[pystac.Item]:
     return items
 
 
-def get_center_from_bbox(
-    bbox: tuple[float] | tuple[int] | list[float] | list[int],
-) -> tuple[float, float]:
+def get_center_from_bbox(bbox: Sequence[int | float]) -> Sequence[int | float]:
     """Calculates the center point of a bounding box.
 
     Args:
@@ -203,7 +205,7 @@ def get_spatial_dims(ds: xr.Dataset) -> (str, str):
 
 
 def get_gridmapping(
-    bbox: tuple[float] | tuple[int] | list[float] | list[int],
+    bbox: get_spatial_dims,
     spatial_res: float | int | tuple[float | int, float | int],
     crs: str | pyproj.crs.CRS,
     tile_size: int | tuple[int, int],
@@ -233,3 +235,106 @@ def get_gridmapping(
         crs=crs,
         tile_size=tile_size,
     )
+
+
+def add_attributes(
+    ds: xr.Dataset, grouped_items: xr.DataArray, **open_params
+) -> xr.Dataset:
+    """Adds metadata attributes to the final dataset.
+
+    This function enriches the input dataset with additional metadata attributes:
+    - 'stac_url': A predefined URL for the EOPF STAC API.
+    - 'stac_items': A mapping from time steps to lists of STAC item IDs.
+    - 'open_params': Opening parameters.
+    - 'xcube_eopf_version': The version of the xcube-eopf package being used.
+
+    Parameters:
+        ds: The input dataset to which attributes will be added.
+        grouped_items: An array containing STAC items grouped by time and tile ID.
+        **open_params: Opening parameters that are stored as a metadata attribute.
+
+    Returns:
+        The modified dataset with added metadata attributes.
+    """
+    ds.attrs["stac_url"] = STAC_URL
+    ds.attrs["stac_items"] = dict(
+        {
+            dt.astype("datetime64[ms]")
+            .astype("O")
+            .isoformat(): [
+                item.id for item in np.sum(grouped_items.sel(time=dt).values)
+            ]
+            for dt in grouped_items.time.values
+        }
+    )
+    ds.attrs["open_params"] = open_params
+    ds.attrs["xcube_eopf_version"] = version
+
+    return ds
+
+
+def filter_items_deprecated(items: list[pystac.Item]) -> list[pystac.Item]:
+    """Filter out deprecated STAC items, which are deprecated.
+
+    Args:
+        items: A list of STAC items to filter.
+
+    Returns:
+        A list of STAC items that are not marked as deprecated.
+    """
+    sel_items = []
+    for item in items:
+        deprecated = item.properties.get("deprecated", False)
+        if not deprecated:
+            sel_items.append(item)
+    return sel_items
+
+
+def filter_items_wrong_footprint(items: list[pystac.Item]) -> list[pystac.Item]:
+    """Filter out STAC items with incorrectly assigned footprints at the antimeridian.
+
+    Some items may have footprints crossing the antimeridian where the west and east
+    boundaries are swapped, resulting in a longitude span greater than 180°.
+    This function removes such items by checking the difference between the minimum
+    and maximum longitude values in the item's bounding box.
+
+    Args:
+        items: A list of STAC items to filter.
+
+    Returns:
+        A list of STAC items whose bounding boxes do not exceed 180°
+        in longitude extent.
+
+    Notes:
+        See related issue: https://github.com/EOPF-Sample-Service/eopf-stac/issues/39
+    """
+    sel_items = []
+    for item in items:
+        if abs(item.bbox[2] - item.bbox[0]) < 180:
+            sel_items.append(item)
+    return sel_items
+
+
+def bbox_to_geojson(bbox):
+    """
+    Convert a bounding box to a GeoJSON Polygon.
+
+    Args:
+        bbox: list or tuple of four numbers [min_x, min_y, max_x, max_y]
+
+    Returns:
+        dict: GeoJSON Polygon
+    """
+    min_x, min_y, max_x, max_y = bbox
+    return {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [min_x, min_y],
+                [max_x, min_y],
+                [max_x, max_y],
+                [min_x, max_y],
+                [min_x, min_y],
+            ]
+        ],
+    }

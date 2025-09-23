@@ -8,7 +8,7 @@ import pyproj
 import xarray as xr
 
 
-def sen2_sample(
+def _sen2_sample(
     origin: tuple[int, int],
     size: tuple[int, int],
     resolution: int,
@@ -38,31 +38,31 @@ def sen2_sample(
     return ds
 
 
-def l2a_10m() -> xr.Dataset:
+def sen2_l2a_10m() -> xr.Dataset:
     size = (10980, 10980)
     chunksize = (1830, 1830)
     resolution = 10
     origin = (600000, 5910000)
     crs_utm = pyproj.CRS.from_epsg(32632)
     bands = ["b02", "b03", "b04", "scl"]
-    return sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)
+    return _sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)
 
 
-def l2a_60m() -> xr.Dataset:
+def sen2_l2a_60m() -> xr.Dataset:
     size = (1830, 1830)
     chunksize = (305, 305)
     resolution = 60
     origin = (600000, 5910000)
     crs_utm = pyproj.CRS.from_epsg(32632)
     bands = ["b02", "b03", "b04", "scl"]
-    return sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)
+    return _sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)
 
 
-def l2a_60m_wo_scl() -> xr.Dataset:
+def sen2_l2a_60m_wo_scl() -> xr.Dataset:
     size = (1830, 1830)
     chunksize = (305, 305)
     resolution = 60
     origin = (600000, 5910000)
     crs_utm = pyproj.CRS.from_epsg(32632)
     bands = ["b02", "b03", "b04"]
-    return sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)
+    return _sen2_sample(origin, size, resolution, chunksize, bands, crs_utm)
