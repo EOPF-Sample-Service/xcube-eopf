@@ -89,9 +89,9 @@ These parameters control the STAC API query and define the output cube's spatial
   Supported methods include:  
   - `0` — nearest neighbor (*default for categorical / integer datasets*)  
   - `1` — linear / bilinear (*default for float datasets*)  
-  - `"nearest"`  
-  - `"triangular"`  
-  - `"bilinear"`  
+  - `"nearest"` - alias for `0` 
+  - `"triangular"` - linearly interpolate between 4 points using two triangles 
+  - `"bilinear"` - alias for `1` 
 
   For details, see the [xcube-resampling documentation](https://xcube-dev.github.io/xcube-resampling/). 
 
