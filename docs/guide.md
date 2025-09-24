@@ -6,7 +6,7 @@ The `"eopf-zarr"` xcube data store enables you to create analysis-ready data cub
 
 This plugin provides convenient access to analysis-ready data from the Sentinel-1,
 Sentinel-2, and Sentinel-3 missions.
-Currently, only Sentinel-2 products are supported.
+Currently, only Sentinel-2 and Sentinel-3 products are supported.
 
 This guide walks you through:
 
