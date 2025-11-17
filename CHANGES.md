@@ -1,3 +1,11 @@
+## Changes in 0.4.0 (under development)
+
+* Made the `crs` parameter optional and set its default to `"EPSG:4326"`.
+  Added support for `crs="native"` for Sentinel-2, which allows specifying the
+  bounding box in latitude/longitude while returning the data in its native
+  UTM grid. (#42)
+
+
 ## Changes in 0.3.0
 
 * Added workflows for generating 3D data cubes from multiple Sentinel-3 tiles.  
