@@ -24,7 +24,6 @@ from .utils import (
     bbox_to_geojson,
     filter_items_deprecated,
     filter_items_wrong_footprint,
-    reproject_bbox,
 )
 
 
@@ -109,17 +108,10 @@ class EOPFZarrDataStore(DataStore):
         schema = self.get_open_data_params_schema()
         schema.validate_instance(open_params)
 
-        # search for items
-        bbox_wgs84 = reproject_bbox(
-            open_params["bbox"], open_params["crs"], "EPSG:4326"
-        )
+        product_handler = ProductHandler.guess(data_id)
 
-        search_params = dict(
-            collections=[data_id],
-            datetime=open_params["time_range"],
-            intersects=bbox_to_geojson(bbox_wgs84),
-            query=open_params.get("query"),
-        )
+        # search for items
+        search_params = product_handler.prepare_stac_queries(data_id, open_params)
         catalog = pystac_client.Client.open(STAC_URL)
         items = list(catalog.search(**search_params).items())
         # filter deprecated items
@@ -129,7 +121,6 @@ class EOPFZarrDataStore(DataStore):
         if len(items) == 0:
             raise DataStoreError(f"No items found for search_params {search_params}.")
 
-        product_handler = ProductHandler.guess(data_id)
         return product_handler.open_data(items, **open_params)
 
     def describe_data(

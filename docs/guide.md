@@ -61,12 +61,12 @@ Samples.
 - `bbox`: Bounding box ["west", "south", "est", "north"] in CRS coordinates.
 - `time_range`: Temporal extent ["YYYY-MM-DD", "YYYY-MM-DD"].
 - `spatial_res`: Spatial resolution in meter of degree (depending on the CRS).
-- `crs`: Coordinate reference system (e.g. `"EPSG:4326"`).
 
 These parameters control the STAC API query and define the output cube's spatial grid.
 
 ## Optional Parameters
 
+- `crs`: Coordinate reference system, defaults to `"EPSG:4326"`.
 - `variables`: Variables to include in the dataset. Accepts a single name, a regex pattern, or an iterable of either.
 - `tile_size`: Spatial tile size of the returned dataset, given as `(width, height)`.
 - `query`: Additional filtering options for STAC Items by their properties. See the 
@@ -218,8 +218,26 @@ is needed at a lower resolution, the process first downsamples the data and
 subsequently performs the reprojection. Upsampling and downsampling are controlled using the `agg_methods` and `interp_methods`
 parameters (see [Optional Parameters](#optional-parameters)).
 
+Furthermore, the parameter `crs` can be set to `"native"`, which allows the user to
+provide the bounding box in regular latitude/longitude coordinates while retrieving
+the data in its **native UTM grid**—without triggering any reprojection.
+The following snippet shows an example:
 
+```python
+from xcube.core.store import new_data_store
 
+store = new_data_store("eopf-stac")
+ds = store.open_data(
+    data_id="sentinel-2-l2a",
+    bbox=[9.7, 53.4, 10.3, 53.7],
+    time_range=["2025-05-01", "2025-05-07"],
+    spatial_res=10,
+    crs="native",
+    variables=["b02", "b03", "b04", "scl"],
+)
+
+Note that if the requested area spans multiple UTM zones, a `DataStoreError`
+will be raised.
 
 
 ### 🛰️ Sentinel-3

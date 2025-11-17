@@ -10,9 +10,12 @@ import numpy as np
 import pyproj
 import pystac
 import xarray as xr
-from xcube.util.jsonschema import JsonObjectSchema
+from numba.scripts.generate_lower_listing import description
+from xcube.core.store import DataStoreError
+from xcube.util.jsonschema import JsonObjectSchema, JsonStringSchema
 from xcube_resampling.gridmapping import GridMapping
 from xcube_resampling.spatial import resample_in_space
+from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import (
     CONVERSION_FACTOR_DEG_METER,
@@ -25,6 +28,7 @@ from xcube_eopf.constants import (
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
+    DEFAULT_CRS,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
@@ -33,7 +37,7 @@ from xcube_eopf.utils import (
     get_gridmapping,
     mosaic_spatial_take_first,
     normalize_crs,
-    reproject_bbox,
+    bbox_to_geojson,
 )
 
 _SEN2_SPATIAL_RES = np.array([10, 20, 60])
@@ -46,6 +50,14 @@ _ATTRIBUTE_KEYS = [
     "flag_colors",
     "grid_mapping",
 ]
+_SCHEMA_CRS_SEN2 = JsonStringSchema(
+    title="Coordinate Reference System",
+    description=(
+        "`crs` can be set to `'native'` to return Sentinel-2 data in its native UTM "
+        "projection for a bounding box specified in latitude/longitude."
+    ),
+    default=DEFAULT_CRS,
+)
 
 
 class Sen2ProductHandler(ProductHandler, ABC):
@@ -62,14 +74,27 @@ class Sen2ProductHandler(ProductHandler, ABC):
                 spatial_res=SCHEMA_SPATIAL_RES,
                 time_range=SCHEMA_TIME_RANGE,
                 bbox=SCHEMA_BBOX,
-                crs=SCHEMA_CRS,
+                crs=_SCHEMA_CRS_SEN2,
                 tile_size=SCHEMA_TILE_SIZE,
                 query=SCHEMA_ADDITIONAL_QUERY,
                 agg_methods=SCHEMA_AGG_METHODS,
                 interp_methods=SCHEMA_INTERP_METHODS,
             ),
-            required=["time_range", "bbox", "crs", "spatial_res"],
+            required=["time_range", "bbox", "spatial_res"],
             additional_properties=False,
+        )
+
+    @staticmethod
+    def prepare_stac_queries(data_id: str, open_params: dict) -> dict:
+        target_crs = open_params.get("crs", DEFAULT_CRS)
+        if target_crs == "native":
+            target_crs = "EPSG:4326"
+        bbox_wgs84 = reproject_bbox(open_params["bbox"], target_crs, "EPSG:4326")
+        return dict(
+            collections=[data_id],
+            datetime=open_params["time_range"],
+            intersects=bbox_to_geojson(bbox_wgs84),
+            query=open_params.get("query"),
         )
 
     def open_data(self, items: list[pystac.Item], **open_params) -> xr.Dataset:
@@ -197,6 +222,17 @@ def generate_cube(grouped_items: xr.DataArray, **open_params) -> xr.Dataset:
         item = np.sum(grouped_items.sel(tile_id=tile_id).values)[0]
         crs = item.properties["proj:code"]
         utm_tile_id[crs].append(tile_id)
+    if open_params.get("crs") == "native":
+        if len(utm_tile_id) > 1:
+            raise DataStoreError(
+                "The requested area spans multiple UTM zones. Please specify the `crs` "
+                "parameter explicitly using a single EPSG code, e.g. `crs=EPSG:4326`."
+            )
+        else:
+            open_params["crs"] = next(iter(utm_tile_id))
+            open_params["bbox"] = reproject_bbox(
+                open_params["bbox"], "EPSG:4326", open_params["crs"]
+            )
 
     # Insert the tile data per UTM zone
     list_ds_utm = []
@@ -332,7 +368,7 @@ def _merge_utm_zones(list_ds_utm: list[xr.Dataset], **open_params) -> xr.Dataset
     """
     # get correct target gridmapping
     crss = [pyproj.CRS.from_cf(ds["spatial_ref"].attrs) for ds in list_ds_utm]
-    target_crs = pyproj.CRS.from_string(open_params["crs"])
+    target_crs = pyproj.CRS.from_string(open_params.get("crs", DEFAULT_CRS))
     crss_equal = [target_crs == crs for crs in crss]
     if any(crss_equal):
         true_index = crss_equal.index(True)
@@ -348,14 +384,14 @@ def _merge_utm_zones(list_ds_utm: list[xr.Dataset], **open_params) -> xr.Dataset
             target_gm = get_gridmapping(
                 open_params["bbox"],
                 open_params["spatial_res"],
-                open_params["crs"],
+                target_crs,
                 open_params.get("tile_size", _TILE_SIZE),
             )
     else:
         target_gm = get_gridmapping(
             open_params["bbox"],
             open_params["spatial_res"],
-            open_params["crs"],
+            target_crs,
             open_params.get("tile_size", _TILE_SIZE),
         )
 

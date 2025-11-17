@@ -9,6 +9,7 @@ import pystac
 import xarray as xr
 from xcube.util.jsonschema import JsonObjectSchema
 from xcube_resampling import rectify_dataset
+from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import (
     SCHEMA_ADDITIONAL_QUERY,
@@ -20,6 +21,7 @@ from xcube_eopf.constants import (
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
+    DEFAULT_CRS,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
@@ -27,6 +29,7 @@ from xcube_eopf.utils import (
     add_nominal_datetime,
     get_gridmapping,
     mosaic_spatial_take_first,
+    bbox_to_geojson,
 )
 
 _TILE_SIZE = 1024  # native chunk size of EOPF Sen3 Zarr samples
@@ -51,11 +54,25 @@ class Sen3ProductHandler(ProductHandler, ABC):
                 agg_methods=SCHEMA_AGG_METHODS,
                 interp_methods=SCHEMA_INTERP_METHODS,
             ),
-            required=["time_range", "bbox", "crs", "spatial_res"],
+            required=["time_range", "bbox", "spatial_res"],
             additional_properties=False,
         )
 
+    @staticmethod
+    def prepare_stac_queries(data_id: str, open_params: dict) -> dict:
+        target_crs = open_params.get("crs", DEFAULT_CRS)
+        bbox_wgs84 = reproject_bbox(open_params["bbox"], target_crs, "EPSG:4326")
+        return dict(
+            collections=[data_id],
+            datetime=open_params["time_range"],
+            intersects=bbox_to_geojson(bbox_wgs84),
+            query=open_params.get("query"),
+        )
+
     def open_data(self, items: list[pystac.Item], **open_params) -> xr.Dataset:
+        if "crs" not in open_params:
+            open_params["crs"] = DEFAULT_CRS
+
         # get STAC items grouped by solar day
         grouped_items = group_items(items)
 
