@@ -12,6 +12,7 @@ from xcube_resampling import rectify_dataset
 from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import (
+    DEFAULT_CRS,
     SCHEMA_ADDITIONAL_QUERY,
     SCHEMA_AGG_METHODS,
     SCHEMA_BBOX,
@@ -21,15 +22,14 @@ from xcube_eopf.constants import (
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
-    DEFAULT_CRS,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
     add_attributes,
     add_nominal_datetime,
+    bbox_to_geojson,
     get_gridmapping,
     mosaic_spatial_take_first,
-    bbox_to_geojson,
 )
 
 _TILE_SIZE = 1024  # native chunk size of EOPF Sen3 Zarr samples

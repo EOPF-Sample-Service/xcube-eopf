@@ -10,7 +10,6 @@ import numpy as np
 import pyproj
 import pystac
 import xarray as xr
-from numba.scripts.generate_lower_listing import description
 from xcube.core.store import DataStoreError
 from xcube.util.jsonschema import JsonObjectSchema, JsonStringSchema
 from xcube_resampling.gridmapping import GridMapping
@@ -19,25 +18,24 @@ from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import (
     CONVERSION_FACTOR_DEG_METER,
+    DEFAULT_CRS,
     SCHEMA_ADDITIONAL_QUERY,
     SCHEMA_AGG_METHODS,
     SCHEMA_BBOX,
-    SCHEMA_CRS,
     SCHEMA_INTERP_METHODS,
     SCHEMA_SPATIAL_RES,
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
-    DEFAULT_CRS,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
     add_attributes,
     add_nominal_datetime,
+    bbox_to_geojson,
     get_gridmapping,
     mosaic_spatial_take_first,
     normalize_crs,
-    bbox_to_geojson,
 )
 
 _SEN2_SPATIAL_RES = np.array([10, 20, 60])
