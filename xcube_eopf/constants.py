@@ -22,6 +22,7 @@ EOPF_ZARR_OPENR_ID = "dataset:zarr:eopf-zarr"
 
 # other constants
 CONVERSION_FACTOR_DEG_METER = 111320
+DEFAULT_CRS = "EPSG:4326"
 LOG = logging.getLogger("xcube.eopf")
 
 # general schema definition
@@ -71,7 +72,7 @@ SCHEMA_VARIABLES = JsonComplexSchema(
     ],
 )
 SCHEMA_SPATIAL_RES = JsonNumberSchema(title="Spatial Resolution", exclusive_minimum=0.0)
-SCHEMA_CRS = JsonStringSchema(title="Coordinate reference system")
+SCHEMA_CRS = JsonStringSchema(title="Coordinate reference system", default=DEFAULT_CRS)
 SCHEMA_TILE_SIZE = JsonArraySchema(
     nullable=True,
     title="Tile size of returned dataset",

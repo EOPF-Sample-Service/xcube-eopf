@@ -21,6 +21,9 @@ class TestProductHandler(ProductHandler):
     def get_open_data_params_schema(self) -> JsonObjectSchema:
         return JsonObjectSchema()
 
+    def prepare_stac_queries(self, data_id: str, open_params: dict) -> dict:
+        return {}
+
     def open_data(self, **open_params) -> xr.Dataset:
         return xr.Dataset()
 

@@ -54,6 +54,10 @@ class ProductHandler(ABC):
         """Return opening parameters specific for the product handler."""
 
     @abstractmethod
+    def prepare_stac_queries(self, data_id: str, query_params: dict) -> dict:
+        """Return opening parameters specific for the product handler."""
+
+    @abstractmethod
     def open_data(self, items: list[pystac.Item], **open_params) -> xr.Dataset:
         """Open and return the dataset corresponding to the given parameters
         for the product handler.

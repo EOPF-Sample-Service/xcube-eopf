@@ -109,9 +109,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIn("tile_size", schema.properties)
         self.assertIn("query", schema.properties)
         self.assertNotIn("test", schema.properties)
-        self.assertCountEqual(
-            ["time_range", "bbox", "crs", "spatial_res"], schema.required
-        )
+        self.assertCountEqual(["time_range", "bbox", "spatial_res"], schema.required)
 
         # with data_id argument for Sen3
         schema = self.store.get_open_data_params_schema(
@@ -126,9 +124,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIn("tile_size", schema.properties)
         self.assertIn("query", schema.properties)
         self.assertNotIn("test", schema.properties)
-        self.assertCountEqual(
-            ["time_range", "bbox", "crs", "spatial_res"], schema.required
-        )
+        self.assertCountEqual(["time_range", "bbox", "spatial_res"], schema.required)
 
         # with invalid opener_id
         with self.assertRaises(DataStoreError) as cm:
@@ -257,6 +253,50 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
+    def test_open_data_sen2_native(self, mock_xarray):
+        mock_xarray.return_value = sen2_l2a_60m_wo_scl()
+
+        # open Sentinel-2 L2A
+        ds = self.store.open_data(
+            data_id="sentinel-2-l2a",
+            bbox=[10.64, 53.05, 10.94, 53.23],
+            time_range=["2025-05-01", "2025-05-15"],
+            spatial_res=50,
+            crs="native",
+            variables=["b02", "b03", "b04"],
+        )
+        self.assertIsInstance(ds, xr.Dataset)
+        self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
+        self.assertEqual(
+            [4, 412, 413], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+        )
+        self.assertEqual(
+            [1, 412, 413],
+            [ds.chunksizes["time"][0], ds.chunksizes["y"][0], ds.chunksizes["x"][0]],
+        )
+        self.assertIn("stac_url", ds.attrs)
+        self.assertIn("stac_items", ds.attrs)
+        self.assertIn("open_params", ds.attrs)
+        self.assertIn("xcube_eopf_version", ds.attrs)
+
+    @pytest.mark.vcr()
+    def test_open_data_sen2_native_error(self):
+        with self.assertRaises(DataStoreError) as cm:
+            _ = self.store.open_data(
+                data_id="sentinel-2-l2a",
+                bbox=[5.5, 46, 6.5, 47],
+                time_range=["2025-05-01", "2025-05-15"],
+                spatial_res=50,
+                crs="native",
+                variables=["b02", "b03", "b04"],
+            )
+        self.assertIn(
+            "The requested area spans multiple UTM zones. Please specify the `crs` ",
+            str(cm.exception),
+        )
+
+    @pytest.mark.vcr()
+    @patch("xarray.open_dataset")
     def test_open_data_sen3_geographic(self, mock_xarray):
         mock_xarray.return_value = sen3_ol1efr_data()
 
@@ -267,7 +307,6 @@ class EOPFZarrDataStoreTest(TestCase):
             bbox=bbox,
             time_range=["2025-05-01", "2025-05-21"],
             spatial_res=300 / CONVERSION_FACTOR_DEG_METER,
-            crs="EPSG:4326",
             variables=["oa01_radiance", "oa02_radiance"],
         )
         self.assertIsInstance(ds, xr.Dataset)
