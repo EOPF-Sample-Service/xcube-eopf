@@ -10,61 +10,10 @@ import numpy as np
 import pyproj
 import pystac
 import xarray as xr
-from xcube.core.store import DataStoreError
-from xcube_resampling.gridmapping import GridMapping
+from xcube_resampling.utils import get_spatial_coords
 
 from .constants import STAC_URL
 from .version import version
-
-
-def reproject_bbox(
-    source_bbox: Sequence[int | float],
-    source_crs: pyproj.CRS | str,
-    target_crs: pyproj.CRS | str,
-    buffer: float = 0.0,
-) -> Sequence[int | float]:
-    """Reprojects a bounding box from a source CRS to a target CRS, with optional
-    buffering.
-
-    The function transforms a bounding box defined in the source coordinate reference
-    system (CRS) to the target CRS using `pyproj`. If the source and target CRS are
-    the same, no transformation is performed. An optional buffer (as a fraction of
-    width/height) can be applied to expand the resulting bounding box.
-
-    Args:
-        source_bbox: The bounding box to reproject, in the form
-            (min_x, min_y, max_x, max_y).
-        source_crs: The source CRS, as a `pyproj.CRS` or string.
-        target_crs: The target CRS, as a `pyproj.CRS` or string.
-        buffer: Optional buffer to apply to the transformed bounding box, expressed as
-                a fraction (e.g., 0.1 for 10% padding). Default is 0.0 (no buffer).
-
-    Returns:
-        A tuple representing the reprojected (and optionally buffered) bounding box:
-        (min_x, min_y, max_x, max_y).
-    """
-    source_crs = normalize_crs(source_crs)
-    target_crs = normalize_crs(target_crs)
-    if source_crs != target_crs:
-        t = pyproj.Transformer.from_crs(source_crs, target_crs, always_xy=True)
-        target_bbox = t.transform_bounds(*source_bbox, densify_pts=21)
-    else:
-        target_bbox = source_bbox
-    if buffer > 0.0:
-        x_min = target_bbox[0]
-        x_max = target_bbox[2]
-        if target_crs.is_geographic and x_min > x_max:
-            x_max += 360
-        buffer_x = abs(x_max - x_min) * buffer
-        buffer_y = abs(target_bbox[3] - target_bbox[1]) * buffer
-        target_bbox = (
-            target_bbox[0] - buffer_x,
-            target_bbox[1] - buffer_y,
-            target_bbox[2] + buffer_x,
-            target_bbox[3] + buffer_y,
-        )
-
-    return target_bbox
 
 
 def normalize_crs(crs: str | pyproj.CRS) -> pyproj.CRS:
@@ -159,7 +108,7 @@ def mosaic_spatial_take_first(list_ds: list[xr.Dataset]) -> xr.Dataset:
     if len(list_ds) == 1:
         return list_ds[0]
 
-    y_coord, x_coord = get_spatial_dims(list_ds[0])
+    x_coord, y_coord = get_spatial_coords(list_ds[0])
     ds_mosaic = xr.Dataset()
     for key in list_ds[0]:
         if list_ds[0][key].dims[-2:] == (y_coord, x_coord):
@@ -178,63 +127,6 @@ def mosaic_spatial_take_first(list_ds: list[xr.Dataset]) -> xr.Dataset:
     ds_mosaic.attrs = list_ds[0].attrs
 
     return ds_mosaic
-
-
-def get_spatial_dims(ds: xr.Dataset) -> (str, str):
-    """Identifies the spatial coordinate names in a dataset.
-
-    The function checks for common spatial dimension naming conventions: ("lat", "lon")
-    or ("y", "x"). If neither pair is found, it raises a DataStoreError.
-
-    Args:
-        ds: The dataset to inspect.
-
-    Returns:
-        A tuple of strings representing the names of the spatial dimensions.
-
-    Raises:
-        DataStoreError: If no recognizable spatial dimensions are found.
-    """
-    if "lat" in ds and "lon" in ds:
-        y_coord, x_coord = "lat", "lon"
-    elif "y" in ds and "x" in ds:
-        y_coord, x_coord = "y", "x"
-    else:
-        raise DataStoreError("No spatial dimensions found in dataset.")
-    return y_coord, x_coord
-
-
-def get_gridmapping(
-    bbox: get_spatial_dims,
-    spatial_res: float | int | tuple[float | int, float | int],
-    crs: str | pyproj.crs.CRS,
-    tile_size: int | tuple[int, int],
-) -> GridMapping:
-    """Creates a regular GridMapping object based on a bounding box, spatial resolution,
-    and CRS.
-
-    Args:
-        bbox: The bounding box in the form (min_x, min_y, max_x, max_y).
-        spatial_res: Spatial resolution as a single value or a (x_res, y_res) tuple.
-        crs: Coordinate reference system as a `pyproj.CRS` or a string
-            (e.g., "EPSG:4326").
-        tile_size: Tile size as a single integer or a (width, height) tuple.
-
-    Returns:
-        A xcube `GridMapping` object representing the regular grid layout defined
-        by the input parameters.
-    """
-    if not isinstance(spatial_res, tuple):
-        spatial_res = (spatial_res, spatial_res)
-    x_size = np.ceil((bbox[2] - bbox[0]) / spatial_res[0]) + 1
-    y_size = np.ceil(abs(bbox[3] - bbox[1]) / spatial_res[1]) + 1
-    return GridMapping.regular(
-        size=(x_size, y_size),
-        xy_min=(bbox[0] - spatial_res[0] / 2, bbox[1] - spatial_res[1] / 2),
-        xy_res=spatial_res,
-        crs=crs,
-        tile_size=tile_size,
-    )
 
 
 def add_attributes(
