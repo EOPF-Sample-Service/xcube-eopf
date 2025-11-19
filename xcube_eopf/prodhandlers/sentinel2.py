@@ -151,6 +151,7 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     #       STAC items with multiple processing versions are added to the list and
     #       mosaicked by taking the fist non-NaN value.
     #       For proper handling wait for STAC item update (see https://github.com/EOPF-Sample-Service/eopf-stac/issues/28)
+
     # get dates and tile IDs of the items
     dates = []
     tile_ids = []

@@ -4,20 +4,21 @@
 
 import dask.array as da
 import numpy as np
+import pyproj
 import xarray as xr
 
 
 def sen3_ol1efr_data():
-    height = 4091
-    width = 4865
+    height = 1485
+    width = 1856
     tile_height = 1024
     tile_width = 1024
 
     # band data
-    bands = [f"oa{i:02d}_radiance" for i in range(1, 22)]
+    bands = [f"oa{i:02d}_radiance" for i in range(1, 3)]
     mock_data = {
         band: (
-            ("rows", "columns"),
+            ("lat", "lon"),
             da.ones(
                 (height, width), chunks=(tile_height, tile_width), dtype=np.float32
             ),
@@ -26,14 +27,13 @@ def sen3_ol1efr_data():
     }
 
     # geolocation data
-    lon = da.linspace(0, 15, width, chunks=tile_width, dtype=np.float32)
-    lon *= da.linspace(0.5, 1.5, width, chunks=tile_width, dtype=np.float32)
-    lat = da.linspace(50, 60, height, chunks=tile_height, dtype=np.float32)
-    lat *= da.linspace(0.5, 1.5, height, chunks=tile_height, dtype=np.float32)
-    lon, lat = da.meshgrid(lon, lat, indexing="xy")
+    lon = np.linspace(5.0, 10.0, width, dtype=np.float32)
+    lat = np.linspace(57.0, 53.0, height, dtype=np.float32)
     coords = {
-        "longitude": (("rows", "columns"), lon),
-        "latitude": (("rows", "columns"), lat),
-        "time_stamp": (("rows",), np.arange(height).astype("datetime64[ns]")),
+        "lon": lon,
+        "lat": lat,
+        "spatial_ref": xr.DataArray(
+            0, attrs=pyproj.CRS.from_string("epsg:4326").to_cf()
+        ),
     }
     return xr.Dataset(mock_data, coords=coords)

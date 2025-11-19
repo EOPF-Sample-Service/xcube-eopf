@@ -4,6 +4,8 @@
   Added support for `crs="native"` for Sentinel-2, which allows specifying the
   bounding box in latitude/longitude while returning the data in its native
   UTM grid. (#42)
+* Added support for `sentinel-3-slstr-l1-rbt`: Level-1 radiances and brightness
+  temperatures (RBT) derived from SLSTR instrument
 
 
 ## Changes in 0.3.0

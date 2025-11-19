@@ -303,10 +303,9 @@ class EOPFZarrDataStoreTest(TestCase):
         mock_xarray.return_value = sen3_ol1efr_data()
 
         # open Sentinel-3 OL1EFR
-        bbox = [5.0, 53.0, 10.0, 57.0]
         ds = self.store.open_data(
             data_id="sentinel-3-olci-l1-efr",
-            bbox=bbox,
+            bbox=[5.0, 53.0, 10.0, 57.0],
             time_range=["2025-05-01", "2025-05-21"],
             spatial_res=300 / CONVERSION_FACTOR_DEG_METER,
             variables=["oa01_radiance", "oa02_radiance"],

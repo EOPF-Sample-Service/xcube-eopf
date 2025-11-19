@@ -83,39 +83,25 @@ class Sen3ProductHandler(ProductHandler, ABC):
 
         return ds
 
-    def load_tile(self, item: pystac.Item) -> xr.Dataset:
-        return xr.open_dataset(
-            item.assets["product"].href + "/measurements",
-            engine="eopf-zarr",
-            chunks={},
-            **dict(op_mode="native"),
-        )
-
     def generate_cube(self, grouped_items: xr.DataArray, **open_params) -> xr.Dataset:
-        target_gm = GridMapping.regular_from_bbox(
-            open_params["bbox"],
-            open_params["spatial_res"],
-            open_params["crs"],
-            open_params.get("tile_size", _TILE_SIZE),
+        xarray_open_params = dict(
+            resolution=open_params["spatial_res"],
+            crs=open_params["crs"],
+            bbox=open_params["bbox"],
+            interp_methods=open_params.get("interp_method"),
+            agg_methods=open_params.get("agg_methods"),
+            variables=open_params.get("variables"),
         )
         dss_time = []
         for dt_idx, dt in enumerate(grouped_items.time.values):
             items = grouped_items.sel(time=dt).item()
             dss_spatial = []
             for item in items:
-                ds = self.load_tile(item)
-                variables = open_params.get("variables")
-                if variables is not None:
-                    ds = ds[variables]
-                if "time_stamp" in ds.coords:
-                    ds = ds.drop_vars("time_stamp")
-                ds["latitude"] = ds["latitude"].persist()
-                ds["longitude"] = ds["longitude"].persist()
-                ds = rectify_dataset(
-                    ds,
-                    target_gm=target_gm,
-                    interp_methods=open_params.get("interp_methods"),
-                    agg_methods=open_params.get("agg_methods"),
+                ds = xr.open_dataset(
+                    item.assets["product"].href,
+                    engine="eopf-zarr",
+                    chunks={},
+                    **xarray_open_params,
                 )
                 dss_spatial.append(ds)
             dss_time.append(mosaic_spatial_take_first(dss_spatial))
@@ -146,14 +132,6 @@ class Sen3Ol2LfrProductHandler(Sen3ProductHandler):
 
 class Sen3Sl1RbtProductHandler(Sen3ProductHandler):
     data_id = "sentinel-3-slstr-l1-rbt"
-
-    def load_tile(self, item: pystac.Item) -> xr.Dataset:
-        return xr.open_dataset(
-            item.assets["product"].href + "/measurements",
-            engine="eopf-zarr",
-            chunks={},
-            **dict(op_mode="native"),
-        )
 
 
 class Sen3Sl2LstProductHandler(Sen3ProductHandler):
