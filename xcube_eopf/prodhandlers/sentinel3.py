@@ -3,14 +3,16 @@
 #  https://opensource.org/license/apache-2-0.
 
 from abc import ABC
+import warnings
+import re
+import logging
+from collections import defaultdict
 
 import numpy as np
 import pystac
 import xarray as xr
 from xcube.util.jsonschema import JsonObjectSchema
-from xcube_resampling import rectify_dataset
 from xcube_resampling.utils import reproject_bbox
-from xcube_resampling.gridmapping import GridMapping
 
 from xcube_eopf.constants import (
     DEFAULT_CRS,
@@ -23,6 +25,7 @@ from xcube_eopf.constants import (
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
+    LOG,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
@@ -33,6 +36,16 @@ from xcube_eopf.utils import (
 )
 
 _TILE_SIZE = 1024  # native chunk size of EOPF Sen3 Zarr samples
+
+class IgnoreZeroSizedDimension(logging.Filter):
+    def filter(self, record):
+        # Return False to ignore this log record
+        if "Clipped dataset contains at least one zero-sized" in record.getMessage():
+            return False
+        return True
+
+logger = logging.getLogger("xcube.resampling")
+logger.addFilter(IgnoreZeroSizedDimension())
 
 
 class Sen3ProductHandler(ProductHandler, ABC):
@@ -84,11 +97,15 @@ class Sen3ProductHandler(ProductHandler, ABC):
         return ds
 
     def generate_cube(self, grouped_items: xr.DataArray, **open_params) -> xr.Dataset:
+        warnings.filterwarnings(
+            "ignore",
+            message="Clipping with the specified bounding box*"
+        )
         xarray_open_params = dict(
             resolution=open_params["spatial_res"],
             crs=open_params["crs"],
             bbox=open_params["bbox"],
-            interp_methods=open_params.get("interp_method"),
+            interp_methods=open_params.get("interp_methods"),
             agg_methods=open_params.get("agg_methods"),
             variables=open_params.get("variables"),
         )
@@ -103,6 +120,8 @@ class Sen3ProductHandler(ProductHandler, ABC):
                     chunks={},
                     **xarray_open_params,
                 )
+                if any(size <= 1 for size in ds.sizes.values()):
+                    continue
                 dss_spatial.append(ds)
             dss_time.append(mosaic_spatial_take_first(dss_spatial))
         ds_final = xr.concat(dss_time, dim="time", join="exact")
@@ -148,6 +167,7 @@ def register(registry: ProductHandlerRegistry):
 
 
 def group_items(items: list[pystac.Item]) -> xr.DataArray:
+    items = _filter_acquisition_time(items)
     items = add_nominal_datetime(items)
 
     # get dates and tile IDs of the items
@@ -180,3 +200,61 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     grouped_items["time"].encoding["calendar"] = "standard"
 
     return grouped_items
+
+
+
+def _filter_acquisition_time(items: list[pystac.Item]) -> list[pystac.Item]:
+    """Deduplicate Sentinel-3 items by acquisition, keeping NT if available, else NR.
+
+    Args:
+        items: List of Sentinel-3 STAC Items.
+
+    Returns:
+        Filtered list with one item per acquisition, preferring NT over NR.
+    """
+    groups = defaultdict(list)
+
+    # Group items by base ID (sensing start/end)
+    for item in items:
+        base_id = _get_base_id(item.id)
+        groups[base_id].append(item)
+
+    result = []
+    for base, grouped_items in groups.items():
+        # Prefer NT if exists
+        nt_items = [i for i in grouped_items if '_NT_' in i.id]
+        if nt_items:
+            # If multiple NTs, pick latest processing timestamp
+            latest_nt = max(nt_items, key=lambda x: _extract_timestamps(x.id)[-1])
+            result.append(latest_nt)
+        else:
+            # Otherwise pick NR (if exists)
+            nr_items = [i for i in grouped_items if '_NR_' in i.id]
+            if nr_items:
+                latest_nr = max(nr_items, key=lambda x: _extract_timestamps(x.id)[-1])
+                result.append(latest_nr)
+
+    return result
+
+def _get_base_id(item_id: str) -> str:
+    # Matches YYYYMMDDThhmmss
+    timestamps = _extract_timestamps(item_id)
+
+    # Fallback if unexpected format
+    if len(timestamps) < 3:
+        LOG.warning(
+            f"Item ID {item_id!r} does not contain 3 timestamp. "
+            f"No filtering applied for this item."
+        )
+        return item_id
+
+    # Remove only the final timestamp
+    last_ts = timestamps[-1]
+    base, _, _ = item_id.rpartition(f"_{last_ts}")
+    return base
+
+def _extract_timestamps(item_id: str) -> list[str]:
+    # Matches YYYYMMDDThhmmss
+    return re.findall(r"\d{8}T\d{6}", item_id)
+
+
