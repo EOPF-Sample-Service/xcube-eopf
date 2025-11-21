@@ -11,12 +11,12 @@ import numpy as np
 import pyproj
 import pystac
 import xarray as xr
+from xarray_eopf.amodes.sentinel2 import get_native_res
 from xcube.core.store import DataStoreError
 from xcube.util.jsonschema import JsonObjectSchema, JsonStringSchema
 from xcube_resampling.gridmapping import GridMapping
 from xcube_resampling.spatial import resample_in_space
 from xcube_resampling.utils import reproject_bbox
-from xarray_eopf.amodes.sentinel2 import get_native_res
 
 from xcube_eopf.constants import (
     DEFAULT_CRS,
@@ -34,8 +34,8 @@ from xcube_eopf.utils import (
     add_attributes,
     add_nominal_datetime,
     bbox_to_geojson,
-    normalize_crs,
     mosaic_spatial_take_first,
+    normalize_crs,
 )
 
 _SEN2_SPATIAL_RES = np.array([10, 20, 60])

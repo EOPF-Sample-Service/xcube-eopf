@@ -2,10 +2,10 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from abc import ABC
-import warnings
-import re
 import logging
+import re
+import warnings
+from abc import ABC
 from collections import defaultdict
 
 import numpy as np
@@ -16,6 +16,7 @@ from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import (
     DEFAULT_CRS,
+    LOG,
     SCHEMA_ADDITIONAL_QUERY,
     SCHEMA_AGG_METHODS,
     SCHEMA_BBOX,
@@ -25,7 +26,6 @@ from xcube_eopf.constants import (
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
-    LOG,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
 from xcube_eopf.utils import (
@@ -37,12 +37,14 @@ from xcube_eopf.utils import (
 
 _TILE_SIZE = 1024  # native chunk size of EOPF Sen3 Zarr samples
 
+
 class IgnoreZeroSizedDimension(logging.Filter):
     def filter(self, record):
         # Return False to ignore this log record
         if "Clipped dataset contains at least one zero-sized" in record.getMessage():
             return False
         return True
+
 
 logger = logging.getLogger("xcube.resampling")
 logger.addFilter(IgnoreZeroSizedDimension())
@@ -98,8 +100,7 @@ class Sen3ProductHandler(ProductHandler, ABC):
 
     def generate_cube(self, grouped_items: xr.DataArray, **open_params) -> xr.Dataset:
         warnings.filterwarnings(
-            "ignore",
-            message="Clipping with the specified bounding box*"
+            "ignore", message="Clipping with the specified bounding box*"
         )
         xarray_open_params = dict(
             resolution=open_params["spatial_res"],
@@ -202,7 +203,6 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     return grouped_items
 
 
-
 def _filter_acquisition_time(items: list[pystac.Item]) -> list[pystac.Item]:
     """Deduplicate Sentinel-3 items by acquisition, keeping NT if available, else NR.
 
@@ -222,19 +222,20 @@ def _filter_acquisition_time(items: list[pystac.Item]) -> list[pystac.Item]:
     result = []
     for base, grouped_items in groups.items():
         # Prefer NT if exists
-        nt_items = [i for i in grouped_items if '_NT_' in i.id]
+        nt_items = [i for i in grouped_items if "_NT_" in i.id]
         if nt_items:
             # If multiple NTs, pick latest processing timestamp
             latest_nt = max(nt_items, key=lambda x: _extract_timestamps(x.id)[-1])
             result.append(latest_nt)
         else:
             # Otherwise pick NR (if exists)
-            nr_items = [i for i in grouped_items if '_NR_' in i.id]
+            nr_items = [i for i in grouped_items if "_NR_" in i.id]
             if nr_items:
                 latest_nr = max(nr_items, key=lambda x: _extract_timestamps(x.id)[-1])
                 result.append(latest_nr)
 
     return result
+
 
 def _get_base_id(item_id: str) -> str:
     # Matches YYYYMMDDThhmmss
@@ -253,8 +254,7 @@ def _get_base_id(item_id: str) -> str:
     base, _, _ = item_id.rpartition(f"_{last_ts}")
     return base
 
+
 def _extract_timestamps(item_id: str) -> list[str]:
     # Matches YYYYMMDDThhmmss
     return re.findall(r"\d{8}T\d{6}", item_id)
-
-

@@ -3,13 +3,17 @@
 #  https://opensource.org/license/apache-2-0.
 
 import datetime
-from unittest import TestCase
 import logging
+from unittest import TestCase
 
 import pystac
 import xarray as xr
 
-from xcube_eopf.prodhandlers.sentinel3 import group_items, IgnoreZeroSizedDimension,_get_base_id
+from xcube_eopf.prodhandlers.sentinel3 import (
+    IgnoreZeroSizedDimension,
+    _get_base_id,
+    group_items,
+)
 
 
 class Sentinel3Test(TestCase):
@@ -83,6 +87,7 @@ class Sentinel3Test(TestCase):
         self.assertIn("does not contain 3 timestamp.", cm.output[-1])
         self.assertEqual(item_id, item_id_return)
 
+
 class TestIgnoreZeroSizedDimension(TestCase):
     def setUp(self):
         self.filter = IgnoreZeroSizedDimension()
@@ -97,14 +102,19 @@ class TestIgnoreZeroSizedDimension(TestCase):
             lineno=0,
             msg=msg,
             args=(),
-            exc_info=None
+            exc_info=None,
         )
 
     def test_suppresses_target_message(self):
-        record = self.make_record("Clipped dataset contains at least one zero-sized dimension.")
-        self.assertFalse(self.filter.filter(record), "Filter should suppress the target message")
+        record = self.make_record(
+            "Clipped dataset contains at least one zero-sized dimension."
+        )
+        self.assertFalse(
+            self.filter.filter(record), "Filter should suppress the target message"
+        )
 
     def test_allows_other_messages(self):
         record = self.make_record("Some other warning message")
-        self.assertTrue(self.filter.filter(record), "Filter should allow non-target messages")
-
+        self.assertTrue(
+            self.filter.filter(record), "Filter should allow non-target messages"
+        )
