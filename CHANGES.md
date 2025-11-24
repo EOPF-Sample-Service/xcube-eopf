@@ -1,4 +1,4 @@
-## Changes in 0.4.0 (under development)
+## Changes in 0.3.1
 
 * Made the `crs` parameter optional and set its default to `"EPSG:4326"`.
   Added support for `crs="native"` for Sentinel-2, which allows specifying the
