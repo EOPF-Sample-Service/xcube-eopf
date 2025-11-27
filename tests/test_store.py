@@ -10,9 +10,9 @@ import pytest
 import xarray as xr
 from xcube.core.store import DataStoreError, new_data_store
 from xcube.util.jsonschema import JsonObjectSchema
+from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import CONVERSION_FACTOR_DEG_METER, DATA_STORE_ID
-from xcube_eopf.utils import reproject_bbox
 
 from .helpers import sen2_l2a_10m, sen2_l2a_60m, sen2_l2a_60m_wo_scl, sen3_ol1efr_data
 
@@ -47,6 +47,7 @@ class EOPFZarrDataStoreTest(TestCase):
                 "sentinel-2-l2a",
                 "sentinel-3-olci-l2-lfr",
                 "sentinel-3-olci-l1-efr",
+                "sentinel-3-slstr-l1-rbt",
                 "sentinel-3-slstr-l2-lst",
             ],
             self.store.get_data_ids(),
@@ -57,6 +58,7 @@ class EOPFZarrDataStoreTest(TestCase):
                 ("sentinel-2-l2a", {}),
                 ("sentinel-3-olci-l2-lfr", {}),
                 ("sentinel-3-olci-l1-efr", {}),
+                ("sentinel-3-slstr-l1-rbt", {}),
                 ("sentinel-3-slstr-l2-lst", {}),
             ],
             self.store.get_data_ids(include_attrs=True),
@@ -179,7 +181,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertEqual(
-            [4, 4001, 4001], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [4, 4000, 4000], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
             [1, 1830, 1830],
@@ -206,10 +208,10 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertEqual(
-            [4, 201, 201], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [4, 200, 200], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
-            [1, 201, 201],
+            [1, 200, 200],
             [ds.chunksizes["time"][0], ds.chunksizes["y"][0], ds.chunksizes["x"][0]],
         )
         self.assertIn("stac_url", ds.attrs)
@@ -236,10 +238,10 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
         self.assertEqual(
-            [4, 412, 684], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+            [4, 411, 683], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
-            [1, 412, 684],
+            [1, 411, 683],
             [
                 ds.chunksizes["time"][0],
                 ds.chunksizes["lat"][0],
@@ -268,10 +270,10 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
         self.assertEqual(
-            [4, 412, 413], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [4, 411, 412], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
-            [1, 412, 413],
+            [1, 411, 412],
             [ds.chunksizes["time"][0], ds.chunksizes["y"][0], ds.chunksizes["x"][0]],
         )
         self.assertIn("stac_url", ds.attrs)
@@ -301,10 +303,9 @@ class EOPFZarrDataStoreTest(TestCase):
         mock_xarray.return_value = sen3_ol1efr_data()
 
         # open Sentinel-3 OL1EFR
-        bbox = [5.0, 53.0, 10.0, 57.0]
         ds = self.store.open_data(
             data_id="sentinel-3-olci-l1-efr",
-            bbox=bbox,
+            bbox=[5.0, 53.0, 10.0, 57.0],
             time_range=["2025-05-01", "2025-05-21"],
             spatial_res=300 / CONVERSION_FACTOR_DEG_METER,
             variables=["oa01_radiance", "oa02_radiance"],
@@ -312,7 +313,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["oa01_radiance", "oa02_radiance"], list(ds.data_vars))
         self.assertEqual(
-            [2, 1486, 1857], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+            [2, 1485, 1856], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
             [1, 1024, 1024],

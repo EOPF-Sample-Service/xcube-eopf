@@ -9,57 +9,15 @@ import numpy as np
 import pyproj
 import pystac
 import xarray as xr
-from xcube.core.store import DataStoreError
-from xcube_resampling.gridmapping import GridMapping
 
 from xcube_eopf.utils import (
     add_nominal_datetime,
-    get_gridmapping,
-    get_spatial_dims,
     mosaic_spatial_take_first,
     normalize_crs,
-    reproject_bbox,
 )
 
 
 class UtilsTest(unittest.TestCase):
-
-    def test_reproject_bbox(self):
-        bbox_wgs84 = [2, 50, 3, 51]
-        crs_wgs84 = "EPSG:4326"
-        crs_3035 = "EPSG:3035"
-        bbox_3035 = [3748675.9529771, 3011432.8944597, 3830472.1359979, 3129432.4914285]
-        self.assertEqual(bbox_wgs84, reproject_bbox(bbox_wgs84, crs_wgs84, crs_wgs84))
-        self.assertEqual(bbox_3035, reproject_bbox(bbox_3035, crs_3035, crs_3035))
-        np.testing.assert_almost_equal(
-            reproject_bbox(bbox_wgs84, crs_wgs84, crs_3035), bbox_3035
-        )
-        np.testing.assert_almost_equal(
-            reproject_bbox(
-                reproject_bbox(bbox_wgs84, crs_wgs84, crs_3035, buffer=0.0),
-                crs_3035,
-                crs_wgs84,
-                buffer=0.0,
-            ),
-            [
-                1.829619451017442,
-                49.93464594063249,
-                3.1462425554926226,
-                51.06428203128216,
-            ],
-        )
-
-        crs_utm = "EPSG:32601"
-        bbox_utm = [
-            213372.0489639729,
-            5540547.369934658,
-            362705.63410562894,
-            5768595.563692021,
-        ]
-        np.testing.assert_almost_equal(
-            reproject_bbox(bbox_utm, crs_utm, crs_wgs84, buffer=0.02),
-            [178.77930769, 49.90632759, -178.87064939, 52.09298731],
-        )
 
     def test_normalize_crs(self):
         crs_str = "EPSG:4326"
@@ -183,41 +141,3 @@ class UtilsTest(unittest.TestCase):
         ds_test = mosaic_spatial_take_first(list_ds)
         self.assertIsInstance(ds_test, xr.Dataset)
         xr.testing.assert_allclose(ds_test, ds_expected)
-
-    def test_get_spatial_dims(self):
-        ds = xr.Dataset()
-        ds["var"] = xr.DataArray(
-            data=np.ones((2, 2)), dims=("y", "x"), coords=dict(y=[0, 10], x=[0, 10])
-        )
-        self.assertEqual(("y", "x"), get_spatial_dims(ds))
-        ds = xr.Dataset()
-        ds["var"] = xr.DataArray(
-            data=np.ones((2, 2)),
-            dims=("lat", "lon"),
-            coords=dict(lat=[0, 10], lon=[0, 10]),
-        )
-        self.assertEqual(("lat", "lon"), get_spatial_dims(ds))
-        ds = xr.Dataset()
-        ds["var"] = xr.DataArray(
-            data=np.ones((2, 2)),
-            dims=("dim_false0", "dim_false1"),
-            coords=dict(dim_false0=[0, 10], dim_false1=[0, 10]),
-        )
-        with self.assertRaises(DataStoreError) as cm:
-            get_spatial_dims(ds)
-        self.assertEqual(
-            "No spatial dimensions found in dataset.",
-            f"{cm.exception}",
-        )
-
-    def test_get_gridmapping(self):
-        bbox = [0, 50, 1, 51]
-        spatial_res = 0.0001
-        crs = "EPSG:4326"
-        tile_size = 2000
-        gm = get_gridmapping(bbox, spatial_res, crs, tile_size)
-        self.assertIsInstance(gm, GridMapping)
-        self.assertEqual((0.0001, 0.0001), gm.xy_res)
-        self.assertEqual(pyproj.CRS.from_epsg(4326), gm.crs)
-        self.assertEqual((2000, 2000), gm.tile_size)
-        self.assertEqual((10001, 10001), gm.size)

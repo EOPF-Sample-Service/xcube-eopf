@@ -4,12 +4,14 @@
 
 from abc import ABC
 from collections import defaultdict
+from collections.abc import Sequence
 
 import dask.array as da
 import numpy as np
 import pyproj
 import pystac
 import xarray as xr
+from xarray_eopf.amodes.sentinel2 import get_native_res
 from xcube.core.store import DataStoreError
 from xcube.util.jsonschema import JsonObjectSchema, JsonStringSchema
 from xcube_resampling.gridmapping import GridMapping
@@ -17,7 +19,6 @@ from xcube_resampling.spatial import resample_in_space
 from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import (
-    CONVERSION_FACTOR_DEG_METER,
     DEFAULT_CRS,
     SCHEMA_ADDITIONAL_QUERY,
     SCHEMA_AGG_METHODS,
@@ -33,7 +34,6 @@ from xcube_eopf.utils import (
     add_attributes,
     add_nominal_datetime,
     bbox_to_geojson,
-    get_gridmapping,
     mosaic_spatial_take_first,
     normalize_crs,
 )
@@ -82,8 +82,7 @@ class Sen2ProductHandler(ProductHandler, ABC):
             additional_properties=False,
         )
 
-    @staticmethod
-    def prepare_stac_queries(data_id: str, open_params: dict) -> dict:
+    def prepare_stac_queries(self, data_id: str, open_params: dict) -> dict:
         target_crs = open_params.get("crs", DEFAULT_CRS)
         if target_crs == "native":
             target_crs = "EPSG:4326"
@@ -152,6 +151,7 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     #       STAC items with multiple processing versions are added to the list and
     #       mosaicked by taking the fist non-NaN value.
     #       For proper handling wait for STAC item update (see https://github.com/EOPF-Sample-Service/eopf-stac/issues/28)
+
     # get dates and tile IDs of the items
     dates = []
     tile_ids = []
@@ -231,6 +231,7 @@ def generate_cube(grouped_items: xr.DataArray, **open_params) -> xr.Dataset:
             open_params["bbox"] = reproject_bbox(
                 open_params["bbox"], "EPSG:4326", open_params["crs"]
             )
+    open_params["crs"] = normalize_crs(open_params.get("crs", DEFAULT_CRS))
 
     # Insert the tile data per UTM zone
     list_ds_utm = []
@@ -272,7 +273,7 @@ def _generate_utm_cube(
     """
     items_bbox = _get_bounding_box(grouped_items)
     final_bbox = reproject_bbox(open_params["bbox"], open_params["crs"], crs_utm)
-    spatial_res = _get_spatial_res(open_params)
+    spatial_res = get_native_res(open_params["spatial_res"], open_params["crs"])
     xarray_open_params = dict(
         resolution=spatial_res,
         interp_methods=open_params.get("interp_method"),
@@ -366,7 +367,7 @@ def _merge_utm_zones(list_ds_utm: list[xr.Dataset], **open_params) -> xr.Dataset
     """
     # get correct target gridmapping
     crss = [pyproj.CRS.from_cf(ds["spatial_ref"].attrs) for ds in list_ds_utm]
-    target_crs = pyproj.CRS.from_string(open_params.get("crs", DEFAULT_CRS))
+    target_crs = open_params["crs"]
     crss_equal = [target_crs == crs for crs in crss]
     if any(crss_equal):
         true_index = crss_equal.index(True)
@@ -379,14 +380,14 @@ def _merge_utm_zones(list_ds_utm: list[xr.Dataset], **open_params) -> xr.Dataset
             ds.x[1] - ds.x[0] != spatial_res[0]
             or abs(ds.y[1] - ds.y[0]) != spatial_res[1]
         ):
-            target_gm = get_gridmapping(
+            target_gm = GridMapping.regular_from_bbox(
                 open_params["bbox"],
                 open_params["spatial_res"],
                 target_crs,
                 open_params.get("tile_size", _TILE_SIZE),
             )
     else:
-        target_gm = get_gridmapping(
+        target_gm = GridMapping.regular_from_bbox(
             open_params["bbox"],
             open_params["spatial_res"],
             target_crs,
@@ -462,42 +463,11 @@ def _get_bounding_box(grouped_items: xr.DataArray) -> list[float | int]:
     return [xmin, ymin, xmax, ymax]
 
 
-def _get_spatial_res(open_params: dict) -> int:
-    """Determine the appropriate Sentinel-2 spatial resolution based on the CRS.
-
-    If the CRS is geographic (e.g., EPSG:4326), the requested spatial resolution
-    (in degree) is converted to meters. The function then selects the nearest
-    equal or coarser supported Sentinel-2 resolution from the native
-    resolutions [10, 20, 60].
-
-    Args:
-        open_params: Dictionary of open parameters. Must include:
-            - "crs": Coordinate reference system as EPSG string or identifier.
-            - "spatial_res": Desired spatial resolution in meters.
-
-    Returns:
-        An integer representing the selected spatial resolution (10, 20, or 60).
-        If no coarser resolution is found, defaults to 60.
-    """
-    crs = normalize_crs(open_params["crs"])
-    if crs.is_geographic:
-        spatial_res = open_params["spatial_res"] * CONVERSION_FACTOR_DEG_METER
-    else:
-        spatial_res = open_params["spatial_res"]
-    idxs = np.where(_SEN2_SPATIAL_RES >= spatial_res)[0]
-    if len(idxs) == 0:
-        spatial_res = 60
-    else:
-        spatial_res = int(_SEN2_SPATIAL_RES[idxs[0]])
-
-    return spatial_res
-
-
 def _create_empty_dataset(
     sample_ds: xr.Dataset,
     grouped_items: xr.DataArray,
-    items_bbox: list[float | int] | tuple[float | int],
-    final_bbox: list[float | int] | tuple[float | int],
+    items_bbox: Sequence[float | int],
+    final_bbox: Sequence[float | int],
     spatial_res: int | float,
 ) -> xr.Dataset:
     """Create an empty xarray Dataset with spatial and temporal dimensions matching

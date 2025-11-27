@@ -104,7 +104,7 @@ class EOPFZarrDataStore(DataStore):
         self._assert_has_data(data_id)
         self._assert_valid_data_type(data_type)
         self._assert_valid_opener_id(opener_id)
-        schema = self.get_open_data_params_schema()
+        schema = self.get_open_data_params_schema(data_id=data_id)
         schema.validate_instance(open_params)
 
         product_handler = ProductHandler.guess(data_id)

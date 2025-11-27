@@ -273,6 +273,7 @@ The EOPF xcube data store so far supports three Sentinel-3 product types via the
 |---------------------------|-----------------------------------------------------------------------|
 | `sentinel-3-olci-l1-efr`  | Level-1 full-resolution top-of-atmosphere radiances from the OLCI     |
 | `sentinel-3-olci-l2-lfr`  | Level-2 land and atmospheric geophysical parameters derived from OLCI |
+| `sentinel-3-slstr-l1-rbt` | Level-1 radiances and brightness temperatures derived from SLSTR      |
 | `sentinel-3-slstr-l2-lst` | Level-2 land surface temperature products derived from SLSTR          |
 
 
@@ -286,6 +287,14 @@ The EOPF xcube data store so far supports three Sentinel-3 product types via the
   `oa21_radiance`
 - `sentinel-3-olci-l2-lfr`:  
   `gifapar`, `iwv`, `otci`, `rc681`, `rc865`
+- `sentinel-3-slstr-l1-rbt`:
+  `s1_radiance_an`, `s2_radiance_an`, `s3_radiance_an`, `s4_radiance_an`,
+  `s5_radiance_an`, `s6_radiance_an`, `s1_radiance_ao`, `s2_radiance_ao`,
+  `s3_radiance_ao`, `s4_radiance_ao`, `s5_radiance_ao`, `s6_radiance_ao`,
+  `s4_radiance_bn`, `s5_radiance_bn`, `s6_radiance_bn`, `s4_radiance_bo`,
+  `s5_radiance_bo`, `s6_radiance_bo`, `f1_bt_fn`, `f1_bt_fo`, `f2_bt_in`,
+  `f2_bt_io`, `s7_bt_in`, `s8_bt_in`, `s9_bt_in`, `s7_bt_io`, `s8_bt_io`,
+  `s9_bt_io`
 - `sentinel-3-slstr-l2-lst`:  
   `lst`
 
