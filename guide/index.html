@@ -757,11 +757,11 @@ No actual data is loaded at this point. </p>
 <li><code>bbox</code>: Bounding box ["west", "south", "est", "north"] in CRS coordinates.</li>
 <li><code>time_range</code>: Temporal extent ["YYYY-MM-DD", "YYYY-MM-DD"].</li>
 <li><code>spatial_res</code>: Spatial resolution in meter of degree (depending on the CRS).</li>
-<li><code>crs</code>: Coordinate reference system (e.g. <code>"EPSG:4326"</code>).</li>
 </ul>
 <p>These parameters control the STAC API query and define the output cube's spatial grid.</p>
 <h2 id="optional-parameters">Optional Parameters</h2>
 <ul>
+<li><code>crs</code>: Coordinate reference system, defaults to <code>"EPSG:4326"</code>.</li>
 <li><code>variables</code>: Variables to include in the dataset. Accepts a single name, a regex pattern, or an iterable of either.</li>
 <li><code>tile_size</code>: Spatial tile size of the returned dataset, given as <code>(width, height)</code>.</li>
 <li><code>query</code>: Additional filtering options for STAC Items by their properties. See the 
@@ -910,6 +910,23 @@ upsampled or downsampled — and reprojected to match the target grid. If reproj
 is needed at a lower resolution, the process first downsamples the data and 
 subsequently performs the reprojection. Upsampling and downsampling are controlled using the <code>agg_methods</code> and <code>interp_methods</code>
 parameters (see <a href="#optional-parameters">Optional Parameters</a>).</p>
+<p>Furthermore, the parameter <code>crs</code> can be set to <code>"native"</code>, which allows the user to
+provide the bounding box in regular latitude/longitude coordinates while retrieving
+the data in its <strong>native UTM grid</strong>—without triggering any reprojection.
+The following snippet shows an example:</p>
+<p>```python
+from xcube.core.store import new_data_store</p>
+<p>store = new_data_store("eopf-stac")
+ds = store.open_data(
+    data_id="sentinel-2-l2a",
+    bbox=[9.7, 53.4, 10.3, 53.7],
+    time_range=["2025-05-01", "2025-05-07"],
+    spatial_res=10,
+    crs="native",
+    variables=["b02", "b03", "b04", "scl"],
+)</p>
+<p>Note that if the requested area spans multiple UTM zones, a <code>DataStoreError</code>
+will be raised.</p>
 <h3 id="sentinel-3">🛰️ Sentinel-3</h3>
 <p>Sentinel-3 has two instruments on board: </p>
 <p>🌊 <strong>OLCI — Ocean and Land Colour Instrument</strong></p>
@@ -951,6 +968,10 @@ applications. </p>
 <td>Level-2 land and atmospheric geophysical parameters derived from OLCI</td>
 </tr>
 <tr>
+<td><code>sentinel-3-slstr-l1-rbt</code></td>
+<td>Level-1 radiances and brightness temperatures derived from SLSTR</td>
+</tr>
+<tr>
 <td><code>sentinel-3-slstr-l2-lst</code></td>
 <td>Level-2 land surface temperature products derived from SLSTR</td>
 </tr>
@@ -966,6 +987,14 @@ applications. </p>
   <code>oa21_radiance</code></li>
 <li><code>sentinel-3-olci-l2-lfr</code>:<br />
 <code>gifapar</code>, <code>iwv</code>, <code>otci</code>, <code>rc681</code>, <code>rc865</code></li>
+<li><code>sentinel-3-slstr-l1-rbt</code>:
+  <code>s1_radiance_an</code>, <code>s2_radiance_an</code>, <code>s3_radiance_an</code>, <code>s4_radiance_an</code>,
+  <code>s5_radiance_an</code>, <code>s6_radiance_an</code>, <code>s1_radiance_ao</code>, <code>s2_radiance_ao</code>,
+  <code>s3_radiance_ao</code>, <code>s4_radiance_ao</code>, <code>s5_radiance_ao</code>, <code>s6_radiance_ao</code>,
+  <code>s4_radiance_bn</code>, <code>s5_radiance_bn</code>, <code>s6_radiance_bn</code>, <code>s4_radiance_bo</code>,
+  <code>s5_radiance_bo</code>, <code>s6_radiance_bo</code>, <code>f1_bt_fn</code>, <code>f1_bt_fo</code>, <code>f2_bt_in</code>,
+  <code>f2_bt_io</code>, <code>s7_bt_in</code>, <code>s8_bt_in</code>, <code>s9_bt_in</code>, <code>s7_bt_io</code>, <code>s8_bt_io</code>,
+  <code>s9_bt_io</code></li>
 <li><code>sentinel-3-slstr-l2-lst</code>:<br />
 <code>lst</code></li>
 </ul>
