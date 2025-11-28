@@ -287,7 +287,7 @@ The EOPF xcube data store so far supports three Sentinel-3 product types via the
   `oa21_radiance`
 - `sentinel-3-olci-l2-lfr`:  
   `gifapar`, `iwv`, `otci`, `rc681`, `rc865`
-- `sentinel-3-slstr-l1-rbt`:
+- `sentinel-3-slstr-l1-rbt`:  
   `s1_radiance_an`, `s2_radiance_an`, `s3_radiance_an`, `s4_radiance_an`,
   `s5_radiance_an`, `s6_radiance_an`, `s1_radiance_ao`, `s2_radiance_ao`,
   `s3_radiance_ao`, `s4_radiance_ao`, `s5_radiance_ao`, `s6_radiance_ao`,
