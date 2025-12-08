@@ -94,7 +94,9 @@ class Sen2ProductHandler(ProductHandler, ABC):
             query=open_params.get("query"),
         )
 
-    def open_data(self, items: list[pystac.Item], **open_params) -> xr.Dataset:
+    def open_data(
+        self, data_id: str, items: list[pystac.Item], **open_params
+    ) -> xr.Dataset:
         # get STAC items grouped by solar day and MRGS tile
         grouped_items = group_items(items)
 
@@ -102,7 +104,7 @@ class Sen2ProductHandler(ProductHandler, ABC):
         ds = generate_cube(grouped_items, **open_params)
 
         # add attributes
-        ds = add_attributes(ds, grouped_items, **open_params)
+        ds = add_attributes(data_id, ds, grouped_items, **open_params)
 
         # TODO how to handle solar and viewing angles
 

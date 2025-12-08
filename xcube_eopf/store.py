@@ -120,7 +120,7 @@ class EOPFZarrDataStore(DataStore):
         if len(items) == 0:
             raise DataStoreError(f"No items found for search_params {search_params}.")
 
-        return product_handler.open_data(items, **open_params)
+        return product_handler.open_data(data_id, items, **open_params)
 
     def describe_data(
         self, data_id: str, data_type: DataTypeLike = None

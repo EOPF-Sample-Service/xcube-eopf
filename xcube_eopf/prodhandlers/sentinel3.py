@@ -83,7 +83,9 @@ class Sen3ProductHandler(ProductHandler, ABC):
             query=open_params.get("query"),
         )
 
-    def open_data(self, items: list[pystac.Item], **open_params) -> xr.Dataset:
+    def open_data(
+        self, data_id: str, items: list[pystac.Item], **open_params
+    ) -> xr.Dataset:
         if "crs" not in open_params:
             open_params["crs"] = DEFAULT_CRS
 
@@ -94,7 +96,7 @@ class Sen3ProductHandler(ProductHandler, ABC):
         ds = self.generate_cube(grouped_items, **open_params)
 
         # add attributes
-        ds = add_attributes(ds, grouped_items, **open_params)
+        ds = add_attributes(data_id, ds, grouped_items, **open_params)
 
         return ds
 

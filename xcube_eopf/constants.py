@@ -18,6 +18,7 @@ from xcube_resampling.constants import AGG_METHODS
 # general stac constants
 DATA_STORE_ID = "eopf-zarr"
 STAC_URL = "https://stac.core.eopf.eodc.eu"
+STAC_COLLECTIONS_URL = "https://stac.browser.user.eopf.eodc.eu/collections"
 EOPF_ZARR_OPENR_ID = "dataset:zarr:eopf-zarr"
 
 # other constants
