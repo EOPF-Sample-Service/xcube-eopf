@@ -1,3 +1,8 @@
+## Changes in 0.3.2 (under development)
+
+* Added the STAC Collection URL to the returned dataset’s attributes.
+
+
 ## Changes in 0.3.1
 
 * Made the `crs` parameter optional and set its default to `"EPSG:4326"`.

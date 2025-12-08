@@ -12,7 +12,7 @@ import pystac
 import xarray as xr
 from xcube_resampling.utils import get_spatial_coords
 
-from .constants import STAC_URL
+from .constants import STAC_COLLECTIONS_URL, STAC_URL
 from .version import version
 
 
@@ -130,7 +130,7 @@ def mosaic_spatial_take_first(list_ds: list[xr.Dataset]) -> xr.Dataset:
 
 
 def add_attributes(
-    ds: xr.Dataset, grouped_items: xr.DataArray, **open_params
+    data_id: str, ds: xr.Dataset, grouped_items: xr.DataArray, **open_params
 ) -> xr.Dataset:
     """Adds metadata attributes to the final dataset.
 
@@ -149,6 +149,7 @@ def add_attributes(
         The modified dataset with added metadata attributes.
     """
     ds.attrs["stac_url"] = STAC_URL
+    ds.attrs["stac_collection_url"] = f"{STAC_COLLECTIONS_URL}/collections/{data_id}"
     ds.attrs["stac_items"] = dict(
         {
             dt.astype("datetime64[ms]")
