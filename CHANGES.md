@@ -1,6 +1,8 @@
 ## Changes in 0.3.2 (under development)
 
 * Added the STAC Collection URL to the returned dataset’s attributes.
+* Read the projected bounding box information from the item's property field 
+  `"proj:bbox"` as default (changes on eopf-stac v0.12.0).
 
 
 ## Changes in 0.3.1

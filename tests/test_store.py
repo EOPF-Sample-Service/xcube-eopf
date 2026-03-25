@@ -145,7 +145,7 @@ class EOPFZarrDataStoreTest(TestCase):
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
             bbox=(610000, 5880000, 630000, 5900000),
-            time_range=["2025-05-01", "2025-05-15"],
+            time_range=["2026-03-18", "2026-03-25"],
             spatial_res=10,
             crs="EPSG:32632",
             variables=["b02", "b03", "b04", "scl"],
@@ -154,7 +154,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertEqual(
-            [4, 2000, 2000], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [2, 2000, 2000], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
             [1, 1830, 1830],
@@ -172,7 +172,7 @@ class EOPFZarrDataStoreTest(TestCase):
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
             bbox=(610000, 5880000, 630000, 5900000),
-            time_range=["2025-05-01", "2025-05-15"],
+            time_range=["2026-03-18", "2026-03-25"],
             spatial_res=5,
             crs="EPSG:32632",
             variables=["b02", "b03", "b04", "scl"],
@@ -181,7 +181,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertEqual(
-            [4, 4000, 4000], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [2, 4000, 4000], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
             [1, 1830, 1830],
@@ -199,7 +199,7 @@ class EOPFZarrDataStoreTest(TestCase):
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
             bbox=(610000, 5880000, 630000, 5900000),
-            time_range=["2025-05-01", "2025-05-15"],
+            time_range=["2026-03-18", "2026-03-25"],
             spatial_res=100,
             crs="EPSG:32632",
             variables=["b02", "b03", "b04", "scl"],
@@ -208,7 +208,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertEqual(
-            [4, 200, 200], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [2, 200, 200], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
             [1, 200, 200],
@@ -230,7 +230,7 @@ class EOPFZarrDataStoreTest(TestCase):
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
             bbox=bbox_wgs84,
-            time_range=["2025-05-01", "2025-05-15"],
+            time_range=["2026-03-18", "2026-03-25"],
             spatial_res=50 / CONVERSION_FACTOR_DEG_METER,
             crs="EPSG:4326",
             variables=["b02", "b03", "b04"],
@@ -238,7 +238,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
         self.assertEqual(
-            [4, 411, 683], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+            [2, 411, 683], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
             [1, 411, 683],
@@ -262,7 +262,7 @@ class EOPFZarrDataStoreTest(TestCase):
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
             bbox=[10.64, 53.05, 10.94, 53.23],
-            time_range=["2025-05-01", "2025-05-15"],
+            time_range=["2026-03-18", "2026-03-25"],
             spatial_res=50,
             crs="native",
             variables=["b02", "b03", "b04"],
@@ -270,7 +270,7 @@ class EOPFZarrDataStoreTest(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04"], list(ds.data_vars))
         self.assertEqual(
-            [4, 411, 412], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [2, 411, 412], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
             [1, 411, 412],
