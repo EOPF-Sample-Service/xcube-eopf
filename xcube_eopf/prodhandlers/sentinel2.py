@@ -451,9 +451,15 @@ def _get_bounding_box(grouped_items: xr.DataArray) -> list[float | int]:
     xmin, ymin, xmax, ymax = np.inf, np.inf, -np.inf, -np.inf
     for tile_id in grouped_items.tile_id.values:
         item = np.sum(grouped_items.sel(tile_id=tile_id).values)[0]
-        # take an assets which is available in L1C and L2A and read out
-        # the bounding box in UTM coordinates.
-        bbox = item.assets["B02_10m"].extra_fields["proj:bbox"]
+        # Take the bbox in UTM from the Item properties as default (latest eopf-stac)
+        bbox = item.properties.get(
+            "proj:bbox", item.assets["B02_10m"].extra_fields.get("proj:bbox")
+        )
+        if bbox is None:
+            raise Exception(
+                "Required metadata field proj:bbox not found under "
+                "Item nor Asset metadata."
+            )
         if xmin > bbox[0]:
             xmin = bbox[0]
         if ymin > bbox[1]:
