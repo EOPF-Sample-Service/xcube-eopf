@@ -235,6 +235,7 @@ ds = store.open_data(
     crs="native",
     variables=["b02", "b03", "b04", "scl"],
 )
+```
 
 Note that if the requested area spans multiple UTM zones, a `DataStoreError`
 will be raised.
