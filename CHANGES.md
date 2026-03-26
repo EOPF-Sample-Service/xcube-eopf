@@ -7,6 +7,8 @@
   skips missing products while continuing datacube generation.
 - Split Sentinel-3 products by ascending/descending orbit before mosaicking; 
   previously all products from a solar day were mosaicked together.
+- When mosaicking multiple Sentinel-2 products into one time slice, the timestamp is 
+  now averaged across all products; previously only the first tile’s timestamp was used.
 
 
 ## Changes in 0.3.1

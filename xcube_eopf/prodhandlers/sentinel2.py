@@ -186,13 +186,15 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     )
 
     # replace date by datetime from first item
-    dts = []
-    for date in grouped_items.time.values:
-        item = np.sum(grouped_items.sel(time=date).values)[0]
-        dts.append(item.datetime.replace(tzinfo=None))
-    grouped_items = grouped_items.assign_coords(
-        time=np.array(dts, dtype="datetime64[ns]")
-    )
+    dts = np.empty(len(dates), dtype="datetime64[s]")
+    for i, date in enumerate(grouped_items.time.values):
+        items = np.sum(grouped_items.sel(time=date).values)
+        times = np.array(
+            [np.datetime64(item.datetime.replace(tzinfo=None)) for item in items]
+        )
+        mean_time = np.datetime64(int(times.view("int64").mean()), "us")
+        dts[i] = mean_time.astype("datetime64[s]")
+    grouped_items = grouped_items.assign_coords(time=dts)
     grouped_items["time"].encoding["units"] = "seconds since 1970-01-01"
     grouped_items["time"].encoding["calendar"] = "standard"
 
