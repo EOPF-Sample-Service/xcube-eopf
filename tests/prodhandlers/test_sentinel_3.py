@@ -26,6 +26,7 @@ class Sentinel3Test(TestCase):
             datetime=datetime.datetime(2024, 6, 4, 10, 30, 31),
             properties={
                 "datetime_nominal": datetime.datetime(2024, 6, 4, 10, 30, 31),
+                "sat:orbit_state": "ascending",
             },
         )
         item1 = pystac.Item(
@@ -35,6 +36,7 @@ class Sentinel3Test(TestCase):
             datetime=datetime.datetime(2024, 6, 4, 10, 30, 31),
             properties={
                 "datetime_nominal": datetime.datetime(2024, 6, 4, 10, 30, 31),
+                "sat:orbit_state": "ascending",
             },
         )
         item2 = pystac.Item(
@@ -44,6 +46,7 @@ class Sentinel3Test(TestCase):
             datetime=datetime.datetime(2024, 6, 4, 10, 30, 31),
             properties={
                 "datetime_nominal": datetime.datetime(2024, 6, 4, 10, 30, 31),
+                "sat:orbit_state": "ascending",
             },
         )
         item3 = pystac.Item(
@@ -53,6 +56,7 @@ class Sentinel3Test(TestCase):
             datetime=datetime.datetime(2024, 6, 4, 8, 30, 31),
             properties={
                 "datetime_nominal": datetime.datetime(2024, 6, 4, 8, 30, 31),
+                "sat:orbit_state": "ascending",
             },
         )
         item4 = pystac.Item(
@@ -62,6 +66,7 @@ class Sentinel3Test(TestCase):
             datetime=datetime.datetime(2024, 6, 5, 8, 30, 31),
             properties={
                 "datetime_nominal": datetime.datetime(2024, 6, 5, 8, 30, 31),
+                "sat:orbit_state": "ascending",
             },
         )
         item5 = pystac.Item(
@@ -71,12 +76,23 @@ class Sentinel3Test(TestCase):
             datetime=datetime.datetime(2024, 6, 6, 8, 30, 31),
             properties={
                 "datetime_nominal": datetime.datetime(2024, 6, 6, 8, 30, 31),
+                "sat:orbit_state": "ascending",
+            },
+        )
+        item6 = pystac.Item(
+            id="S3A_SL_2_LST____20251121T202032_20251121T224521_20251121T456789_0180_133_049_2160_PS1_O_NR_004",
+            geometry=None,
+            bbox=[1, 52, 2, 53],
+            datetime=datetime.datetime(2024, 6, 6, 20, 30, 31),
+            properties={
+                "datetime_nominal": datetime.datetime(2024, 6, 6, 20, 30, 31),
+                "sat:orbit_state": "descending",
             },
         )
 
-        grouped_item = group_items([item0, item1, item2, item3, item4, item5])
+        grouped_item = group_items([item0, item1, item2, item3, item4, item5, item6])
         self.assertIsInstance(grouped_item, xr.DataArray)
-        self.assertEqual(dict(time=3), grouped_item.sizes)
+        self.assertEqual(dict(time=4), grouped_item.sizes)
         self.assertIsInstance(grouped_item[0].item(), list)
         self.assertEqual(2, len(grouped_item[0].item()))
 
