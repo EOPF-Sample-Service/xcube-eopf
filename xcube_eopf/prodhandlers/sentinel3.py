@@ -182,35 +182,35 @@ def group_items(items: list[pystac.Item]) -> xr.DataArray:
     items = add_nominal_datetime(items)
 
     # get dates and tile IDs of the items
-    dates = []
+    groups = defaultdict(list)
     for item in items:
-        dates.append(item.properties["datetime_nominal"].date())
-    dates = np.unique(dates)
-
-    # sort items by date and tile ID into a data array
-    grouped_items = np.full(len(dates), None, dtype=object)
-    for idx, item in enumerate(items):
         date = item.properties["datetime_nominal"].date()
-        idx_date = np.where(dates == date)[0][0]
-        if grouped_items[idx_date] is None:
-            grouped_items[idx_date] = [item]
-        else:
-            grouped_items[idx_date].append(item)
+        orbit = item.properties["sat:orbit_state"]
+        key = (date, orbit)
+        groups[key].append(item)
 
-    grouped_items = xr.DataArray(grouped_items, dims=("time",), coords=dict(time=dates))
+    # Sort keys chronologically and descending before ascending
+    orbit_order = {"descending": 0, "ascending": 1}
+    sorted_keys = sorted(groups.keys(), key=lambda k: (k[0], orbit_order[k[1]]))
 
-    # replace date by datetime from first item
-    dts = []
-    for date in grouped_items.time.values:
-        item = np.sum(grouped_items.sel(time=date).values)[0]
-        dts.append(item.datetime.replace(tzinfo=None))
-    grouped_items = grouped_items.assign_coords(
-        time=np.array(dts, dtype="datetime64[ns]")
-    )
-    grouped_items["time"].encoding["units"] = "seconds since 1970-01-01"
-    grouped_items["time"].encoding["calendar"] = "standard"
+    grouped_items = np.empty(len(sorted_keys), dtype=object)
+    for i, k in enumerate(sorted_keys):
+        grouped_items[i] = groups[k]
 
-    return grouped_items
+    # Mean timestamp per group
+    dts = np.empty(len(grouped_items), dtype="datetime64[s]")
+    for i, items in enumerate(grouped_items):
+        times = np.array(
+            [np.datetime64(item.datetime.replace(tzinfo=None)) for item in items]
+        )
+        mean_time = np.datetime64(int(times.view("int64").mean()), "us")
+        dts[i] = mean_time.astype("datetime64[s]")
+
+    da = xr.DataArray(grouped_items, dims=("time",), coords=dict(time=dts))
+    da["time"].encoding["units"] = "seconds since 1970-01-01"
+    da["time"].encoding["calendar"] = "standard"
+
+    return da
 
 
 def _filter_acquisition_time(items: list[pystac.Item]) -> list[pystac.Item]:

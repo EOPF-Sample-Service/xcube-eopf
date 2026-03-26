@@ -5,6 +5,8 @@
   `"proj:bbox"` as default (changes on eopf-stac v0.12.0).
 - Add handling for `FileNotFoundError` when opening EOPF products; logs a warning and 
   skips missing products while continuing datacube generation.
+- Split Sentinel-3 products by ascending/descending before mosaicking; previously 
+  all products from a solar day were mosaicked together.
 
 
 ## Changes in 0.3.1
