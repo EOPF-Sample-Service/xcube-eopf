@@ -457,7 +457,8 @@ def _get_bounding_box(grouped_items: xr.DataArray) -> list[float | int]:
         )
         if bbox is None:
             raise Exception(
-                "Required metadata field proj:bbox not found under Item nor Asset metadata."
+                "Required metadata field proj:bbox not found under "
+                "Item nor Asset metadata."
             )
         if xmin > bbox[0]:
             xmin = bbox[0]
