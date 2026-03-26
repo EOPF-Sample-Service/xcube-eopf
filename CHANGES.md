@@ -3,6 +3,8 @@
 * Added the STAC Collection URL to the returned dataset’s attributes.
 * Read the projected bounding box information from the item's property field 
   `"proj:bbox"` as default (changes on eopf-stac v0.12.0).
+- Add handling for `FileNotFoundError` when opening EOPF products; logs a warning and 
+  skips missing products while continuing datacube generation.
 
 
 ## Changes in 0.3.1

@@ -117,12 +117,20 @@ class Sen3ProductHandler(ProductHandler, ABC):
             items = grouped_items.sel(time=dt).item()
             dss_spatial = []
             for item in items:
-                ds = xr.open_dataset(
-                    item.assets["product"].href,
-                    engine="eopf-zarr",
-                    chunks={},
-                    **xarray_open_params,
-                )
+                try:
+                    ds = xr.open_dataset(
+                        item.assets["product"].href,
+                        engine="eopf-zarr",
+                        chunks={},
+                        **xarray_open_params,
+                    )
+                except FileNotFoundError:
+                    LOG.warning(
+                        "File not found for STAC item %s (href=%s)",
+                        item.id,
+                        item.assets["product"].href,
+                    )
+                    continue
                 if any(size <= 1 for size in ds.sizes.values()):
                     continue
                 dss_spatial.append(ds)
