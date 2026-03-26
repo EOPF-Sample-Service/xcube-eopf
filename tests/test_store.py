@@ -139,8 +139,20 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
-    def test_open_data_sen2_10m(self, mock_xarray):
-        mock_xarray.return_value = sen2_l2a_10m()
+    def test_open_data_sen2_10m(self, mock_open_dataset):
+        ds_ok = sen2_l2a_10m()
+
+        # First call fails, second succeeds (adjust count if needed)
+        mock_open_dataset.side_effect = [
+            FileNotFoundError("missing file"),
+            ds_ok,
+            ds_ok,
+            ds_ok,
+            ds_ok,
+            ds_ok,
+            ds_ok,
+            ds_ok,
+        ]
 
         ds = self.store.open_data(
             data_id="sentinel-2-l2a",
@@ -149,7 +161,7 @@ class EOPFZarrDataStoreTest(TestCase):
             spatial_res=10,
             crs="EPSG:32632",
             variables=["b02", "b03", "b04", "scl"],
-            interp_methods={np.float32: 0, "scl": 3},
+            interp_methods={np.float32: 0, "scl": 1},
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
@@ -299,21 +311,32 @@ class EOPFZarrDataStoreTest(TestCase):
 
     @pytest.mark.vcr()
     @patch("xarray.open_dataset")
-    def test_open_data_sen3_geographic(self, mock_xarray):
-        mock_xarray.return_value = sen3_ol1efr_data()
+    def test_open_data_sen3_geographic(self, mock_open_dataset):
+        ds_ok = sen3_ol1efr_data()
+
+        # First call fails, second succeeds (adjust count if needed)
+        mock_open_dataset.side_effect = [
+            FileNotFoundError("missing file"),
+            ds_ok,
+            ds_ok,
+            ds_ok,
+            ds_ok,
+            ds_ok,
+            ds_ok,
+        ]
 
         # open Sentinel-3 OL1EFR
         ds = self.store.open_data(
             data_id="sentinel-3-olci-l1-efr",
             bbox=[5.0, 53.0, 10.0, 57.0],
-            time_range=["2025-05-01", "2025-05-21"],
+            time_range=["2026-03-01", "2026-03-03"],
             spatial_res=300 / CONVERSION_FACTOR_DEG_METER,
             variables=["oa01_radiance", "oa02_radiance"],
         )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["oa01_radiance", "oa02_radiance"], list(ds.data_vars))
         self.assertEqual(
-            [2, 1485, 1856], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+            [3, 1485, 1856], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
             [1, 1024, 1024],

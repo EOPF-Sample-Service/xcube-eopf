@@ -20,6 +20,7 @@ from xcube_resampling.utils import reproject_bbox
 
 from xcube_eopf.constants import (
     DEFAULT_CRS,
+    LOG,
     SCHEMA_ADDITIONAL_QUERY,
     SCHEMA_AGG_METHODS,
     SCHEMA_BBOX,
@@ -289,12 +290,20 @@ def _generate_utm_cube(
             items = grouped_items.sel(tile_id=tile_id, time=dt).item()
             multi_tiles = []
             for item in items:
-                ds = xr.open_dataset(
-                    item.assets["product"].href,
-                    engine="eopf-zarr",
-                    chunks={},
-                    **xarray_open_params,
-                )
+                try:
+                    ds = xr.open_dataset(
+                        item.assets["product"].href,
+                        engine="eopf-zarr",
+                        chunks={},
+                        **xarray_open_params,
+                    )
+                except FileNotFoundError:
+                    LOG.warning(
+                        "File not found for STAC item %s (href=%s)",
+                        item.id,
+                        item.assets["product"].href,
+                    )
+                    continue
                 ds = ds.sel(
                     x=slice(final_bbox[0], final_bbox[2]),
                     y=slice(final_bbox[3], final_bbox[1]),
