@@ -7,7 +7,7 @@ from unittest import TestCase
 import xarray as xr
 from xcube.core.store import new_data_store
 
-from xcube_eopf.utils import reproject_bbox
+from xcube_resampling.utils import reproject_bbox
 
 from .helper import timeit
 
@@ -86,7 +86,7 @@ class Sentinel2Test(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["b02", "b03", "b04", "scl"], list(ds.data_vars))
         self.assertCountEqual(
-            [3, 6681, 3341], [ds.sizes["time"], ds.sizes["lon"], ds.sizes["lat"]]
+            [3, 6680, 3340], [ds.sizes["time"], ds.sizes["lon"], ds.sizes["lat"]]
         )
         self.assertEqual(
             [1, 1830, 1830],
