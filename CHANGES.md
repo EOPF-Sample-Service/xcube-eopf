@@ -1,4 +1,4 @@
-## Changes in 0.3.2 (under development)
+## Changes in 0.3.2
 
 * Added the STAC Collection URL to the returned dataset’s attributes.
 * Read the projected bounding box information from the item's property field 
@@ -9,6 +9,7 @@
   previously all products from a solar day were mosaicked together.
 - When mosaicking multiple Sentinel-2 products into one time slice, the timestamp is 
   now averaged across all products; previously only the first tile’s timestamp was used.
+- Enhanced the example notebooks and incorporated them into the documentation page.
 
 
 ## Changes in 0.3.1

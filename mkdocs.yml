@@ -8,6 +8,10 @@ nav:
   - Overview: index.md
   - Getting Started: start.md
   - User Guide: guide.md
+  - Example Notebooks:
+      - Introduction: examples/introduction.ipynb
+      - Sentinel-2: examples/sentinel_2.ipynb
+      - Sentinel-3: examples/sentinel_3.ipynb
   - Python API: api.md
   - About: about.md
 
@@ -35,8 +39,8 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
 
 extra:
   social:
@@ -45,8 +49,12 @@ extra:
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/xcube-eopf/
 
+extra_css:
+  - stylesheets/xarray_dataset.css
+
 plugins:
   - search
+  - mkdocs-jupyter
   - autorefs
   - mkdocstrings:
       handlers:
