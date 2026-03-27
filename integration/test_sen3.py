@@ -7,7 +7,7 @@ from unittest import TestCase
 import xarray as xr
 from xcube.core.store import new_data_store
 
-from xcube_eopf.utils import reproject_bbox
+from xcube_resampling.utils import reproject_bbox
 
 from .helper import timeit
 
@@ -37,10 +37,10 @@ class Sentinel3Test(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["oa01_radiance", "oa02_radiance"], list(ds.data_vars))
         self.assertCountEqual(
-            [1, 113, 224], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+            [1, 112, 223], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
-            [1, 113, 224],
+            [1, 112, 223],
             [
                 ds.chunksizes["time"][0],
                 ds.chunksizes["lat"][0],
@@ -66,10 +66,10 @@ class Sentinel3Test(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["oa01_radiance", "oa02_radiance"], list(ds.data_vars))
         self.assertCountEqual(
-            [1, 115, 136], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
+            [1, 114, 135], [ds.sizes["time"], ds.sizes["y"], ds.sizes["x"]]
         )
         self.assertEqual(
-            [1, 115, 136],
+            [1, 114, 135],
             [ds.chunksizes["time"][0], ds.chunksizes["y"][0], ds.chunksizes["x"][0]],
         )
         self.assertIn("stac_url", ds.attrs)
@@ -121,10 +121,10 @@ class Sentinel3Test(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["gifapar", "iwv"], list(ds.data_vars))
         self.assertCountEqual(
-            [1, 113, 224], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+            [1, 112, 223], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
-            [1, 113, 224],
+            [1, 112, 223],
             [
                 ds.chunksizes["time"][0],
                 ds.chunksizes["lat"][0],
@@ -149,10 +149,10 @@ class Sentinel3Test(TestCase):
         self.assertIsInstance(ds, xr.Dataset)
         self.assertCountEqual(["lst"], list(ds.data_vars))
         self.assertCountEqual(
-            [1, 113, 224], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
+            [1, 112, 223], [ds.sizes["time"], ds.sizes["lat"], ds.sizes["lon"]]
         )
         self.assertEqual(
-            [1, 113, 224],
+            [1, 112, 223],
             [
                 ds.chunksizes["time"][0],
                 ds.chunksizes["lat"][0],

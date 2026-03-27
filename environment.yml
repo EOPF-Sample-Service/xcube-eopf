@@ -11,15 +11,20 @@ dependencies:
   - pystac-client
   - shapely
   - xarray
-  - xarray-eopf ==0.2.5
+  - xarray-eopf >=0.2.7
   - xcube >=1.11.0
-  - xcube-resampling >= 0.3.2
+  - xcube-resampling >=0.3.2
   # Development Dependencies - Tools
   - black
   - isort
+  - mkdocs >=1.5
+  - mkdocs-autorefs
+  - mkdocs-material >=9
+  - mkdocs-jupyter
+  - mkdocstrings
+  - mkdocstrings-python
   - pytest
   - pytest-cov
-  - pytest-recording
   - ruff
   # Development Dependencies - Demos
   - jupyterlab

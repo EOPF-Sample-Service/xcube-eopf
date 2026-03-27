@@ -235,6 +235,7 @@ ds = store.open_data(
     crs="native",
     variables=["b02", "b03", "b04", "scl"],
 )
+```
 
 Note that if the requested area spans multiple UTM zones, a `DataStoreError`
 will be raised.
@@ -305,7 +306,7 @@ the following steps:
 
 1. **Query** tiles using the [EOPF Zarr Sample Service STAC API](https://stac.core.eopf.eodc.eu/) for a given time range and 
    spatial extent.
-2. **Group** items by solar day.
+2. **Group** items by solar day and orbit direction (ascending and descending passes).
 3. **Rectify** data from the native 2D irregular grid to a regular grid using 
    [xcube-resampling](https://xcube-dev.github.io/xcube-resampling/guide/#3-rectification).
 4. **Mosaic** adjacent tiles into seamless daily scenes.
