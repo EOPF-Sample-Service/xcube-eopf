@@ -1,3 +1,8 @@
+## Changes in 0.3.3
+
+- Updated dependencies in `pyproject.toml`, impacting PyPI distribution 
+  and installation via pip.
+
 ## Changes in 0.3.2
 
 * Added the STAC Collection URL to the returned dataset’s attributes.
