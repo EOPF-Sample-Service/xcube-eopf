@@ -55,9 +55,12 @@ class Sen3ProductHandler(ProductHandler, ABC):
     for Ol1Err, Ol1Efr, Ol2Lfr, and Sl2Lst product.
     """
 
+    default_resolution = None
+    required_open_params = ["time_range", "bbox"]
+
     def get_open_data_params_schema(self) -> JsonObjectSchema:
         return JsonObjectSchema(
-            title="Opening parameters for Sentinel-2 products.",
+            title="Opening parameters for Sentinel-3 products.",
             properties=dict(
                 variables=SCHEMA_VARIABLES,
                 spatial_res=SCHEMA_SPATIAL_RES,
@@ -69,7 +72,7 @@ class Sen3ProductHandler(ProductHandler, ABC):
                 agg_methods=SCHEMA_AGG_METHODS,
                 interp_methods=SCHEMA_INTERP_METHODS,
             ),
-            required=["time_range", "bbox", "spatial_res"],
+            required=self.required_open_params,
             additional_properties=False,
         )
 
@@ -105,7 +108,7 @@ class Sen3ProductHandler(ProductHandler, ABC):
             "ignore", message="Clipping with the specified bounding box*"
         )
         xarray_open_params = dict(
-            resolution=open_params["spatial_res"],
+            resolution=open_params.get("spatial_res", self.default_resolution),
             crs=open_params["crs"],
             bbox=open_params["bbox"],
             interp_methods=open_params.get("interp_methods"),
@@ -142,6 +145,8 @@ class Sen3ProductHandler(ProductHandler, ABC):
 
 class Sen3Ol1EfrProductHandler(Sen3ProductHandler):
     data_id = "sentinel-3-olci-l1-efr"
+    default_resolution = 300
+    required_open_params = ["time_range", "bbox", "spatial_res"]
 
 
 # this will be added later, when the footprints are corrected. Note, this
@@ -149,23 +154,28 @@ class Sen3Ol1EfrProductHandler(Sen3ProductHandler):
 # datasets, resulting in a lot of falsely assigned STAC item's bbox and geometry.
 # class Sen3Ol1ErrProductHandler(Sen3ProductHandler):
 #     data_id = "sentinel-3-olci-l1-err"
+#     default_resolution = 1200
 
 
 class Sen3Ol2LfrProductHandler(Sen3ProductHandler):
     data_id = "sentinel-3-olci-l2-lfr"
+    default_resolution = 300
 
 
 # Broken data in: https://stac.browser.user.eopf.eodc.eu/collections/sentinel-3-olci-l2-lrr?.language=en
 # class Sen3Ol2LrrProductHandler(Sen3ProductHandler):
 #     data_id = "sentinel-3-olci-l2-lrr"
+#     default_resolution = 1200
 
 
 class Sen3Sl1RbtProductHandler(Sen3ProductHandler):
     data_id = "sentinel-3-slstr-l1-rbt"
+    default_resolution = None
 
 
 class Sen3Sl2LstProductHandler(Sen3ProductHandler):
     data_id = "sentinel-3-slstr-l2-lst"
+    default_resolution = 1000
 
 
 def register(registry: ProductHandlerRegistry):
