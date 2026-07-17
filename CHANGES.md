@@ -1,3 +1,6 @@
+## Changes in 0.3.4 (under development)
+
+
 ## Changes in 0.3.3
 
 - Updated dependencies in `pyproject.toml`, impacting PyPI distribution 

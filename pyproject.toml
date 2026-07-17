@@ -87,10 +87,7 @@ version = {attr = "xcube_eopf.__version__"}
 readme = {file = "README.md", content-type = "text/markdown"}
 
 [tool.setuptools.packages.find]
-exclude = [
-  "tests",
-  "docs"
-]
+include = ["xcube_eopf*"]
 
 [tool.flake8]
 max-line-length = 88
