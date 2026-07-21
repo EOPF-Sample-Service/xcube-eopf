@@ -6,6 +6,7 @@ from abc import ABC
 from collections import defaultdict
 
 import numpy as np
+import pyproj
 import pystac
 import xarray as xr
 from xcube.util.jsonschema import JsonObjectSchema
@@ -44,7 +45,7 @@ class Sen1Level1ProductHandler(ProductHandler, ABC):
 
     def get_open_data_params_schema(self) -> JsonObjectSchema:
         return JsonObjectSchema(
-            title="Opening parameters for Sentinel-2 products.",
+            title="Opening parameters for Sentinel-1 products.",
             properties=dict(
                 variables=SCHEMA_VARIABLES,
                 spatial_res=SCHEMA_SPATIAL_RES,
@@ -75,11 +76,13 @@ class Sen1Level1ProductHandler(ProductHandler, ABC):
     def open_data(
         self, data_id: str, items: list[pystac.Item], **open_params
     ) -> xr.Dataset:
-        if "crs" not in open_params:
-            open_params["crs"] = DEFAULT_CRS
+        crs = open_params.get("crs")
+        if crs is not None and isinstance(crs, str):
+            crs = pyproj.CRS.from_string(crs)
+            open_params["crs"] = crs
 
         # get STAC items grouped by solar day
-        grouped_items = group_items(items)
+        grouped_items = self.group_items(items)
 
         # generate cube by mosaicking and stacking tiles
         ds = self.generate_cube(grouped_items, **open_params)
@@ -90,11 +93,12 @@ class Sen1Level1ProductHandler(ProductHandler, ABC):
         return ds
 
     def generate_cube(self, grouped_items: xr.DataArray, **open_params) -> xr.Dataset:
-        resolution = open_params.get("spatial_res")
-        crs = open_params.get("spatial_res")
         dem = open_params.get("dem")
         if dem is None:
+            resolution = open_params.get("spatial_res")
+            crs = open_params.get("crs")
             dem = get_dem(open_params["bbox"], resolution=resolution, crs=crs)
+
         xarray_open_params = dict(
             dem=dem,
             apply_rtc=open_params.get("apply_rtc"),
@@ -129,6 +133,45 @@ class Sen1Level1ProductHandler(ProductHandler, ABC):
         ds_final = ds_final.assign_coords(dict(time=grouped_items.time))
         return ds_final
 
+    @staticmethod
+    def group_items(items: list[pystac.Item]) -> xr.DataArray:
+        items = add_nominal_datetime(items)
+
+        # get dates and tile IDs of the items
+        groups = defaultdict(list)
+        for item in items:
+            date = item.properties["datetime_nominal"].date()
+            orbit_state = item.properties["sat:orbit_state"]
+            relative_orbit = item.properties["sat:relative_orbit"]
+            platform = item.properties["platform"]
+            key = (date, orbit_state, relative_orbit, platform)
+            groups[key].append(item)
+
+        # Sort keys chronologically and descending before ascending
+        orbit_order = {"descending": 0, "ascending": 1}
+        sorted_keys = sorted(
+            groups.keys(), key=lambda k: (k[0], orbit_order[k[1]], k[2], [3])
+        )
+
+        grouped_items = np.empty(len(sorted_keys), dtype=object)
+        for i, k in enumerate(sorted_keys):
+            grouped_items[i] = groups[k]
+
+        # Representative timestamp (center time) of the acquisition mosaic
+        dts = np.empty(len(grouped_items), dtype="datetime64[s]")
+        for i, items in enumerate(grouped_items):
+            times = np.array(
+                [np.datetime64(item.datetime.replace(tzinfo=None)) for item in items]
+            )
+            mean_time = np.datetime64(int(times.view("int64").mean()), "us")
+            dts[i] = mean_time.astype("datetime64[s]")
+
+        da = xr.DataArray(grouped_items, dims=("time",), coords=dict(time=dts))
+        da["time"].encoding["units"] = "seconds since 1970-01-01"
+        da["time"].encoding["calendar"] = "standard"
+
+        return da
+
 
 class Sen1Level1GRDProductHandler(Sen1Level1ProductHandler):
     data_id = "sentinel-1-l1-grd"
@@ -141,44 +184,45 @@ class Sen1Level1SLCProductHandler(Sen1Level1ProductHandler):
 class Sen1Level2OCNProductHandler(Sen3ProductHandler):
     data_id = "sentinel-1-l2-ocn"
     default_resolution = 1000  # meter
+    title_open_params = "Opening parameters for Sentinel-1 Level-2 OCN products."
+
+    @staticmethod
+    def group_items(items: list[pystac.Item]) -> xr.DataArray:
+        items = add_nominal_datetime(items)
+
+        # get dates and tile IDs of the items
+        groups = defaultdict(list)
+        for item in items:
+            date = item.properties["datetime_nominal"].date()
+            orbit = item.properties["sat:orbit_state"]
+            key = (date, orbit)
+            groups[key].append(item)
+
+        # Sort keys chronologically and descending before ascending
+        orbit_order = {"descending": 0, "ascending": 1}
+        sorted_keys = sorted(groups.keys(), key=lambda k: (k[0], orbit_order[k[1]]))
+
+        grouped_items = np.empty(len(sorted_keys), dtype=object)
+        for i, k in enumerate(sorted_keys):
+            grouped_items[i] = groups[k]
+
+        # Mean timestamp per group
+        dts = np.empty(len(grouped_items), dtype="datetime64[s]")
+        for i, items in enumerate(grouped_items):
+            times = np.array(
+                [np.datetime64(item.datetime.replace(tzinfo=None)) for item in items]
+            )
+            mean_time = np.datetime64(int(times.view("int64").mean()), "us")
+            dts[i] = mean_time.astype("datetime64[s]")
+
+        da = xr.DataArray(grouped_items, dims=("time",), coords=dict(time=dts))
+        da["time"].encoding["units"] = "seconds since 1970-01-01"
+        da["time"].encoding["calendar"] = "standard"
+
+        return da
 
 
 def register(registry: ProductHandlerRegistry):
     registry.register(Sen1Level1GRDProductHandler)
     registry.register(Sen1Level1SLCProductHandler)
     registry.register(Sen1Level2OCNProductHandler)
-
-
-def group_items(items: list[pystac.Item]) -> xr.DataArray:
-    items = add_nominal_datetime(items)
-
-    # get dates and tile IDs of the items
-    groups = defaultdict(list)
-    for item in items:
-        date = item.properties["datetime_nominal"].date()
-        orbit = item.properties["sat:orbit_state"]
-        key = (date, orbit)
-        groups[key].append(item)
-
-    # Sort keys chronologically and descending before ascending
-    orbit_order = {"descending": 0, "ascending": 1}
-    sorted_keys = sorted(groups.keys(), key=lambda k: (k[0], orbit_order[k[1]]))
-
-    grouped_items = np.empty(len(sorted_keys), dtype=object)
-    for i, k in enumerate(sorted_keys):
-        grouped_items[i] = groups[k]
-
-    # Mean timestamp per group
-    dts = np.empty(len(grouped_items), dtype="datetime64[s]")
-    for i, items in enumerate(grouped_items):
-        times = np.array(
-            [np.datetime64(item.datetime.replace(tzinfo=None)) for item in items]
-        )
-        mean_time = np.datetime64(int(times.view("int64").mean()), "us")
-        dts[i] = mean_time.astype("datetime64[s]")
-
-    da = xr.DataArray(grouped_items, dims=("time",), coords=dict(time=dts))
-    da["time"].encoding["units"] = "seconds since 1970-01-01"
-    da["time"].encoding["calendar"] = "standard"
-
-    return da

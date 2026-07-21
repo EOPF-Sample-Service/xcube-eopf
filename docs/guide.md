@@ -5,19 +5,19 @@ The `"eopf-zarr"` xcube data store enables you to create analysis-ready data cub
 [EOPF Sentinel Zarr Sample Service](https://zarr.eopf.copernicus.eu/).
 
 This plugin provides convenient access to analysis-ready data from the Sentinel-1,
-Sentinel-2, and Sentinel-3 missions.
-Currently, only Sentinel-2 and Sentinel-3 products are supported.
+Sentinel-2, and Sentinel-3 missions. Sentinel-1 GRD and SLC support is currently 
+experimental.
 
 This guide walks you through:
 
-1. **Set up a EOPF Data Store**
+1. **Set up an EOPF Data Store**
 2. **Selecting a Product**
 3. **Opening a Spatiotemporal Data Cube**
 4. **Inspecting, Visualizing, and Saving the Data Cube**
 
 ---
 
-### 1. Set up a EOPF Data Store
+### 1. Set up an EOPF Data Store
 
 To instantiate the data store:
 ```python
@@ -58,9 +58,9 @@ Samples.
 
 **Required parameters:**
 
-- `bbox`: Bounding box ["west", "south", "est", "north"] in CRS coordinates.
+- `bbox`: Bounding box ["west", "south", "east", "north"] in CRS coordinates.
 - `time_range`: Temporal extent ["YYYY-MM-DD", "YYYY-MM-DD"].
-- `spatial_res`: Spatial resolution in meter of degree (depending on the CRS).
+- `spatial_res`: Spatial resolution in meter or degree  (depending on the CRS).
 
 These parameters control the STAC API query and define the output cube's spatial grid.
 
@@ -163,7 +163,43 @@ viewer.info()
 
 ### 🛰️ Sentinel-1
 
-Support for Sentinel-1 will be added in an upcoming release.
+## Main Features of the xcube-eopf Data Store for Sentinel-1
+
+Sentinel-1 provides **C-band Synthetic Aperture Radar (SAR)** data. Unlike optical sensors, SAR actively transmits microwave pulses and measures the returned signal, enabling observations independent of daylight and largely unaffected by cloud cover.
+
+Each pixel measures the **radar backscatter**, i.e., the fraction of the emitted microwave energy reflected back to the satellite. Bright pixels indicate strong reflections, while dark pixels indicate weak reflections. The measured backscatter depends on factors such as surface roughness, moisture content, geometry, and vegetation structure.
+
+Sentinel-1 supports several radar polarization combinations:
+
+- **VV** – Vertical transmit, Vertical receive
+- **VH** – Vertical transmit, Horizontal receive
+- **HH** – Horizontal transmit, Horizontal receive
+- **HV** – Horizontal transmit, Vertical receive
+
+The available polarization combinations depend on the acquisition mode.
+
+The main Sentinel-1 product types are:
+
+| Product                         | Description                                                                                                | Typical applications                                       | STAC Collection          |
+|---------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|--------------------------|
+| **SLC (Single Look Complex)**   | Complex-valued radar data (amplitude and phase) in slant-range geometry.                                   | Interferometry (InSAR), ground deformation, DEM generation | [sentinel-1-l1-slc](https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l1-slc) |
+| **GRD (Ground Range Detected)** | Detected radar intensity projected to ground-range geometry. Easier to use than SLC for most applications. | Flood mapping, sea ice, agriculture, ship detection        | [sentinel-1-l1-grd](https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l1-grd) |
+| **OCN (Ocean)**                 | Ocean geophysical products including wind, wave, and surface current information.                          | Oceanography, marine weather, offshore monitoring          | [sentinel-1-l2-ocn](https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l2-ocn) |
+
+> **Note:** Support for Sentinel-1 GRD and SLC products is currently experimental and undergoing validation. Some conversion parameters required for the processing chain are not yet available in the new EOPF products and are therefore estimated. Future EOPF product versions will provide these parameters directly.
+
+### Data Cube Generation Workflow
+
+1. **STAC query:** Retrieve all matching STAC Items based on the requested spatial (`bbox`) and temporal (`time_range`) extent.
+2. **Grouping:** Group the retrieved items by acquisition day, relative orbit, orbit direction (ascending or descending), and satellite platform.
+3. **Opening:** Open each product in analysis mode using **xarray-eopf**.
+   - **GRD:** Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the **Copernicus DEM GLO-30** is automatically retrieved from CDSE. See the [GRD documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd).
+   - **SLC:** Performs radiometric calibration, TOPSAR burst debursting and merging, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the **Copernicus DEM GLO-30** is automatically retrieved from CDSE. See the [SLC documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-slc).
+   - **OCN:** Rectifies the irregular measurement grid to a regular spatial grid. See the [OCN documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn).
+4. **Mosaicking:** Merge adjacent tiles acquired on the same day into seamless scenes.
+5. **Stacking:** Stack the daily mosaics along the temporal dimension to create multi-temporal data cubes for each variable.
+
+📚 **Further reading:** [xcube-eopf Sentinel-1 Documentation](https://eopf-sample-service.github.io/xcube-eopf/guide/#sentinel-1)
 
 ---
 
@@ -201,7 +237,7 @@ The EOPF xcube data store supports two Sentinel-2 product types via the `data_id
    spatial and temporal extent (`bbox` and `time_range` argument).
 2. **Sorting:** Items are ordered by solar acquisition time and Tile ID.
 3. **Native Alignment:** Within each UTM zone, tiles from the same solar day are 
-   aligned in the native UMT without reprojection. Overlaps are resolved by selecting 
+   aligned in the native UTM without reprojection. Overlaps are resolved by selecting 
    the first non-NaN pixel value in item order.
 4. **Cube Assembly:** The method of cube creation depends on the user's request,
   as summarized below:

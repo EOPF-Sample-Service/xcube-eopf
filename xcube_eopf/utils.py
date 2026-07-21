@@ -4,6 +4,7 @@
 
 import datetime
 from collections.abc import Sequence
+from typing import Any
 
 import dask.array as da
 import numpy as np
@@ -129,6 +130,27 @@ def mosaic_spatial_take_first(list_ds: list[xr.Dataset]) -> xr.Dataset:
     return ds_mosaic
 
 
+def make_json_serializable(obj: Any) -> Any:
+    """Recursively convert Python objects into JSON-serializable objects."""
+
+    if isinstance(obj, pyproj.CRS):
+        return obj.to_string()  # e.g. "EPSG:4326"
+
+    if isinstance(obj, np.generic):
+        return obj.item()  # np.float64 -> float, np.int64 -> int
+
+    if isinstance(obj, tuple):
+        return [make_json_serializable(v) for v in obj]
+
+    if isinstance(obj, list):
+        return [make_json_serializable(v) for v in obj]
+
+    if isinstance(obj, dict):
+        return {k: make_json_serializable(v) for k, v in obj.items()}
+
+    return obj
+
+
 def add_attributes(
     data_id: str, ds: xr.Dataset, grouped_items: xr.DataArray, **open_params
 ) -> xr.Dataset:
@@ -160,7 +182,8 @@ def add_attributes(
             for dt in grouped_items.time.values
         }
     )
-    ds.attrs["open_params"] = open_params
+
+    ds.attrs["open_params"] = make_json_serializable(open_params)
     ds.attrs["xcube_eopf_version"] = version
 
     return ds
