@@ -1,10 +1,16 @@
-## Changes in 0.3.4 (under development)
+## Changes in 0.3.4
+
+- Add support for the following Sentinel-1 collections:
+  - [`sentinel-1-l1-grd`](https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l1-grd)
+  - [`sentinel-1-l1-slc`](https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l1-slc)
+  - [`sentinel-1-l2-ocn`](https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l2-ocn)
 
 
 ## Changes in 0.3.3
 
 - Updated dependencies in `pyproject.toml`, impacting PyPI distribution 
   and installation via pip.
+
 
 ## Changes in 0.3.2
 

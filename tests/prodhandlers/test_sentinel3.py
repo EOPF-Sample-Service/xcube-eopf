@@ -11,8 +11,8 @@ import xarray as xr
 
 from xcube_eopf.prodhandlers.sentinel3 import (
     IgnoreZeroSizedDimension,
+    Sen3Ol1EfrProductHandler,
     _get_base_id,
-    group_items,
 )
 
 
@@ -89,8 +89,10 @@ class Sentinel3Test(TestCase):
                 "sat:orbit_state": "descending",
             },
         )
-
-        grouped_item = group_items([item0, item1, item2, item3, item4, item5, item6])
+        prodhandler = Sen3Ol1EfrProductHandler()
+        grouped_item = prodhandler.group_items(
+            [item0, item1, item2, item3, item4, item5, item6]
+        )
         self.assertIsInstance(grouped_item, xr.DataArray)
         self.assertEqual(dict(time=4), grouped_item.sizes)
         self.assertIsInstance(grouped_item[0].item(), list)

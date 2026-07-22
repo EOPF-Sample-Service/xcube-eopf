@@ -34,6 +34,15 @@ class EOPFZarrDataStoreTest(TestCase):
 
     def test_get_data_types_for_data(self):
         self.assertEqual(
+            ("dataset",), self.store.get_data_types_for_data("sentinel-1-l1-grd")
+        )
+        self.assertEqual(
+            ("dataset",), self.store.get_data_types_for_data("sentinel-1-l1-slc")
+        )
+        self.assertEqual(
+            ("dataset",), self.store.get_data_types_for_data("sentinel-1-l2-ocn")
+        )
+        self.assertEqual(
             ("dataset",), self.store.get_data_types_for_data("sentinel-2-l1c")
         )
         self.assertEqual(
@@ -43,6 +52,9 @@ class EOPFZarrDataStoreTest(TestCase):
     def test_get_data_ids(self):
         self.assertCountEqual(
             [
+                "sentinel-1-l1-grd",
+                "sentinel-1-l1-slc",
+                "sentinel-1-l2-ocn",
                 "sentinel-2-l1c",
                 "sentinel-2-l2a",
                 "sentinel-3-olci-l2-lfr",
@@ -54,6 +66,9 @@ class EOPFZarrDataStoreTest(TestCase):
         )
         self.assertCountEqual(
             [
+                ("sentinel-1-l1-grd", {}),
+                ("sentinel-1-l1-slc", {}),
+                ("sentinel-1-l2-ocn", {}),
                 ("sentinel-2-l1c", {}),
                 ("sentinel-2-l2a", {}),
                 ("sentinel-3-olci-l2-lfr", {}),
@@ -65,6 +80,9 @@ class EOPFZarrDataStoreTest(TestCase):
         )
 
     def test_has_data(self):
+        self.assertTrue(self.store.has_data("sentinel-1-l1-grd"))
+        self.assertTrue(self.store.has_data("sentinel-1-l1-slc"))
+        self.assertTrue(self.store.has_data("sentinel-1-l2-ocn"))
         self.assertTrue(self.store.has_data("sentinel-2-l1c"))
         self.assertTrue(self.store.has_data("sentinel-2-l2a"))
         self.assertTrue(self.store.has_data("sentinel-3-olci-l2-lfr"))
@@ -94,6 +112,9 @@ class EOPFZarrDataStoreTest(TestCase):
         # no optional arguments; get all open parameters from all product handlers
         schema = self.store.get_open_data_params_schema()
         self.assertIsInstance(schema, JsonObjectSchema)
+        self.assertIn("sentinel-1-l1-grd", schema.properties)
+        self.assertIn("sentinel-1-l1-slc", schema.properties)
+        self.assertIn("sentinel-1-l2-ocn", schema.properties)
         self.assertIn("sentinel-2-l1c", schema.properties)
         self.assertIn("sentinel-2-l2a", schema.properties)
         self.assertIn("sentinel-3-olci-l2-lfr", schema.properties)

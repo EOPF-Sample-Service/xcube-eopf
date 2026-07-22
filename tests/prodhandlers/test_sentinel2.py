@@ -9,7 +9,7 @@ import pystac
 import pytest
 import xarray as xr
 
-from xcube_eopf.prodhandlers.sentinel2 import group_items, _get_bounding_box
+from xcube_eopf.prodhandlers.sentinel2 import _get_bounding_box, group_items
 
 
 class Sentinel2Test(TestCase):

@@ -4,13 +4,16 @@
 
 import logging
 
+import xarray as xr
 from xcube.util.jsonschema import (
     JsonArraySchema,
+    JsonBooleanSchema,
     JsonComplexSchema,
     JsonDateSchema,
     JsonIntegerSchema,
     JsonNumberSchema,
     JsonObjectSchema,
+    JsonSchema,
     JsonStringSchema,
 )
 from xcube_resampling.constants import AGG_METHODS
@@ -120,4 +123,55 @@ SCHEMA_AGG_METHODS = JsonComplexSchema(
             )
         ),
     ],
+)
+
+SCHEMA_APPLY_RTC = JsonBooleanSchema(
+    title="Enable or disable radiometric terrain correction (RTC).",
+    default=True,
+)
+
+SCHEMA_FOOTPRINT_SCALE_FACTOR = JsonArraySchema(
+    title="Radar pixel footprint scaling factors",
+    description=(
+        "Scaling factors applied to the radar pixel footprint in the x and y "
+        "directions during resampling. Larger values increase the area over "
+        "which each radar pixel contributes to the output grid. The default "
+        "(3.0, 3.0) accounts for the typical resolution difference between "
+        "Sentinel-1 GRD (~10 m) and a DEM (~30 m)."
+    ),
+    items=JsonNumberSchema(minimum=0.0),
+    min_items=2,
+    max_items=2,
+    default=[3.0, 3.0],
+)
+
+
+class JsonPythonTypeSchema(JsonSchema):
+    def __init__(self, python_type, **kwargs):
+        super().__init__(**kwargs)
+        self.python_type = python_type
+
+    def to_dict(self):
+        d = super().to_dict()
+        # JSON can't describe this type, so just expose metadata
+        d.setdefault("type", "object")
+        return d
+
+    def validate_instance(self, instance):
+        if not isinstance(instance, self.python_type):
+            raise TypeError(
+                f"Expected {self.python_type.__name__}, got {type(instance).__name__}"
+            )
+
+    def _to_unvalidated_instance(self, value):
+        return value
+
+    def _from_validated_instance(self, instance):
+        return instance
+
+
+SCHEMA_DEM = JsonPythonTypeSchema(
+    xr.DataArray,
+    title="Digital Elevation Model",
+    description="Elevation model as an xarray.DataArray.",
 )
