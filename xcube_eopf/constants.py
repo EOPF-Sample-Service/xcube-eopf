@@ -6,15 +6,15 @@ import logging
 
 import xarray as xr
 from xcube.util.jsonschema import (
-    JsonSchema,
     JsonArraySchema,
+    JsonBooleanSchema,
     JsonComplexSchema,
     JsonDateSchema,
     JsonIntegerSchema,
     JsonNumberSchema,
     JsonObjectSchema,
+    JsonSchema,
     JsonStringSchema,
-    JsonBooleanSchema,
 )
 from xcube_resampling.constants import AGG_METHODS
 

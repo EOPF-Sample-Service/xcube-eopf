@@ -9,33 +9,34 @@ import numpy as np
 import pyproj
 import pystac
 import xarray as xr
+from xarray_eopf.amodes.sentinel1 import get_dem
 from xcube.util.jsonschema import JsonObjectSchema
 from xcube_resampling.utils import reproject_bbox
-from xarray_eopf.amodes.sentinel1 import get_dem
 
 from xcube_eopf.constants import (
     DEFAULT_CRS,
-    SCHEMA_ADDITIONAL_QUERY,
     LOG,
-    SCHEMA_DEM,
-    SCHEMA_FOOTPRINT_SCALE_FACTOR,
-    SCHEMA_SPATIAL_RES,
+    SCHEMA_ADDITIONAL_QUERY,
+    SCHEMA_APPLY_RTC,
     SCHEMA_BBOX,
     SCHEMA_CRS,
+    SCHEMA_DEM,
+    SCHEMA_FOOTPRINT_SCALE_FACTOR,
     SCHEMA_INTERP_METHODS,
-    SCHEMA_APPLY_RTC,
+    SCHEMA_SPATIAL_RES,
     SCHEMA_TILE_SIZE,
     SCHEMA_TIME_RANGE,
     SCHEMA_VARIABLES,
 )
 from xcube_eopf.prodhandler import ProductHandler, ProductHandlerRegistry
-from .sentinel3 import Sen3ProductHandler
 from xcube_eopf.utils import (
     add_attributes,
     add_nominal_datetime,
-    mosaic_spatial_take_first,
     bbox_to_geojson,
+    mosaic_spatial_take_first,
 )
+
+from .sentinel3 import Sen3ProductHandler
 
 
 class Sen1Level1ProductHandler(ProductHandler, ABC):

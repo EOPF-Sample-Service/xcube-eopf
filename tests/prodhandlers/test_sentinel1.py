@@ -12,6 +12,7 @@ import pystac
 import xarray as xr
 from xcube.util.jsonschema import JsonObjectSchema
 
+from tests.helpers.sentinel1 import sen1_grd_slc_analysis_dataset
 from xcube_eopf.prodhandler import ProductHandlerRegistry
 from xcube_eopf.prodhandlers.sentinel1 import (
     Sen1Level1GRDProductHandler,
@@ -19,7 +20,6 @@ from xcube_eopf.prodhandlers.sentinel1 import (
     Sen1Level2OCNProductHandler,
     register,
 )
-from tests.helpers.sentinel1 import sen1_grd_slc_analysis_dataset
 
 
 def _make_item(

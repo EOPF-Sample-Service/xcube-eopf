@@ -6,7 +6,6 @@ from unittest import TestCase
 
 import xarray as xr
 from xcube.core.store import new_data_store
-
 from xcube_resampling.utils import reproject_bbox
 
 from .helper import timeit

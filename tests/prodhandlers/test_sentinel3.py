@@ -10,8 +10,8 @@ import pystac
 import xarray as xr
 
 from xcube_eopf.prodhandlers.sentinel3 import (
-    Sen3Ol1EfrProductHandler,
     IgnoreZeroSizedDimension,
+    Sen3Ol1EfrProductHandler,
     _get_base_id,
 )
 

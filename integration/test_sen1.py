@@ -92,7 +92,9 @@ class Sentinel1IntegrationTest(TestCase):
     def setUp(self):
         self.store = new_data_store("eopf-zarr")
 
-    def _open_with_fake_catalog(self, data_id, items, open_dataset_path, side_effect, **open_params):
+    def _open_with_fake_catalog(
+        self, data_id, items, open_dataset_path, side_effect, **open_params
+    ):
         catalog = _FakeCatalog(items)
         with (
             patch("pystac_client.Client.open", return_value=catalog),
@@ -146,7 +148,9 @@ class Sentinel1IntegrationTest(TestCase):
         self.assertEqual(
             ["sentinel-1-l1-grd"], catalog.last_search_kwargs["collections"]
         )
-        self.assertEqual(["2026-05-15", "2026-05-16"], catalog.last_search_kwargs["datetime"])
+        self.assertEqual(
+            ["2026-05-15", "2026-05-16"], catalog.last_search_kwargs["datetime"]
+        )
         self.assertIsInstance(ds, xr.Dataset)
         self.assertIn("gamma0_vv", ds.data_vars)
         self.assertEqual(2, ds.sizes["time"])
