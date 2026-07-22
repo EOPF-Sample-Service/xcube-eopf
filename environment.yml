@@ -24,6 +24,7 @@ dependencies:
   - mkdocstrings
   - mkdocstrings-python
   - pytest
+  - pytest-recording
   - pytest-cov
   - ruff
   # Development Dependencies - Demos

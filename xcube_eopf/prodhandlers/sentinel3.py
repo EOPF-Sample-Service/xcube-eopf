@@ -99,7 +99,7 @@ class Sen3ProductHandler(ProductHandler, ABC):
             crs = pyproj.CRS.from_string(crs)
             open_params["crs"] = crs
 
-        if "spatial_ref" not in open_params:
+        if "spatial_ref" not in open_params and data_id != "sentinel-3-slstr-l1-rbt":
             spatial_ref = self.default_resolution
 
             if crs.is_geographic:
@@ -125,9 +125,9 @@ class Sen3ProductHandler(ProductHandler, ABC):
             "ignore", message="Clipping with the specified bounding box*"
         )
         xarray_open_params = dict(
-            resolution=open_params["spatial_ref"],
             crs=open_params["crs"],
             bbox=open_params["bbox"],
+            resolution=open_params.get("spatial_ref"),
             interp_methods=open_params.get("interp_methods"),
             agg_methods=open_params.get("agg_methods"),
             variables=open_params.get("variables"),
