@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -382,10 +382,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-set-up-a-eopf-data-store" class="md-nav__link">
+  <a href="#1-set-up-an-eopf-data-store" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Set up a EOPF Data Store
+        1. Set up an EOPF Data Store
       
     </span>
   </a>
@@ -492,6 +492,34 @@
     <span class="md-ellipsis">
       
         🛰️ Sentinel-1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-features-of-the-xcube-eopf-data-store-for-sentinel-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main Features of the xcube-eopf Data Store for Sentinel-1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Features of the xcube-eopf Data Store for Sentinel-1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-cube-generation-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Cube Generation Workflow
       
     </span>
   </a>
@@ -762,10 +790,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-set-up-a-eopf-data-store" class="md-nav__link">
+  <a href="#1-set-up-an-eopf-data-store" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Set up a EOPF Data Store
+        1. Set up an EOPF Data Store
       
     </span>
   </a>
@@ -878,6 +906,34 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-features-of-the-xcube-eopf-data-store-for-sentinel-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main Features of the xcube-eopf Data Store for Sentinel-1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Features of the xcube-eopf Data Store for Sentinel-1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-cube-generation-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Cube Generation Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#sentinel-2" class="md-nav__link">
     <span class="md-ellipsis">
@@ -932,17 +988,17 @@
 (ARDCs) from Sentinel Zarr sample products published by the 
 <a href="https://zarr.eopf.copernicus.eu/">EOPF Sentinel Zarr Sample Service</a>.</p>
 <p>This plugin provides convenient access to analysis-ready data from the Sentinel-1,
-Sentinel-2, and Sentinel-3 missions.
-Currently, only Sentinel-2 and Sentinel-3 products are supported.</p>
+Sentinel-2, and Sentinel-3 missions. Sentinel-1 GRD and SLC support is currently 
+experimental.</p>
 <p>This guide walks you through:</p>
 <ol>
-<li><strong>Set up a EOPF Data Store</strong></li>
+<li><strong>Set up an EOPF Data Store</strong></li>
 <li><strong>Selecting a Product</strong></li>
 <li><strong>Opening a Spatiotemporal Data Cube</strong></li>
 <li><strong>Inspecting, Visualizing, and Saving the Data Cube</strong></li>
 </ol>
 <hr />
-<h3 id="1-set-up-a-eopf-data-store">1. Set up a EOPF Data Store</h3>
+<h3 id="1-set-up-an-eopf-data-store">1. Set up an EOPF Data Store</h3>
 <p>To instantiate the data store:
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">xcube.core.store</span><span class="w"> </span><span class="kn">import</span> <span class="n">new_data_store</span>
 
@@ -975,9 +1031,9 @@ No actual data is loaded at this point. </p>
 </blockquote>
 <p><strong>Required parameters:</strong></p>
 <ul>
-<li><code>bbox</code>: Bounding box ["west", "south", "est", "north"] in CRS coordinates.</li>
+<li><code>bbox</code>: Bounding box ["west", "south", "east", "north"] in CRS coordinates.</li>
 <li><code>time_range</code>: Temporal extent ["YYYY-MM-DD", "YYYY-MM-DD"].</li>
-<li><code>spatial_res</code>: Spatial resolution in meter of degree (depending on the CRS).</li>
+<li><code>spatial_res</code>: Spatial resolution in meter or degree  (depending on the CRS).</li>
 </ul>
 <p>These parameters control the STAC API query and define the output cube's spatial grid.</p>
 <h2 id="optional-parameters">Optional Parameters</h2>
@@ -1055,7 +1111,63 @@ to visualize the cube:</p>
 <hr />
 <h2 id="specific-parameters-for-supported-sentinel-missions">Specific Parameters for supported Sentinel Missions</h2>
 <h3 id="sentinel-1">🛰️ Sentinel-1</h3>
-<p>Support for Sentinel-1 will be added in an upcoming release.</p>
+<h2 id="main-features-of-the-xcube-eopf-data-store-for-sentinel-1">Main Features of the xcube-eopf Data Store for Sentinel-1</h2>
+<p>Sentinel-1 provides <strong>C-band Synthetic Aperture Radar (SAR)</strong> data. Unlike optical sensors, SAR actively transmits microwave pulses and measures the returned signal, enabling observations independent of daylight and largely unaffected by cloud cover.</p>
+<p>Each pixel measures the <strong>radar backscatter</strong>, i.e., the fraction of the emitted microwave energy reflected back to the satellite. Bright pixels indicate strong reflections, while dark pixels indicate weak reflections. The measured backscatter depends on factors such as surface roughness, moisture content, geometry, and vegetation structure.</p>
+<p>Sentinel-1 supports several radar polarization combinations:</p>
+<ul>
+<li><strong>VV</strong> – Vertical transmit, Vertical receive</li>
+<li><strong>VH</strong> – Vertical transmit, Horizontal receive</li>
+<li><strong>HH</strong> – Horizontal transmit, Horizontal receive</li>
+<li><strong>HV</strong> – Horizontal transmit, Vertical receive</li>
+</ul>
+<p>The available polarization combinations depend on the acquisition mode.</p>
+<p>The main Sentinel-1 product types are:</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Description</th>
+<th>Typical applications</th>
+<th>STAC Collection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SLC (Single Look Complex)</strong></td>
+<td>Complex-valued radar data (amplitude and phase) in slant-range geometry.</td>
+<td>Interferometry (InSAR), ground deformation, DEM generation</td>
+<td><a href="https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l1-slc">sentinel-1-l1-slc</a></td>
+</tr>
+<tr>
+<td><strong>GRD (Ground Range Detected)</strong></td>
+<td>Detected radar intensity projected to ground-range geometry. Easier to use than SLC for most applications.</td>
+<td>Flood mapping, sea ice, agriculture, ship detection</td>
+<td><a href="https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l1-grd">sentinel-1-l1-grd</a></td>
+</tr>
+<tr>
+<td><strong>OCN (Ocean)</strong></td>
+<td>Ocean geophysical products including wind, wave, and surface current information.</td>
+<td>Oceanography, marine weather, offshore monitoring</td>
+<td><a href="https://stac.browser.user.eopf.eodc.eu/collections/sentinel-1-l2-ocn">sentinel-1-l2-ocn</a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note:</strong> Support for Sentinel-1 GRD and SLC products is currently experimental and undergoing validation. Some conversion parameters required for the processing chain are not yet available in the new EOPF products and are therefore estimated. Future EOPF product versions will provide these parameters directly.</p>
+</blockquote>
+<h3 id="data-cube-generation-workflow">Data Cube Generation Workflow</h3>
+<ol>
+<li><strong>STAC query:</strong> Retrieve all matching STAC Items based on the requested spatial (<code>bbox</code>) and temporal (<code>time_range</code>) extent.</li>
+<li><strong>Grouping:</strong> Group the retrieved items by acquisition day, relative orbit, orbit direction (ascending or descending), and satellite platform.</li>
+<li><strong>Opening:</strong> Open each product in analysis mode using <strong>xarray-eopf</strong>.</li>
+<li><strong>GRD:</strong> Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd">GRD documentation</a>.</li>
+<li><strong>SLC:</strong> Performs radiometric calibration, TOPSAR burst debursting and merging, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-slc">SLC documentation</a>.</li>
+<li><strong>OCN:</strong> Rectifies the irregular measurement grid to a regular spatial grid. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn">OCN documentation</a>.</li>
+<li><strong>Mosaicking:</strong> Merge adjacent tiles acquired on the same day into seamless scenes.</li>
+<li><strong>Stacking:</strong> Stack the daily mosaics along the temporal dimension to create multi-temporal data cubes for each variable.</li>
+</ol>
+<p>📚 <strong>Further reading:</strong> <a href="https://eopf-sample-service.github.io/xcube-eopf/guide/#sentinel-1">xcube-eopf Sentinel-1 Documentation</a></p>
 <hr />
 <h3 id="sentinel-2">🛰️ Sentinel-2</h3>
 <p>Sentinel-2 provides multi-spectral imagery at different native resolutions:</p>
@@ -1099,7 +1211,7 @@ These tiles are stored in their native UTM CRS, which varies by geographic locat
    spatial and temporal extent (<code>bbox</code> and <code>time_range</code> argument).</li>
 <li><strong>Sorting:</strong> Items are ordered by solar acquisition time and Tile ID.</li>
 <li><strong>Native Alignment:</strong> Within each UTM zone, tiles from the same solar day are 
-   aligned in the native UMT without reprojection. Overlaps are resolved by selecting 
+   aligned in the native UTM without reprojection. Overlaps are resolved by selecting 
    the first non-NaN pixel value in item order.</li>
 <li><strong>Cube Assembly:</strong> The method of cube creation depends on the user's request,
   as summarized below:</li>
@@ -1275,7 +1387,7 @@ the following steps:</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2025 EOPF Sample Service Team
+      Copyright &copy; 2026 EOPF Sample Service Team
     </div>
   
   
@@ -1329,7 +1441,7 @@ the following steps:</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
