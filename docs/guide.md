@@ -60,11 +60,12 @@ Samples.
 
 - `bbox`: Bounding box ["west", "south", "east", "north"] in CRS coordinates.
 - `time_range`: Temporal extent ["YYYY-MM-DD", "YYYY-MM-DD"].
-- `spatial_res`: Spatial resolution in meter or degree  (depending on the CRS).
+- `spatial_res`: Spatial resolution in meters or degrees, depending on the selected 
+  CRS. Optional for some data IDs.
 
 These parameters control the STAC API query and define the output cube's spatial grid.
 
-## Optional Parameters
+**Optional Parameters**
 
 - `crs`: Coordinate reference system, defaults to `"EPSG:4326"`.
 - `variables`: Variables to include in the dataset. Accepts a single name, a regex pattern, or an iterable of either.
@@ -163,8 +164,6 @@ viewer.info()
 
 ### 🛰️ Sentinel-1
 
-## Main Features of the xcube-eopf Data Store for Sentinel-1
-
 Sentinel-1 provides **C-band Synthetic Aperture Radar (SAR)** data. Unlike optical sensors, SAR actively transmits microwave pulses and measures the returned signal, enabling observations independent of daylight and largely unaffected by cloud cover.
 
 Each pixel measures the **radar backscatter**, i.e., the fraction of the emitted microwave energy reflected back to the satellite. Bright pixels indicate strong reflections, while dark pixels indicate weak reflections. The measured backscatter depends on factors such as surface roughness, moisture content, geometry, and vegetation structure.
@@ -188,7 +187,7 @@ The main Sentinel-1 product types are:
 
 > **Note:** Support for Sentinel-1 GRD and SLC products is currently experimental and undergoing validation. Some conversion parameters required for the processing chain are not yet available in the new EOPF products and are therefore estimated. Future EOPF product versions will provide these parameters directly.
 
-### Data Cube Generation Workflow
+**Data Cube Generation Workflow**
 
 1. **STAC query:** Retrieve all matching STAC Items based on the requested spatial (`bbox`) and temporal (`time_range`) extent.
 2. **Grouping:** Group the retrieved items by acquisition day, relative orbit, orbit direction (ascending or descending), and satellite platform.

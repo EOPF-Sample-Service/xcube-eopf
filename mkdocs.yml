@@ -10,6 +10,7 @@ nav:
   - User Guide: guide.md
   - Example Notebooks:
       - Introduction: examples/introduction.ipynb
+      - Sentinel-1: examples/sentinel_1.ipynb
       - Sentinel-2: examples/sentinel_2.ipynb
       - Sentinel-3: examples/sentinel_3.ipynb
   - Python API: api.md
