@@ -482,17 +482,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#data-cube-generation-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Data Cube Generation Workflow
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#sentinel-2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -589,6 +578,34 @@
     
   
     Introduction to the xcube EOPF Data Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/sentinel_1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Sentinel-1 Data Cubes
   
 
     
@@ -856,17 +873,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#data-cube-generation-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Data Cube Generation Workflow
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#sentinel-2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1088,7 +1094,7 @@ to visualize the cube:</p>
 <blockquote>
 <p><strong>Note:</strong> Support for Sentinel-1 GRD and SLC products is currently experimental and undergoing validation. Some conversion parameters required for the processing chain are not yet available in the new EOPF products and are therefore estimated. Future EOPF product versions will provide these parameters directly.</p>
 </blockquote>
-<h3 id="data-cube-generation-workflow">Data Cube Generation Workflow</h3>
+<p><strong>Data Cube Generation Workflow</strong></p>
 <ol>
 <li><strong>STAC query:</strong> Retrieve all matching STAC Items based on the requested spatial (<code>bbox</code>) and temporal (<code>time_range</code>) extent.</li>
 <li><strong>Grouping:</strong> Group the retrieved items by acquisition day, relative orbit, orbit direction (ascending or descending), and satellite platform.</li>
