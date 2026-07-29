@@ -414,23 +414,6 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optional Parameters
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Optional Parameters">
-      <ul class="md-nav__list">
-        
           <li class="md-nav__item">
   <a href="#4-inspect-visualize-and-save-the-data-cube" class="md-nav__link">
     <span class="md-ellipsis">
@@ -497,23 +480,6 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#main-features-of-the-xcube-eopf-data-store-for-sentinel-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Main Features of the xcube-eopf Data Store for Sentinel-1
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Main Features of the xcube-eopf Data Store for Sentinel-1">
-      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#data-cube-generation-workflow" class="md-nav__link">
@@ -822,23 +788,6 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optional Parameters
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Optional Parameters">
-      <ul class="md-nav__list">
-        
           <li class="md-nav__item">
   <a href="#4-inspect-visualize-and-save-the-data-cube" class="md-nav__link">
     <span class="md-ellipsis">
@@ -905,23 +854,6 @@
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#main-features-of-the-xcube-eopf-data-store-for-sentinel-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Main Features of the xcube-eopf Data Store for Sentinel-1
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Main Features of the xcube-eopf Data Store for Sentinel-1">
-      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#data-cube-generation-workflow" class="md-nav__link">
@@ -1033,10 +965,11 @@ No actual data is loaded at this point. </p>
 <ul>
 <li><code>bbox</code>: Bounding box ["west", "south", "east", "north"] in CRS coordinates.</li>
 <li><code>time_range</code>: Temporal extent ["YYYY-MM-DD", "YYYY-MM-DD"].</li>
-<li><code>spatial_res</code>: Spatial resolution in meter or degree  (depending on the CRS).</li>
+<li><code>spatial_res</code>: Spatial resolution in meters or degrees, depending on the selected 
+  CRS. Optional for some data IDs.</li>
 </ul>
 <p>These parameters control the STAC API query and define the output cube's spatial grid.</p>
-<h2 id="optional-parameters">Optional Parameters</h2>
+<p><strong>Optional Parameters</strong></p>
 <ul>
 <li><code>crs</code>: Coordinate reference system, defaults to <code>"EPSG:4326"</code>.</li>
 <li><code>variables</code>: Variables to include in the dataset. Accepts a single name, a regex pattern, or an iterable of either.</li>
@@ -1111,7 +1044,6 @@ to visualize the cube:</p>
 <hr />
 <h2 id="specific-parameters-for-supported-sentinel-missions">Specific Parameters for supported Sentinel Missions</h2>
 <h3 id="sentinel-1">🛰️ Sentinel-1</h3>
-<h2 id="main-features-of-the-xcube-eopf-data-store-for-sentinel-1">Main Features of the xcube-eopf Data Store for Sentinel-1</h2>
 <p>Sentinel-1 provides <strong>C-band Synthetic Aperture Radar (SAR)</strong> data. Unlike optical sensors, SAR actively transmits microwave pulses and measures the returned signal, enabling observations independent of daylight and largely unaffected by cloud cover.</p>
 <p>Each pixel measures the <strong>radar backscatter</strong>, i.e., the fraction of the emitted microwave energy reflected back to the satellite. Bright pixels indicate strong reflections, while dark pixels indicate weak reflections. The measured backscatter depends on factors such as surface roughness, moisture content, geometry, and vegetation structure.</p>
 <p>Sentinel-1 supports several radar polarization combinations:</p>
