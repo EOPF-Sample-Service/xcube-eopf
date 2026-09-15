@@ -193,9 +193,10 @@ The main Sentinel-1 product types are:
 2. **Grouping:** Group the retrieved items by acquisition day, relative orbit, orbit direction (ascending or descending), and satellite platform.
 3. **Opening:** Open each product in analysis mode using **xarray-eopf**.
 
-   * **GRD:** Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the **Copernicus DEM GLO-30** is automatically retrieved from CDSE. See the [GRD documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd).
-   * **SLC:** Performs radiometric calibration, TOPSAR burst debursting and merging, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the **Copernicus DEM GLO-30** is automatically retrieved from CDSE. See the [SLC documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-slc).
-   * **OCN:** Rectifies the irregular measurement grid to a regular spatial grid. See the [OCN documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn).
+    - **GRD:** Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the **Copernicus DEM GLO-30** is automatically retrieved from CDSE. See the [GRD documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd).
+    - **SLC:** Performs radiometric calibration, TOPSAR burst debursting and merging, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the **Copernicus DEM GLO-30** is automatically retrieved from CDSE. See the [SLC documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-slc).
+    - **OCN:** Rectifies the irregular measurement grid to a regular spatial grid. See the [OCN documentation](https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn).
+
 4. **Mosaicking:** Merge adjacent tiles acquired on the same day into seamless scenes.
 5. **Stacking:** Stack the daily mosaics along the temporal dimension to create multi-temporal data cubes for each variable.
 

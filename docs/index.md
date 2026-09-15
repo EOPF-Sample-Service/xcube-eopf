@@ -58,9 +58,10 @@ The workflow for building 3D analysis-ready cubes from Sentinel-1 products invol
 2. **Group** items by acquisition day, relative orbit, orbit direction, and satellite platform.
 3. **Open** products in analysis mode using the [xarray-eopf backend](https://eopf-sample-service.github.io/xarray-eopf/).
 
-   * **GRD:** Radiometric calibration, geocoding, and radiometric terrain correction.
-   * **SLC:** Radiometric calibration, TOPSAR debursting and merging, geocoding, and radiometric terrain correction.
-   * **OCN:** Rectification from the native irregular grid to a regular spatial grid.
+    - **GRD:** Radiometric calibration, geocoding, and radiometric terrain correction.
+    - **SLC:** Radiometric calibration, TOPSAR debursting and merging, geocoding, and radiometric terrain correction.
+    - **OCN:** Rectification from the native irregular grid to a regular spatial grid.
+   
 4. **Mosaic** adjacent tiles into seamless daily scenes.
 5. **Stack** the daily mosaics along the temporal axis to form 3D data cubes.
 
