@@ -1105,8 +1105,12 @@ to visualize the cube:</p>
 <p><strong>GRD:</strong> Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd">GRD documentation</a>.</p>
 </li>
 <li><strong>SLC:</strong> Performs radiometric calibration, TOPSAR burst debursting and merging, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-slc">SLC documentation</a>.</li>
-<li><strong>OCN:</strong> Rectifies the irregular measurement grid to a regular spatial grid. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn">OCN documentation</a>.</li>
-<li><strong>Mosaicking:</strong> Merge adjacent tiles acquired on the same day into seamless scenes.</li>
+<li>
+<p><strong>OCN:</strong> Rectifies the irregular measurement grid to a regular spatial grid. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn">OCN documentation</a>.</p>
+</li>
+<li>
+<p><strong>Mosaicking:</strong> Merge adjacent tiles acquired on the same day into seamless scenes.</p>
+</li>
 <li><strong>Stacking:</strong> Stack the daily mosaics along the temporal dimension to create multi-temporal data cubes for each variable.</li>
 </ol>
 <hr />
