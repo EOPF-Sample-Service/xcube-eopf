@@ -1100,13 +1100,11 @@ to visualize the cube:</p>
 <li><strong>Grouping:</strong> Group the retrieved items by acquisition day, relative orbit, orbit direction (ascending or descending), and satellite platform.</li>
 <li>
 <p><strong>Opening:</strong> Open each product in analysis mode using <strong>xarray-eopf</strong>.</p>
-</li>
-<li>
-<p><strong>GRD:</strong> Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd">GRD documentation</a>.</p>
-</li>
+<ul>
+<li><strong>GRD:</strong> Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd">GRD documentation</a>.</li>
 <li><strong>SLC:</strong> Performs radiometric calibration, TOPSAR burst debursting and merging, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-slc">SLC documentation</a>.</li>
-<li>
-<p><strong>OCN:</strong> Rectifies the irregular measurement grid to a regular spatial grid. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn">OCN documentation</a>.</p>
+<li><strong>OCN:</strong> Rectifies the irregular measurement grid to a regular spatial grid. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn">OCN documentation</a>.</li>
+</ul>
 </li>
 <li>
 <p><strong>Mosaicking:</strong> Merge adjacent tiles acquired on the same day into seamless scenes.</p>
