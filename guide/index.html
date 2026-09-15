@@ -1098,14 +1098,17 @@ to visualize the cube:</p>
 <ol>
 <li><strong>STAC query:</strong> Retrieve all matching STAC Items based on the requested spatial (<code>bbox</code>) and temporal (<code>time_range</code>) extent.</li>
 <li><strong>Grouping:</strong> Group the retrieved items by acquisition day, relative orbit, orbit direction (ascending or descending), and satellite platform.</li>
-<li><strong>Opening:</strong> Open each product in analysis mode using <strong>xarray-eopf</strong>.</li>
-<li><strong>GRD:</strong> Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd">GRD documentation</a>.</li>
+<li>
+<p><strong>Opening:</strong> Open each product in analysis mode using <strong>xarray-eopf</strong>.</p>
+</li>
+<li>
+<p><strong>GRD:</strong> Performs radiometric calibration, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-grd">GRD documentation</a>.</p>
+</li>
 <li><strong>SLC:</strong> Performs radiometric calibration, TOPSAR burst debursting and merging, geocoding based on zero-Doppler geometry using a DEM, and radiometric terrain correction. If no DEM is provided, the <strong>Copernicus DEM GLO-30</strong> is automatically retrieved from CDSE. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-1-slc">SLC documentation</a>.</li>
 <li><strong>OCN:</strong> Rectifies the irregular measurement grid to a regular spatial grid. See the <a href="https://eopf-sample-service.github.io/xarray-eopf/guide/#sentinel-1-level-2-ocn">OCN documentation</a>.</li>
 <li><strong>Mosaicking:</strong> Merge adjacent tiles acquired on the same day into seamless scenes.</li>
 <li><strong>Stacking:</strong> Stack the daily mosaics along the temporal dimension to create multi-temporal data cubes for each variable.</li>
 </ol>
-<p>📚 <strong>Further reading:</strong> <a href="https://eopf-sample-service.github.io/xcube-eopf/guide/#sentinel-1">xcube-eopf Sentinel-1 Documentation</a></p>
 <hr />
 <h3 id="sentinel-2">🛰️ Sentinel-2</h3>
 <p>Sentinel-2 provides multi-spectral imagery at different native resolutions:</p>
