@@ -44,7 +44,57 @@ Currently, support is focused on **Sentinel-2** and **Sentinel-3** products.
 
 ### Sentinel-1
 
-Support for Sentinel-1 will be added in an upcoming release.
+The current implementation supports three Sentinel-1 product levels, available as `data_id` values:
+
+* `sentinel-1-l1-grd`: Level-1 Ground Range Detected (GRD)
+* `sentinel-1-l1-slc`: Level-1 Single Look Complex (SLC)
+* `sentinel-1-l2-ocn`: Level-2 Ocean (OCN)
+
+#### Cube Generation Workflow
+
+The workflow for building 3D analysis-ready cubes from Sentinel-1 products involves the following steps:
+
+1. **Query** products using the [EOPF STAC API](https://stac.browser.user.eopf.eodc.eu/) for a given time range and spatial extent.
+2. **Group** items by acquisition day, relative orbit, orbit direction, and satellite platform.
+3. **Open** products in analysis mode using the [xarray-eopf backend](https://eopf-sample-service.github.io/xarray-eopf/).
+
+    - **GRD:** Radiometric calibration, geocoding, and radiometric terrain correction.
+    - **SLC:** Radiometric calibration, TOPSAR debursting and merging, geocoding, and radiometric terrain correction.
+    - **OCN:** Rectification from the native irregular grid to a regular spatial grid.
+   
+4. **Mosaic** adjacent tiles into seamless daily scenes.
+5. **Stack** the daily mosaics along the temporal axis to form 3D data cubes.
+
+> Note: For GRD ans SLC, if no DEM is given, CDSE S3 credentials must be configured to 
+> enable access to the CopDEM (30 m) dataset from CDSE. Instructions for generating 
+> credentials are available [here](https://documentation.dataspace.copernicus.eu/APIs/S3.html#generate-secrets).
+> The Copernicus DEM GLO-30 is part of the Copernicus Contributing Missions (CCM) 
+> data and requires requesting access as described [here](https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/ccm-how-to-register). 
+> Note that it may take a few hours for access to CCM data to be granted.
+
+
+#### Supported Variables
+
+* **GRD:** `vv`, `vh`, `hh`, `hv` *(each GRD product contains only a subset of these bands)*
+* **SLC:** `vv`, `vh`, `hh`, `hv` *(each GRD product contains only a subset of these bands)*
+* **OCN:** `wind_speed`, `wind_direction`, `inversion_quality`, `wind_quality`, `percentage_bright_points`
+
+> **Note:** Support for Sentinel-1 GRD and SLC products is currently experimental and 
+> undergoing validation. Some required processing parameters are not yet available 
+> in the new EOPF products and are therefore estimated.
+
+**Example: Sentinel-1 GRD**
+
+```python
+from xcube.core.store import new_data_store
+
+store = new_data_store("eopf-stac")
+ds = store.open_data(
+    data_id="sentinel-1-l1-grd",
+    bbox=[20.6, 37.6, 21., 38.],
+    time_range=["2026-05-04", "2026-05-05"],
+)
+```
 
 ---
 
